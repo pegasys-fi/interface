@@ -4,7 +4,7 @@ import Web3Status from 'components/Web3Status'
 import { chainIdToBackendName } from 'graphql/utils/util'
 import { useIsNftPage } from 'hooks/useIsNftPage'
 import { useIsPoolsPage } from 'hooks/useIsPoolsPage'
-import { useAtomValue } from 'jotai/utils'
+import { useAtomValue } from 'jotai'
 import { Box } from 'nft/components/Box'
 import { Row } from 'nft/components/Flex'
 import { PegasysIcon } from 'nft/components/icons'
@@ -77,6 +77,13 @@ export const PageTabs = () => {
         background={pathname.startsWith('/swap') ? theme.backgroundNavBarButton : 'none'}
       >
         <Trans>Swap</Trans>
+      </MenuItem>
+      <MenuItem
+        href="/farm"
+        isActive={pathname.startsWith('/farm')}
+        background={pathname.startsWith('/farm') ? theme.backgroundNavBarButton : 'none'}
+      >
+        <Trans>Farm</Trans>
       </MenuItem>
       <MenuItem
         href={`/tokens/${chainName}`}

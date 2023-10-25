@@ -1,4 +1,6 @@
 import { Currency } from '@pollum-io/sdk-core'
+import { ChainId } from '@pollum-io/smart-order-router'
+import { FarmPoolData, InfoAddress } from 'components/Farm/constants'
 import { SupportedChainId } from 'constants/chains'
 import { NATIVE_CHAIN_ID, nativeOnChain, WRAPPED_NATIVE_CURRENCY } from 'constants/tokens'
 import { HistoryDuration } from 'graphql/data/__generated__/types-and-hooks'
@@ -30,6 +32,12 @@ export enum TimePeriod {
   WEEK,
   MONTH,
   YEAR,
+}
+
+export enum TimePeriodLeaderboard {
+  DAY,
+  WEEK,
+  MONTH,
 }
 
 export function toHistoryDuration(timePeriod: TimePeriod): HistoryDuration {
@@ -95,11 +103,11 @@ export function validateUrlChainParam(chainName: string | undefined) {
 
 // TODO(cartcrom): refactor into safer lookup & replace usage
 // TODO verify this later
-export const CHAIN_NAME_TO_CHAIN_ID: { [key in string]: SupportedChainId } = {
-  ['ROLLUX' as Chain]: SupportedChainId.ROLLUX,
+export const CHAIN_NAME_TO_CHAIN_ID: { [key in string]: ChainId } = {
+  ['ROLLUX' as Chain]: ChainId.ROLLUX,
 }
 
-export function fromGraphQLChain(chain: Chain): SupportedChainId {
+export function fromGraphQLChain(chain: Chain): ChainId {
   return CHAIN_NAME_TO_CHAIN_ID[chain]
 }
 
@@ -157,5 +165,65 @@ export function unwrapTokenRollux<
     ...nativeToken,
     address: NATIVE_CHAIN_ID,
     extensions: undefined, // prevents marking cross-chain wrapped tokens as native
+  }
+}
+
+export const getGammaData = async () => {
+  try {
+    const data = await fetch(`${process.env.REACT_APP_GAMMA_API_ENDPOINT}/pegasys/rollux/hypervisors/allData`)
+    const gammaData = (await data.json()) as { [key: string]: FarmPoolData }
+    return gammaData
+  } catch (e) {
+    console.log(e)
+    return null
+    // TODO: check backup endpoint with gamma
+    // try {
+    //   const data = await fetch(`${process.env.REACT_APP_GAMMA_API_ENDPOINT_BACKUP}/pegasys/rollux/hypervisors/allData`)
+    //   const gammaData = await data.json()
+    //   return gammaData
+    // } catch (e) {
+    //   console.log(e)
+    //   return null
+    // }
+  }
+}
+
+export const getGammaPositions = async (account?: string) => {
+  if (!account) return null
+  try {
+    const data = await fetch(`${process.env.REACT_APP_GAMMA_API_ENDPOINT}/pegasys/rollux/user/${account}`)
+    const positions = (await data.json()) as { [key: string]: InfoAddress }
+
+    return positions[account.toLowerCase()]
+  } catch (e) {
+    console.log(e)
+    return null
+    // try {
+    //   const data = await fetch(`${process.env.REACT_APP_GAMMA_API_ENDPOINT_BACKUP}/pegasys/rollux/user/${account}`)
+    //   const positions = await data.json()
+    //   return positions[account.toLowerCase()]
+    // } catch (e) {
+    //   console.log(e)
+    //   return null
+    // }
+  }
+}
+
+const getGammaRewards = async () => {
+  try {
+    const data = await fetch(`${process.env.REACT_APP_GAMMA_API_ENDPOINT}/pegasys/rollux/allRewards2`)
+    const gammaData = await data.json()
+    return gammaData
+  } catch (e) {
+    console.log(e)
+    return null
+    // try {
+    //   const data = await fetch(`${process.env.REACT_APP_GAMMA_API_ENDPOINT_BACKUP}/pegasys/rollux/allRewards2`)
+    //   const gammaData = await data.json()
+    //   return gammaData
+    // } catch (e) {
+    //   console.log(e)
+    //   return null
+    // }
   }
 }

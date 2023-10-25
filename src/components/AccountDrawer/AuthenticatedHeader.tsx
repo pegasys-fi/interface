@@ -180,7 +180,7 @@ export default function AuthenticatedHeader({ account, openSettings }: { account
     <AuthenticatedHeaderWrapper>
       <HeaderWrapper>
         <StatusWrapper>
-          <StatusIcon connection={connection} size={40} />
+          {connection && <StatusIcon connection={connection} size={40} />}
           {account && (
             <AccountNamesWrapper>
               <ThemedText.SubHeader color="textPrimary" fontWeight={500}>
