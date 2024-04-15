@@ -91,7 +91,7 @@ const Layer2Prompt = styled(EmptyProposals)`
 export default function Pool() {
   const theme = useTheme()
   const { account, chainId } = useWeb3React()
-  const unsupportedV2Network = chainId && UNSUPPORTED_V2POOL_CHAIN_IDS.includes(chainId)
+  const unsupportedV2Network = false //chainId && UNSUPPORTED_V2POOL_CHAIN_IDS.includes(chainId)
 
   // fetch the user's balances of all tracked V2 LP tokens
   let trackedTokenPairs = useTrackedTokenPairs()

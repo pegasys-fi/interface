@@ -3756,16 +3756,16 @@
     node-cache "^5.1.2"
     stats-lite "^2.2.0"
 
-"@pollum-io/smart-order-router@0.0.12":
-  version "0.0.12"
-  resolved "https://registry.yarnpkg.com/@pollum-io/smart-order-router/-/smart-order-router-0.0.12.tgz#f99733d635a95c6c596911f99d1691bc2cfdd250"
-  integrity sha512-dJ3AptP+cB7sWSFtofVKOfQba6yxOhkhRfXZzSQlBwhq4SrXrTAccI64f07EL/2ZvubHp2bj/ur04aRCr8+6WQ==
+"@pollum-io/smart-order-router@0.0.14":
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/@pollum-io/smart-order-router/-/smart-order-router-0.0.14.tgz#e3352fc21fba8283a582f4a20fa18f03081676fb"
+  integrity sha512-f3or+EA7G4yYtQgp3PpsWf66CdsskmS3+/8zvWypNO+Z9pLgRTKkFdZDlZERqsfneAhOwIxEvWX5w41bExO+Vw==
   dependencies:
     "@pollum-io/default-token-list" latest
     "@pollum-io/router-sdk" "0.0.3"
     "@pollum-io/swap-router-contracts" "0.0.5"
-    "@pollum-io/universal-router" "0.0.4"
-    "@pollum-io/universal-router-sdk" "0.0.3"
+    "@pollum-io/universal-router" "0.0.5"
+    "@pollum-io/universal-router-sdk" "0.0.5"
     "@pollum-io/v1-sdk" "0.0.2"
     "@pollum-io/v3-sdk" "0.0.1"
     "@uniswap/permit2-sdk" "^1.2.0"
@@ -3821,14 +3821,14 @@
     bignumber.js "^9.0.2"
     ethers "^5.3.1"
 
-"@pollum-io/universal-router-sdk@0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@pollum-io/universal-router-sdk/-/universal-router-sdk-0.0.4.tgz#b45333760afe7b73e9015d96a00ab8384fc90226"
-  integrity sha512-DQGetyfSnLImWOfpp4vTIOCpyQl9ryzVok5DWpTuqtZ3wRbpQebbAlgscW5q1OQ4lb0zXm6NbF2RAv4sNcjh8w==
+"@pollum-io/universal-router-sdk@0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@pollum-io/universal-router-sdk/-/universal-router-sdk-0.0.5.tgz#998e86150cd98087b7294d6871e77762225a7425"
+  integrity sha512-pZgP8UvP48QRcH7YHmlgjyfhxrZalC3raNp/s/z0N+tsCVjdIJ8Nx6UmTZwfR/BtP5RkVnOoljw5O9ExXBvHcQ==
   dependencies:
     "@pollum-io/router-sdk" "0.0.3"
     "@pollum-io/sdk-core" "0.0.3"
-    "@pollum-io/universal-router" "0.0.4"
+    "@pollum-io/universal-router" "0.0.5"
     "@pollum-io/v1-sdk" "0.0.2"
     "@pollum-io/v3-sdk" "0.0.1"
     "@uniswap/permit2-sdk" "^1.2.0"
@@ -3839,6 +3839,15 @@
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/@pollum-io/universal-router/-/universal-router-0.0.4.tgz#ceffc90871be0c15d4e320213cc565bdb2cbe3b2"
   integrity sha512-arEJ5re0lsfjxmE5wkk4Qff7gDsM3NvhZKUdO9pkIvwp4Yt6WPKLBFXro9wSlA2KAXWECjPS6+p7jEBXpBINSg==
+  dependencies:
+    "@openzeppelin/contracts" "4.7.0"
+    "@pollum-io/pegasys-protocol" "0.0.17"
+    "@pollum-io/v3-core" "0.0.1"
+
+"@pollum-io/universal-router@0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@pollum-io/universal-router/-/universal-router-0.0.5.tgz#8ad00985ae7ffb69681114641ba85eb93fe1df46"
+  integrity sha512-M75xkhTD6awWNfCckPcuquzRnGGICPJ1UeFVY7Et69FrCrV+BoZfdAySxAWbnzaAZfelX+xOz80CCThat392bA==
   dependencies:
     "@openzeppelin/contracts" "4.7.0"
     "@pollum-io/pegasys-protocol" "0.0.17"

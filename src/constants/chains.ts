@@ -38,7 +38,7 @@ export const SUPPORTED_GAS_ESTIMATE_CHAIN_IDS = [SupportedChainId.ROLLUX] as con
 /**
  * Unsupported networks for V2 pool behavior.
  */
-export const UNSUPPORTED_V2POOL_CHAIN_IDS = [SupportedChainId.ROLLUX] as const
+export const UNSUPPORTED_V2POOL_CHAIN_IDS = [] as const
 
 // export const TESTNET_CHAIN_IDS = [SupportedChainId.ROLLUX_TANENBAUM] as const
 
