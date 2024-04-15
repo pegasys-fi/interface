@@ -151,8 +151,8 @@ export default function AddLiquidity() {
       value: BigNumber | null
     if (currencyA.isNative || currencyB.isNative) {
       const tokenBIsETH = currencyB.isNative
-      estimate = router.estimateGas.addLiquidityETH
-      method = router.addLiquidityETH
+      estimate = router.estimateGas.addLiquiditySYS
+      method = router.addLiquiditySYS
       args = [
         (tokenBIsETH ? currencyA : currencyB)?.wrapped?.address ?? '', // token
         (tokenBIsETH ? parsedAmountA : parsedAmountB).quotient.toString(), // token desired
@@ -177,7 +177,7 @@ export default function AddLiquidity() {
       ]
       value = null
     }
-
+    console.log(args)
     setAttemptingTxn(true)
     await estimate(...args, value ? { value } : {})
       .then((estimatedGasLimit) =>
@@ -297,7 +297,7 @@ export default function AddLiquidity() {
           navigate(`/add/v2/${newCurrencyIdB}`)
         }
       } else {
-        navigate(`/add/v2/${currencyIdA ? currencyIdA : 'ETH'}/${newCurrencyIdB}`)
+        navigate(`/add/v2/${currencyIdA ? currencyIdA : 'SYS'}/${newCurrencyIdB}`)
       }
     },
     [currencyIdA, navigate, currencyIdB]

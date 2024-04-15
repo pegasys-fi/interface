@@ -170,7 +170,7 @@ export default function RemoveLiquidity() {
     if (approval === ApprovalState.APPROVED) {
       // removeLiquidityETH
       if (oneCurrencyIsETH) {
-        methodNames = ['removeLiquidityETH', 'removeLiquidityETHSupportingFeeOnTransferTokens']
+        methodNames = ['removeLiquiditySYS', 'removeLiquiditySYSSupportingFeeOnTransferTokens']
         args = [
           currencyBIsETH ? tokenA.address : tokenB.address,
           liquidityAmount.quotient.toString(),
@@ -198,7 +198,7 @@ export default function RemoveLiquidity() {
     else if (signatureData !== null) {
       // removeLiquidityETHWithPermit
       if (oneCurrencyIsETH) {
-        methodNames = ['removeLiquidityETHWithPermit', 'removeLiquidityETHWithPermitSupportingFeeOnTransferTokens']
+        methodNames = ['removeLiquiditySYSWithPermit', 'removeLiquiditySYSWithPermitSupportingFeeOnTransferTokens']
         args = [
           currencyBIsETH ? tokenA.address : tokenB.address,
           liquidityAmount.quotient.toString(),
@@ -546,12 +546,12 @@ export default function RemoveLiquidity() {
                         ) : oneCurrencyIsWETH ? (
                           <StyledInternalLink
                             to={`/remove/v2/${
-                              currencyA && WRAPPED_NATIVE_CURRENCY[chainId]?.equals(currencyA) ? 'ETH' : currencyIdA
+                              currencyA && WRAPPED_NATIVE_CURRENCY[chainId]?.equals(currencyA) ? 'SYS' : currencyIdA
                             }/${
-                              currencyB && WRAPPED_NATIVE_CURRENCY[chainId]?.equals(currencyB) ? 'ETH' : currencyIdB
+                              currencyB && WRAPPED_NATIVE_CURRENCY[chainId]?.equals(currencyB) ? 'SYS' : currencyIdB
                             }`}
                           >
-                            Receive ETH
+                            Receive SYS
                           </StyledInternalLink>
                         ) : null}
                       </RowBetween>

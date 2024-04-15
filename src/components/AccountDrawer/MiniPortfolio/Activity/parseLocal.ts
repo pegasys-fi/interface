@@ -25,7 +25,7 @@ import { getActivityTitle } from '../constants'
 import { Activity, ActivityMap } from './types'
 
 function getCurrency(currencyId: string, chainId: ChainId, tokens: TokenAddressMap): Currency | undefined {
-  return currencyId === 'ETH' ? nativeOnChain(chainId) : tokens[chainId]?.[currencyId]?.token
+  return currencyId === 'SYS' ? nativeOnChain(chainId) : tokens[chainId]?.[currencyId]?.token
 }
 
 function buildCurrencyDescriptor(

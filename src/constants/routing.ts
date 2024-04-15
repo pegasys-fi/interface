@@ -2,7 +2,7 @@
 import { Currency, Token } from '@pollum-io/sdk-core'
 import { SupportedChainId } from 'constants/chains'
 
-import { DAI_ROLLUX, nativeOnChain, USDC_ROLLUX, USDT_ROLLUX, WBTC_ROLLUX, WRAPPED_NATIVE_CURRENCY } from './tokens'
+import { nativeOnChain, USDC_ROLLUX, USDT_ROLLUX, WBTC_ROLLUX, WRAPPED_NATIVE_CURRENCY } from './tokens'
 
 type ChainTokenList = {
   readonly [chainId: number]: Token[]
@@ -23,7 +23,6 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ...WRAPPED_NATIVE_CURRENCIES_ONLY,
   [SupportedChainId.ROLLUX]: [
     ...WRAPPED_NATIVE_CURRENCIES_ONLY[SupportedChainId.ROLLUX],
-    DAI_ROLLUX,
     USDC_ROLLUX,
     WBTC_ROLLUX,
   ],
@@ -41,7 +40,6 @@ export const CUSTOM_BASES: { [chainId: number]: { [tokenAddress: string]: Token[
 export const COMMON_BASES: ChainCurrencyList = {
   [SupportedChainId.ROLLUX]: [
     nativeOnChain(SupportedChainId.ROLLUX),
-    DAI_ROLLUX,
     USDC_ROLLUX,
     USDT_ROLLUX,
     WBTC_ROLLUX,

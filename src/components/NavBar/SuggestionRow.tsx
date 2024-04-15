@@ -94,7 +94,7 @@ export const CollectionRow = ({
       {collection.stats?.floor_price ? (
         <Column className={styles.suggestionSecondaryContainer}>
           <Row gap="4">
-            <Box className={styles.primaryText}>{ethNumberStandardFormatter(collection.stats?.floor_price)} ETH</Box>
+            <Box className={styles.primaryText}>{ethNumberStandardFormatter(collection.stats?.floor_price)} SYS</Box>
           </Row>
           <Box className={styles.secondaryText}>Floor</Box>
         </Column>
