@@ -1,3 +1,4 @@
+import { i18n } from '@lingui/core'
 import { Trans } from '@lingui/macro'
 import { Token } from '@pollum-io/sdk-core'
 import { formatNumber } from '@uniswap/conedison/format'
@@ -389,48 +390,62 @@ export default function ModalAddGammaLiquidity({
               <ApprovedArea>
                 <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row' }}>
                   <Deposit>
-                    <GridItemAddLiquidity
-                      titleText="Deposit: "
-                      availableStakeAmount={token0Balance}
-                      textButton={validationTextButton0}
-                      tokenSymbol={tokenStake0?.symbol || ''}
-                      depositValue={deposit0}
-                      disabledButton={
-                        approvalToken0 === ApprovalState.APPROVED || approvalToken0 === ApprovalState.UNKNOWN
-                      }
-                      isApproved={
-                        approvalToken0 === ApprovalState.APPROVED && approvalToken1 === ApprovalState.APPROVED
-                      }
-                      setDepositAmount={(amount: string) => {
-                        setDeposit0(amount)
-                        if (uniProxyContract)
-                          getDepositAmounts(
-                            0,
-                            uniProxyContract,
-                            setDeposit1,
-                            setDeposit0,
-                            pairData,
-                            token0Address,
-                            token1Address,
-                            amount,
-                            deposit1,
-                            decimals0,
-                            decimals1
-                          )
-                      }}
-                      approveOrStakeLPOrWithdraw={approveCallbackToken0}
-                    />
+                    <Deposit>
+                      <GridItemAddLiquidity
+                        titleText="Deposit: "
+                        availableStakeAmount={token0Balance}
+                        textButton={
+                          Number(token0Balance) < Number(deposit0)
+                            ? i18n._('Insufficient Balance')
+                            : validationTextButton0
+                        }
+                        tokenSymbol={tokenStake0?.symbol || ''}
+                        depositValue={deposit0}
+                        disabledButton={
+                          Number(token0Balance) < Number(deposit0) ||
+                          approvalToken0 === ApprovalState.APPROVED ||
+                          approvalToken0 === ApprovalState.UNKNOWN
+                        }
+                        isApproved={
+                          approvalToken0 === ApprovalState.APPROVED && approvalToken1 === ApprovalState.APPROVED
+                        }
+                        setDepositAmount={(amount: string) => {
+                          setDeposit0(amount)
+                          if (uniProxyContract)
+                            getDepositAmounts(
+                              0,
+                              uniProxyContract,
+                              setDeposit1,
+                              setDeposit0,
+                              pairData,
+                              token0Address,
+                              token1Address,
+                              amount,
+                              deposit1,
+                              decimals0,
+                              decimals1
+                            )
+                        }}
+                        approveOrStakeLPOrWithdraw={approveCallbackToken0}
+                      />
+                    </Deposit>
                   </Deposit>
 
                   <Deposit>
                     <GridItemAddLiquidity
                       titleText="Deposit: "
                       availableStakeAmount={token1Balance}
-                      textButton={validationTextButton1}
+                      textButton={
+                        Number(token1Balance) < Number(deposit1)
+                          ? i18n._('Insufficient Balance')
+                          : validationTextButton1
+                      }
                       tokenSymbol={tokenStake1?.symbol || ''}
                       depositValue={deposit1}
                       disabledButton={
-                        approvalToken1 === ApprovalState.APPROVED || approvalToken1 === ApprovalState.UNKNOWN
+                        Number(token1Balance) < Number(deposit1) ||
+                        approvalToken1 === ApprovalState.APPROVED ||
+                        approvalToken1 === ApprovalState.UNKNOWN
                       }
                       isApproved={
                         approvalToken0 === ApprovalState.APPROVED && approvalToken1 === ApprovalState.APPROVED
