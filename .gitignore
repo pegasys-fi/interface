@@ -15,6 +15,7 @@
 yarn.lock
 # testing
 /coverage
+.yarn
 
 # builds
 /build
