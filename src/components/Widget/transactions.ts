@@ -101,14 +101,14 @@ export function useSyncWidgetTransactions() {
         const { slippageTolerance, trade, tradeType } = transaction.info
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const eventProperties = {
-          ...formatSwapSignedAnalyticsEventProperties({
-            trade,
-            // TODO: add once Widgets adds fiat values to callback
-            fiatValues: { amountIn: undefined, amountOut: undefined },
-            txHash: transaction.receipt?.transactionHash ?? '',
-          }),
-        }
+        // const eventProperties = {
+        //   ...formatSwapSignedAnalyticsEventProperties({
+        //     trade,
+        //     // TODO: add once Widgets adds fiat values to callback
+        //     fiatValues: { amountIn: undefined, amountOut: undefined },
+        //     txHash: transaction.receipt?.transactionHash ?? '',
+        //   }),
+        // }
         const baseTxInfo = {
           type: AppTransactionType.SWAP,
           tradeType,

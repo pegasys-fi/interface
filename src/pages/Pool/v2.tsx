@@ -195,7 +195,7 @@ export default function Pool() {
                 </EmptyProposals>
               ) : allV2PairsWithLiquidity?.length > 0 || stakingPairs?.length > 0 ? (
                 <>
-                  <ButtonSecondary>
+                  {/* <ButtonSecondary>
                     <RowBetween>
                       <Trans>
                         <ExternalLink href={'https://v2.info.uniswap.org/account/' + account}>
@@ -204,7 +204,7 @@ export default function Pool() {
                         <span> ↗ </span>
                       </Trans>
                     </RowBetween>
-                  </ButtonSecondary>
+                  </ButtonSecondary> */}
                   {v2PairsWithoutStakedAmount.map((v2Pair) => (
                     <FullPositionCard key={v2Pair.liquidityToken.address} pair={v2Pair} />
                   ))}

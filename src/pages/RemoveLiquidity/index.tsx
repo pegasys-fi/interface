@@ -541,7 +541,7 @@ export default function RemoveLiquidity() {
                                 : currencyIdB
                             }`}
                           >
-                            Receive WETH
+                            Receive WSYS
                           </StyledInternalLink>
                         ) : oneCurrencyIsWETH ? (
                           <StyledInternalLink
