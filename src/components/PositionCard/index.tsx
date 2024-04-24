@@ -12,11 +12,11 @@ import styled from 'styled-components/macro'
 import { BIG_INT_ZERO } from '../../constants/misc'
 import { useTotalSupply } from '../../hooks/useTotalSupply'
 import { useTokenBalance } from '../../state/connection/hooks'
-import { ExternalLink, ThemedText } from '../../theme'
+import { ThemedText } from '../../theme'
 import { currencyId } from '../../utils/currencyId'
 import { unwrappedToken } from '../../utils/unwrappedToken'
-import { ButtonEmpty, ButtonPrimary, ButtonSecondary } from '../Button'
-import { GrayCard, LightCard } from '../Card'
+import { ButtonEmpty, ButtonPrimary } from '../Button'
+import { LightCard } from '../Card'
 import { AutoColumn } from '../Column'
 import DoubleCurrencyLogo from '../DoubleLogo'
 import { CardNoise } from '../earn/styled'
@@ -76,7 +76,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
   return (
     <>
       {userPoolBalance && JSBI.greaterThan(userPoolBalance.quotient, JSBI.BigInt(0)) ? (
-        <GrayCard border={border}>
+        <LightCard border={border}>
           <AutoColumn gap="md">
             <FixedHeightRow>
               <RowFixed>
@@ -86,10 +86,10 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
               </RowFixed>
             </FixedHeightRow>
             <FixedHeightRow onClick={() => setShowMore(!showMore)}>
-              <RowFixed>
-                <DoubleCurrencyLogo currency0={currency0} currency1={currency1} margin={true} size={20} />
+              <RowFixed gap="8px">
+                <DoubleCurrencyLogo currency0={currency0} currency1={currency1} margin={true} size={25} />
                 <Text fontWeight={500} fontSize={20}>
-                  {currency0.symbol}/{currency1.symbol}
+                  {currency0.symbol} / {currency1.symbol}
                 </Text>
               </RowFixed>
               <RowFixed>
@@ -137,7 +137,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
               </FixedHeightRow>
             </AutoColumn>
           </AutoColumn>
-        </GrayCard>
+        </LightCard>
       ) : (
         <LightCard>
           <ThemedText.DeprecatedSubHeader style={{ textAlign: 'center' }}>

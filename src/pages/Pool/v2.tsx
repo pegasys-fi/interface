@@ -22,7 +22,7 @@ import { useV2Pairs } from '../../hooks/useV2Pairs'
 import { useTokenBalancesWithLoadingIndicator } from '../../state/connection/hooks'
 import { useStakingInfo } from '../../state/stake/hooks'
 import { toV2LiquidityToken, useTrackedTokenPairs } from '../../state/user/hooks'
-import { ExternalLink, HideSmall, ThemedText } from '../../theme'
+import { HideSmall, ThemedText } from '../../theme'
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
@@ -90,7 +90,7 @@ const Layer2Prompt = styled(EmptyProposals)`
 
 export default function Pool() {
   const theme = useTheme()
-  const { account, chainId } = useWeb3React()
+  const { account } = useWeb3React()
   const unsupportedV2Network = false //chainId && UNSUPPORTED_V2POOL_CHAIN_IDS.includes(chainId)
 
   // fetch the user's balances of all tracked V2 LP tokens

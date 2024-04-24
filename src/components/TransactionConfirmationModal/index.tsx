@@ -15,8 +15,7 @@ import { useIsTransactionConfirmed, useTransaction } from 'state/transactions/ho
 import styled, { useTheme } from 'styled-components/macro'
 import { useIsDarkMode } from 'theme/components/ThemeToggle'
 
-import { ExternalLink, ThemedText } from '../../theme'
-import { CloseIcon } from '../../theme'
+import { CloseIcon, ExternalLink, ThemedText } from '../../theme'
 import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink'
 import { TransactionSummary } from '../AccountDetails/TransactionSummary'
 import { ButtonLight, ButtonPrimary } from '../Button'
