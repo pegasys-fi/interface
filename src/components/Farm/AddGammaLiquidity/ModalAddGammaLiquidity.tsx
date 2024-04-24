@@ -20,6 +20,7 @@ import styled, { useTheme } from 'styled-components/macro'
 import { CloseIcon, ThemedText } from 'theme'
 import { useIsDarkMode } from 'theme/components/ThemeToggle'
 import { useTransactionFinalizer } from 'utils/farmUtils'
+import { regexTokenSymbol } from 'utils/regexTokenSymbol'
 
 import gammaLogo from '../../../assets/svg/gamma_logo.svg'
 import gammaLogoWhite from '../../../assets/svg/gamma_logo_white.svg'
@@ -226,7 +227,7 @@ export default function ModalAddGammaLiquidity({
             {'Withdraw' + ' '}
             {formatNumber(Number(unStakeGamma)) + ' '}
             <Text as="span" color={theme.accentActive}>
-              {cleanCurrencySymbol(lpTokenSymbol)}
+              {regexTokenSymbol(lpTokenSymbol)}
             </Text>
           </Text>
         </Row>
@@ -296,10 +297,6 @@ export default function ModalAddGammaLiquidity({
       transactionWithdrawErrorMessage: transactionErrorMessage,
       txHashWithdraw: txHash,
     })
-  }
-
-  const cleanCurrencySymbol = (symbol?: string) => {
-    return symbol?.replace(/[x0-9]/gi, '')
   }
   return (
     <>
@@ -498,7 +495,7 @@ export default function ModalAddGammaLiquidity({
                   titleText="Withdraw: "
                   availableStakeAmount={lpTokenBalance}
                   textButton="Withdraw"
-                  tokenSymbol={cleanCurrencySymbol(lpTokenSymbol) || ''}
+                  tokenSymbol={regexTokenSymbol(lpTokenSymbol) || ''}
                   depositValue={unStakeGamma}
                   disabledButton={!(Number(unStakeGamma) > 0)}
                   isApproved={false}
