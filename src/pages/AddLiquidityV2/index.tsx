@@ -12,6 +12,7 @@ import { Plus } from 'react-feather'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Text } from 'rebass'
 import styled, { useTheme } from 'styled-components/macro'
+import { regexTokenSymbol } from 'utils/regexTokenSymbol'
 
 import { ButtonError, ButtonLight, ButtonPrimary } from '../../components/Button'
 import { BlueCard, LightCard } from '../../components/Card'
@@ -276,10 +277,6 @@ export default function AddLiquidity() {
     </Trans>
   )
 
-  function cleanCurrencySymbol(symbol?: string) {
-    return symbol?.replace(/[x0-9]/gi, '')
-  }
-
   const handleCurrencyASelect = useCallback(
     (currencyA: Currency) => {
       const newCurrencyIdA = currencyId(currencyA)
@@ -466,10 +463,10 @@ export default function AddLiquidity() {
                         >
                           {approvalA === ApprovalState.PENDING ? (
                             <Dots>
-                              <Trans>Approving {cleanCurrencySymbol(currencies[Field.CURRENCY_A]?.symbol)}</Trans>
+                              <Trans>Approving {regexTokenSymbol(currencies[Field.CURRENCY_A]?.symbol)}</Trans>
                             </Dots>
                           ) : (
-                            <Trans>Approve {cleanCurrencySymbol(currencies[Field.CURRENCY_A]?.symbol)}</Trans>
+                            <Trans>Approve {regexTokenSymbol(currencies[Field.CURRENCY_A]?.symbol)}</Trans>
                           )}
                         </ButtonPrimary>
                       )}
@@ -481,10 +478,10 @@ export default function AddLiquidity() {
                         >
                           {approvalB === ApprovalState.PENDING ? (
                             <Dots>
-                              <Trans>Approving {cleanCurrencySymbol(currencies[Field.CURRENCY_B]?.symbol)}</Trans>
+                              <Trans>Approving {regexTokenSymbol(currencies[Field.CURRENCY_B]?.symbol)}</Trans>
                             </Dots>
                           ) : (
-                            <Trans>Approve {cleanCurrencySymbol(currencies[Field.CURRENCY_B]?.symbol)}</Trans>
+                            <Trans>Approve {regexTokenSymbol(currencies[Field.CURRENCY_B]?.symbol)}</Trans>
                           )}
                         </ButtonPrimary>
                       )}
