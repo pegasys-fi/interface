@@ -298,6 +298,17 @@ export default function ModalAddGammaLiquidity({
       txHashWithdraw: txHash,
     })
   }
+
+  // TODO: Fix types
+  function getDepositValidation(balance: any, depositAmount: any, approvalState: any) {
+    if (Number(balance) < Number(depositAmount)) {
+      return i18n._('Insufficient Balance')
+    } else if (approvalState !== ApprovalState.APPROVED) {
+      return i18n._('Approve Required')
+    }
+    return i18n._('Ready to Deposit')
+  }
+
   return (
     <>
       <TransactionConfirmationModal
@@ -393,15 +404,7 @@ export default function ModalAddGammaLiquidity({
                     <GridItemAddLiquidity
                       titleText="Deposit: "
                       availableStakeAmount={token0Balance}
-                      textButton={
-                        Number(token0Balance) < Number(deposit0)
-                          ? i18n._('Insufficient Balance')
-                          : approvalToken0 === ApprovalState.PENDING
-                          ? i18n._('Approve Pending')
-                          : approvalToken0 === ApprovalState.NOT_APPROVED
-                          ? i18n._('Approve')
-                          : i18n._('Ready to Deposit')
-                      }
+                      textButton={getDepositValidation(token0Balance, deposit0, approvalToken0)}
                       tokenSymbol={tokenStake0?.symbol || ''}
                       depositValue={deposit0}
                       disabledButton={
@@ -433,15 +436,7 @@ export default function ModalAddGammaLiquidity({
                     <GridItemAddLiquidity
                       titleText="Deposit: "
                       availableStakeAmount={token1Balance}
-                      textButton={
-                        Number(token1Balance) < Number(deposit1)
-                          ? i18n._('Insufficient Balance')
-                          : approvalToken1 === ApprovalState.PENDING
-                          ? i18n._('Approve Pending')
-                          : approvalToken1 === ApprovalState.NOT_APPROVED
-                          ? i18n._('Approve')
-                          : i18n._('Ready to Deposit')
-                      }
+                      textButton={getDepositValidation(token1Balance, deposit1, approvalToken1)}
                       tokenSymbol={tokenStake1?.symbol || ''}
                       depositValue={deposit1}
                       disabledButton={
