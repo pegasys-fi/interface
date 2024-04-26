@@ -299,8 +299,7 @@ export default function ModalAddGammaLiquidity({
     })
   }
 
-  // TODO: Fix types
-  function getDepositValidation(balance: any, depositAmount: any, approvalState: any) {
+  function getDepositValidation(balance: string, depositAmount: string, approvalState: ApprovalState) {
     if (Number(balance) < Number(depositAmount)) {
       return i18n._('Insufficient Balance')
     } else if (approvalState !== ApprovalState.APPROVED) {
