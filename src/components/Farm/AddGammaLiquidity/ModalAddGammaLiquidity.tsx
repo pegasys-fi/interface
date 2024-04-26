@@ -407,9 +407,7 @@ export default function ModalAddGammaLiquidity({
                       textButton={getDepositValidation(token0Balance, deposit0, approvalToken0)}
                       tokenSymbol={tokenStake0?.symbol || ''}
                       depositValue={deposit0}
-                      disabledButton={
-                        Number(token0Balance) < Number(deposit0) || approvalToken0 !== ApprovalState.APPROVED
-                      }
+                      disabledButton={Number(token0Balance) < Number(deposit0)}
                       isApproved={approvalToken0 === ApprovalState.APPROVED}
                       setDepositAmount={(amount: string) => {
                         setDeposit0(amount)
@@ -439,9 +437,7 @@ export default function ModalAddGammaLiquidity({
                       textButton={getDepositValidation(token1Balance, deposit1, approvalToken1)}
                       tokenSymbol={tokenStake1?.symbol || ''}
                       depositValue={deposit1}
-                      disabledButton={
-                        Number(token1Balance) < Number(deposit1) || approvalToken1 !== ApprovalState.APPROVED
-                      }
+                      disabledButton={Number(token1Balance) < Number(deposit1)}
                       isApproved={approvalToken1 === ApprovalState.APPROVED}
                       setDepositAmount={(amount: string) => {
                         setDeposit1(amount)
