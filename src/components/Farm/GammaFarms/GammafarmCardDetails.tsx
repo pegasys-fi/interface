@@ -21,6 +21,7 @@ import { useTransactionAdder } from 'state/transactions/hooks'
 import styled, { useTheme } from 'styled-components/macro'
 import { calculateGasMargin } from 'utils/calculateGasMargin'
 import { useTransactionFinalizer } from 'utils/farmUtils'
+import { regexTokenSymbol } from 'utils/regexTokenSymbol'
 
 import { TransactionType } from '../../../state/transactions/types'
 import { GridItemGammaCard } from './GridItemGammaCard'
@@ -326,9 +327,13 @@ const GammaFarmCardDetails: React.FC<{
     [rewardToken?.symbol, rewardsAmount]
   )
 
-  const pendingTextDeposit = `Depositing ${formatNumber(Number(dataDetails.stakeAmount))} ${dataDetails.lpSymbol}`
+  const pendingTextDeposit = `Depositing ${formatNumber(Number(dataDetails.stakeAmount))} ${regexTokenSymbol(
+    dataDetails.lpSymbol
+  )}`
 
-  const pendingTextWithdraw = `Withdraw ${formatNumber(Number(unStakeAmount))} ${dataDetails.lpSymbol}`
+  const pendingTextWithdraw = `Withdraw ${formatNumber(Number(unStakeAmount))} ${regexTokenSymbol(
+    dataDetails.lpSymbol
+  )}`
 
   const modalHeader = () => {
     return (
@@ -355,7 +360,7 @@ const GammaFarmCardDetails: React.FC<{
             {'Deposit' + ' '}
             {formatNumber(Number(dataDetails.stakeAmount)) + ' '}
             <Text as="span" color={theme.accentActive}>
-              {dataDetails.lpSymbol}
+              {regexTokenSymbol(dataDetails.lpSymbol)}
             </Text>
           </Text>
         </Row>
@@ -370,7 +375,7 @@ const GammaFarmCardDetails: React.FC<{
           <Text fontSize="18px">
             {'Approve' + ' '}
             <Text as="span" color={theme.accentActive}>
-              {dataDetails.lpSymbol}
+              {regexTokenSymbol(dataDetails.lpSymbol)}
             </Text>
           </Text>
         </Row>
@@ -386,7 +391,7 @@ const GammaFarmCardDetails: React.FC<{
             {'Withdraw' + ' '}
             {formatNumber(Number(unStakeAmount)) + ' '}
             <Text as="span" color={theme.accentActive}>
-              {dataDetails.lpSymbol}
+              {regexTokenSymbol(dataDetails.lpSymbol)}
             </Text>
           </Text>
         </Row>
@@ -567,7 +572,7 @@ const GammaFarmCardDetails: React.FC<{
                   : 'Approve'
               }
               setUnStakeAmount={setUnStakeAmount}
-              tokenLPSymbol={dataDetails.lpSymbol}
+              tokenLPSymbol={regexTokenSymbol(dataDetails.lpSymbol) || ''}
             />
 
             <GridItemGammaCard
@@ -588,7 +593,7 @@ const GammaFarmCardDetails: React.FC<{
                   txHashWithdraw: undefined,
                 })
               }
-              tokenLPSymbol={dataDetails.lpSymbol}
+              tokenLPSymbol={regexTokenSymbol(dataDetails.lpSymbol) || ''}
             />
 
             {rewardToken && (
