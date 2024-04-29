@@ -7,7 +7,7 @@ import { LoadingOpacityContainer, loadingOpacityMixin } from 'components/Loader/
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
 import { isSupportedChain } from 'constants/chains'
 import { darken } from 'polished'
-import { ReactNode, useCallback, useState } from 'react'
+import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { Lock } from 'react-feather'
 import styled, { useTheme } from 'styled-components/macro'
 import { flexColumnNoWrap, flexRowNoWrap } from 'theme/styles'
@@ -229,6 +229,7 @@ export default function SwapCurrencyInputPanel({
   const [modalOpen, setModalOpen] = useState(false)
   const { account, chainId } = useWeb3React()
   const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
+  const [balance, setBalance] = useState(selectedCurrencyBalance)
   const theme = useTheme()
 
   const handleDismissSearch = useCallback(() => {
@@ -236,6 +237,10 @@ export default function SwapCurrencyInputPanel({
   }, [setModalOpen])
 
   const chainAllowed = isSupportedChain(chainId)
+
+  useEffect(() => {
+    setBalance(selectedCurrencyBalance)
+  }, [selectedCurrencyBalance])
 
   return (
     <InputPanel id={id} hideInput={hideInput} {...rest}>
@@ -314,15 +319,15 @@ export default function SwapCurrencyInputPanel({
                     fontSize={14}
                     style={{ display: 'inline' }}
                   >
-                    {!hideBalance && currency && selectedCurrencyBalance ? (
+                    {!hideBalance && currency && balance ? (
                       renderBalance ? (
-                        renderBalance(selectedCurrencyBalance)
+                        renderBalance(balance)
                       ) : (
-                        <Trans>Balance: {formatCurrencyAmount(selectedCurrencyBalance, 4)}</Trans>
+                        <Trans>Balance: {formatCurrencyAmount(balance, 4)}</Trans>
                       )
                     ) : null}
                   </ThemedText.DeprecatedBody>
-                  {showMaxButton && selectedCurrencyBalance ? (
+                  {showMaxButton && balance ? (
                     <StyledBalanceMax onClick={onMax}>
                       <Trans>Max</Trans>
                     </StyledBalanceMax>
