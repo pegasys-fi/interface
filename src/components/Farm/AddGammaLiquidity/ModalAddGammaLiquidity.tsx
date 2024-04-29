@@ -9,11 +9,13 @@ import DoubleCurrencyLogo from 'components/DoubleLogo'
 import ModalAddLiquidity from 'components/ModalAddLiquidity'
 import Row, { RowBetween } from 'components/Row'
 import SubTitleContainer from 'components/SubTitleContainer/SubTitleContainer'
+import { MouseoverTooltip } from 'components/Tooltip'
 import TransactionConfirmationModal, { ConfirmationModalContent } from 'components/TransactionConfirmationModal'
 import { Contract } from 'ethers/lib/ethers'
 import { ApprovalState } from 'hooks/useApproveCallback'
 import { useIsMobile } from 'nft/hooks'
 import React, { useCallback, useState } from 'react'
+import { Info } from 'react-feather'
 import { Text } from 'rebass'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import styled, { useTheme } from 'styled-components/macro'
@@ -463,7 +465,14 @@ export default function ModalAddGammaLiquidity({
                 {approvalToken0 === ApprovalState.APPROVED && approvalToken1 === ApprovalState.APPROVED && (
                   <DepositButton>
                     <ButtonPrimary
-                      style={{ height: '40px', fontSize: '16px' }}
+                      style={{
+                        height: '40px',
+                        fontSize: '16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '5px',
+                      }}
                       disabled={false}
                       onClick={() => {
                         setTransactionModal({
@@ -474,6 +483,17 @@ export default function ModalAddGammaLiquidity({
                         })
                       }}
                     >
+                      <MouseoverTooltip
+                        style={{ height: 'auto', display: 'flex' }}
+                        text={
+                          <Trans>
+                            Permission is required for Pegasys farm to swap each token. This will expire after one month
+                            for your security.
+                          </Trans>
+                        }
+                      >
+                        <Info size={17} />
+                      </MouseoverTooltip>
                       Confirm Deposit
                     </ButtonPrimary>
                   </DepositButton>
