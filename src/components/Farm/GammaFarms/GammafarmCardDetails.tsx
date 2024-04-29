@@ -8,7 +8,6 @@ import { AutoColumn } from 'components/Column'
 import Divider from 'components/Divider/Divider'
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
 import Row from 'components/Row'
-import { MouseoverTooltip } from 'components/Tooltip'
 import TransactionConfirmationModal, { ConfirmationModalContent } from 'components/TransactionConfirmationModal'
 import { Contract } from 'ethers/lib/ethers'
 import { formatUnits, parseUnits } from 'ethers/lib/utils'
@@ -17,7 +16,6 @@ import { ApprovalState } from 'hooks/useApproveCallback'
 import { useSingleCallResult } from 'lib/hooks/multicall'
 import { useIsMobile } from 'nft/hooks'
 import React, { useCallback, useMemo, useState } from 'react'
-import { Info } from 'react-feather'
 import { Box, Text } from 'rebass'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import styled, { useTheme } from 'styled-components/macro'
@@ -549,60 +547,56 @@ const GammaFarmCardDetails: React.FC<{
 
         <div style={{ padding: 1.5 }}>
           <Grid isMobile={isMobile} hasRewards={Number(rewardsAmount) > 0}>
-            {parseFloat(dataDetails.availableStakeAmount) > 0 && (
-              <GridItemGammaCard
-                titleText="Available:"
-                approveOrStakeLP={() =>
-                  setTransactionDepositModal({
-                    attemptingDepositTxn: false,
-                    showTransactionDepositModal: true,
-                    transactionDepositErrorMessage: undefined,
-                    txHashDeposit: undefined,
-                  })
-                }
-                availableStakeAmount={dataDetails.availableStakeAmount}
-                availableStakeUSD={dataDetails.availableStakeUSD}
-                stakeAmount={dataDetails.stakeAmount}
-                setStakeAmount={dataDetails.setStakeAmount}
-                stakeButtonDisabled={stakeButtonDisabled}
-                textButton={
-                  dataDetails.approval === ApprovalState.APPROVED
-                    ? approveOrStaking
-                      ? 'Depositing'
-                      : 'Deposit'
-                    : approveOrStaking
-                    ? 'Approving'
-                    : 'Approve'
-                }
-                setUnStakeAmount={setUnStakeAmount}
-                tokenLPSymbol={regexTokenSymbol(dataDetails.lpSymbol) || ''}
-              />
-            )}
+            <GridItemGammaCard
+              titleText="Available:"
+              approveOrStakeLP={() =>
+                setTransactionDepositModal({
+                  attemptingDepositTxn: false,
+                  showTransactionDepositModal: true,
+                  transactionDepositErrorMessage: undefined,
+                  txHashDeposit: undefined,
+                })
+              }
+              availableStakeAmount={dataDetails.availableStakeAmount}
+              availableStakeUSD={dataDetails.availableStakeUSD}
+              stakeAmount={dataDetails.stakeAmount}
+              setStakeAmount={dataDetails.setStakeAmount}
+              stakeButtonDisabled={stakeButtonDisabled}
+              textButton={
+                dataDetails.approval === ApprovalState.APPROVED
+                  ? approveOrStaking
+                    ? 'Depositing'
+                    : 'Deposit'
+                  : approveOrStaking
+                  ? 'Approving'
+                  : 'Approve'
+              }
+              setUnStakeAmount={setUnStakeAmount}
+              tokenLPSymbol={regexTokenSymbol(dataDetails.lpSymbol) || ''}
+            />
 
-            {parseFloat(dataDetails.availableStakeAmount) > 0 && (
-              <GridItemGammaCard
-                titleText="Deposited:"
-                stakedUSD={dataDetails.stakedUSD}
-                setUnStakeAmount={setUnStakeAmount}
-                stakedAmount={dataDetails.stakedAmount}
-                unStakeAmount={unStakeAmount}
-                unStakeButtonDisabled={unStakeButtonDisabled}
-                textButton={attemptUnstaking ? 'Withdrawing' : 'Withdraw'}
-                setStakeAmount={dataDetails.setStakeAmount}
-                stakeAmount={dataDetails.stakeAmount}
-                unStakeLP={() =>
-                  setTransactionWithdrawModal({
-                    attemptingWithdrawTxn: false,
-                    showTransactionWithdrawModal: true,
-                    transactionWithdrawErrorMessage: undefined,
-                    txHashWithdraw: undefined,
-                  })
-                }
-                tokenLPSymbol={regexTokenSymbol(dataDetails.lpSymbol) || ''}
-              />
-            )}
+            <GridItemGammaCard
+              titleText="Deposited:"
+              stakedUSD={dataDetails.stakedUSD}
+              setUnStakeAmount={setUnStakeAmount}
+              stakedAmount={dataDetails.stakedAmount}
+              unStakeAmount={unStakeAmount}
+              unStakeButtonDisabled={unStakeButtonDisabled}
+              textButton={attemptUnstaking ? 'Withdrawing' : 'Withdraw'}
+              setStakeAmount={dataDetails.setStakeAmount}
+              stakeAmount={dataDetails.stakeAmount}
+              unStakeLP={() =>
+                setTransactionWithdrawModal({
+                  attemptingWithdrawTxn: false,
+                  showTransactionWithdrawModal: true,
+                  transactionWithdrawErrorMessage: undefined,
+                  txHashWithdraw: undefined,
+                })
+              }
+              tokenLPSymbol={regexTokenSymbol(dataDetails.lpSymbol) || ''}
+            />
 
-            {parseFloat(dataDetails.availableStakeAmount) > 0 && rewardToken && (
+            {rewardToken && (
               <GridItem>
                 <ClaimContainer>
                   <small style={{ color: theme.textSecondary }}>Earned Rewards: </small>
@@ -636,29 +630,6 @@ const GammaFarmCardDetails: React.FC<{
                     </ButtonPrimary>
                   </Box>
                 </ClaimContainer>
-              </GridItem>
-            )}
-
-            {parseFloat(dataDetails.availableStakeAmount) === 0 && (
-              <GridItem>
-                <ButtonPrimary
-                  style={{
-                    height: '40px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '5px',
-                  }}
-                  onClick={() => console.log('open modal here')}
-                >
-                  <MouseoverTooltip
-                    style={{ height: 'auto', display: 'flex' }}
-                    text={<Trans>Make sure to Add Gamma liquidity before adding LP liquidity.</Trans>}
-                  >
-                    <Info size={17} />
-                  </MouseoverTooltip>
-                  Add Farm Liquidity
-                </ButtonPrimary>
               </GridItem>
             )}
           </Grid>
