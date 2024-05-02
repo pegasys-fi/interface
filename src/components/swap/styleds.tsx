@@ -27,6 +27,7 @@ export const PageWrapper = styled.div<{ isOnSwapPage?: boolean }>`
 export const SwapWrapper = styled.main<{ chainId?: number }>`
   position: relative;
   background: ${({ theme }) => theme.backgroundSurface};
+  box-shadow: ${({ theme }) => theme.deepShadow};
   border-radius: 30px;
   border: 1px solid ${({ theme }) => theme.backgroundBorderGradient};
   padding: 8px;
