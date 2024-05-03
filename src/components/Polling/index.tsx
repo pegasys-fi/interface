@@ -105,6 +105,7 @@ export default function Polling() {
   const blockNumber = useBlockNumber()
   const [isMounting, setIsMounting] = useState(false)
   const [isHover, setIsHover] = useState(false)
+  const [block, setBlock] = useState<number>()
   const machineTime = useMachineTimeMs(NETWORK_HEALTH_CHECK_MS)
   const blockTime = useCurrentBlockTimestamp()
   const isNftPage = useIsNftPage()
@@ -133,12 +134,16 @@ export default function Polling() {
     //if you pass a value to array, like this [data] than clearTimeout will run every time this value changes (useEffect re-run)
   )
 
+  useEffect(() => {
+    setBlock(blockNumber)
+  }, [blockNumber, blockTime])
+
   //TODO - chainlink gas oracle is really slow. Can we get a better data source?
 
   const blockExternalLinkHref = useMemo(() => {
-    if (!chainId || !blockNumber) return ''
-    return getExplorerLink(chainId, blockNumber.toString(), ExplorerDataType.BLOCK)
-  }, [blockNumber, chainId])
+    if (!chainId || !block) return ''
+    return getExplorerLink(chainId, block.toString(), ExplorerDataType.BLOCK)
+  }, [block, chainId])
 
   if (isNftPage || isLandingPage) {
     return null
@@ -152,7 +157,7 @@ export default function Polling() {
             <MouseoverTooltip
               text={<Trans>The most recent block number on this network. Prices update on every block.</Trans>}
             >
-              {blockNumber}&ensp;
+              {block}&ensp;
             </MouseoverTooltip>
           </ExternalLink>
         </StyledPollingBlockNumber>
