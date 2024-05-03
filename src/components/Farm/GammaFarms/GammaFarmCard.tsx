@@ -367,7 +367,11 @@ export function GammaFarmCard({ data, rewardData, pairData, token0, token1 }: Ga
               height={20}
               onClick={() => setShowDetails(!showDetails)}
             >
-              {showDetails ? <ChevronUp color={theme.accentActive} /> : <ChevronDown color={theme.accentActive} />}
+              {showDetails ? (
+                <ChevronUp color={theme.accentActive} style={{ cursor: 'pointer' }} />
+              ) : (
+                <ChevronDown color={theme.accentActive} style={{ cursor: 'pointer' }} />
+              )}
             </Box>
           </div>
         </div>
