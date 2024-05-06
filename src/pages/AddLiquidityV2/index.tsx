@@ -278,32 +278,56 @@ export default function AddLiquidity() {
     </Trans>
   )
 
-  const handleCurrencyASelect = useCallback(
-    (currencyA: Currency) => {
-      const newCurrencyIdA = currencyId(currencyA)
-      if (newCurrencyIdA === currencyIdB) {
-        navigate(`/add/v2/${currencyIdB}/${currencyIdA}`)
+  const handleCurrencySelect = useCallback(
+    (currencyNew: Currency, currencyIdOther?: string): (string | undefined)[] => {
+      const currencyIdNew = currencyId(currencyNew)
+
+      if (currencyIdNew === currencyIdOther) {
+        // not ideal, but for now clobber the other if the currency ids are equal
+        return [currencyIdNew, undefined]
       } else {
-        navigate(`/add/v2/${newCurrencyIdA}/${currencyIdB}`)
+        // prevent weth + eth
+        const isETHOrWETHNew =
+          currencyIdNew === 'SYS' ||
+          (chainId !== undefined && currencyIdNew === WRAPPED_NATIVE_CURRENCY[chainId]?.address)
+        const isETHOrWETHOther =
+          currencyIdOther !== undefined &&
+          (currencyIdOther === 'SYS' ||
+            (chainId !== undefined && currencyIdOther === WRAPPED_NATIVE_CURRENCY[chainId]?.address))
+
+        if (isETHOrWETHNew && isETHOrWETHOther) {
+          return [currencyIdNew, undefined]
+        } else {
+          return [currencyIdNew, currencyIdOther]
+        }
       }
     },
-    [currencyIdB, navigate, currencyIdA]
+    [chainId]
+  )
+
+  const handleCurrencyASelect = useCallback(
+    (currencyA: Currency) => {
+      const [idA, idB] = handleCurrencySelect(currencyA, currencyIdB)
+
+      if (idB === undefined) {
+        navigate(`/add/v2/${idA}`)
+      } else {
+        navigate(`/add/v2/${idA}/${idB}`)
+      }
+    },
+    [handleCurrencySelect, currencyIdB, navigate]
   )
 
   const handleCurrencyBSelect = useCallback(
     (currencyB: Currency) => {
-      const newCurrencyIdB = currencyId(currencyB)
-      if (currencyIdA === newCurrencyIdB) {
-        if (currencyIdB) {
-          navigate(`/add/v2/${currencyIdB}/${newCurrencyIdB}`)
-        } else {
-          navigate(`/add/v2/${newCurrencyIdB}`)
-        }
+      const [idB, idA] = handleCurrencySelect(currencyB, currencyIdA)
+      if (idA === undefined) {
+        navigate(`/add/${idB}`)
       } else {
-        navigate(`/add/v2/${currencyIdA ? currencyIdA : 'SYS'}/${newCurrencyIdB}`)
+        navigate(`/add/${idA}/${idB}`)
       }
     },
-    [currencyIdA, navigate, currencyIdB]
+    [handleCurrencySelect, currencyIdA, navigate]
   )
 
   const handleDismissConfirmation = useCallback(() => {

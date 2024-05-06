@@ -33,18 +33,6 @@ const InputPanel = styled.div<{ hideInput?: boolean }>`
   will-change: height;
 `
 
-const FixedContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  border-radius: 20px;
-  background-color: ${({ theme }) => theme.backgroundInteractive};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-`
-
 const Container = styled.div<{ hideInput: boolean; disabled: boolean }>`
   border-radius: ${({ hideInput }) => (hideInput ? '16px' : '20px')};
   border: 1px solid ${({ theme }) => theme.backgroundModule};

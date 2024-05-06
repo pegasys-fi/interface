@@ -19,6 +19,7 @@ const StyledInput = styled.input<{ error?: boolean; fontSize?: string; align?: s
   overflow: hidden;
   text-overflow: ellipsis;
   padding: 0px;
+  appearance: textfield;
   -webkit-appearance: textfield;
   text-align: right;
 
@@ -27,6 +28,7 @@ const StyledInput = styled.input<{ error?: boolean; fontSize?: string; align?: s
   }
 
   [type='number'] {
+    appearance: textfield;
     -moz-appearance: textfield;
   }
 
