@@ -136,6 +136,7 @@ export default function AddLiquidity() {
     if (!chainId || !provider || !account || !router) return
 
     const { [Field.CURRENCY_A]: parsedAmountA, [Field.CURRENCY_B]: parsedAmountB } = parsedAmounts
+
     if (!parsedAmountA || !parsedAmountB || !currencyA || !currencyB || !deadline) {
       return
     }
@@ -177,7 +178,7 @@ export default function AddLiquidity() {
       ]
       value = null
     }
-    // console.log(args)
+
     setAttemptingTxn(true)
     await estimate(...args, value ? { value } : {})
       .then((estimatedGasLimit) =>
@@ -396,7 +397,6 @@ export default function AddLiquidity() {
               showMaxButton={!atMaxAmounts[Field.CURRENCY_A]}
               currency={currencies[Field.CURRENCY_A] ?? null}
               id="add-liquidity-input-tokena"
-              showCommonBases
             />
             <ColumnCenter>
               <Plus size="16" color={theme.textSecondary} />
@@ -411,7 +411,6 @@ export default function AddLiquidity() {
               showMaxButton={!atMaxAmounts[Field.CURRENCY_B]}
               currency={currencies[Field.CURRENCY_B] ?? null}
               id="add-liquidity-input-tokenb"
-              showCommonBases
             />
             {currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B] && pairState !== PairState.INVALID && (
               <>

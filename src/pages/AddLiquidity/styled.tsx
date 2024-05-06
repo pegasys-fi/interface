@@ -1,6 +1,6 @@
 import { AutoColumn } from 'components/Column'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
-import Input from 'components/NumericalInput'
+import { Input } from 'components/NumericalInput'
 import styled from 'styled-components/macro'
 
 export const PageWrapper = styled.div<{ wide: boolean }>`
