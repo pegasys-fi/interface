@@ -5,24 +5,27 @@ import { Currency, CurrencyAmount, Percent } from '@pollum-io/sdk-core'
 import { useWeb3React } from '@web3-react/core'
 import { useToggleAccountDrawer } from 'components/AccountDrawer'
 import { sendEvent } from 'components/analytics'
+import { ButtonError, ButtonLight, ButtonPrimary } from 'components/Button'
+import CurrencyInputPanel from 'components/CurrencyInputPanel'
+import { AddRemoveTabs } from 'components/NavigationTabs'
+import { MinimalPositionCard } from 'components/PositionCard'
 import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter'
 import { SwitchLocaleLink } from 'components/SwitchLocaleLink'
+import TransactionConfirmationModal, { ConfirmationModalContent } from 'components/TransactionConfirmationModal'
+import { PairState } from 'hooks/useV2Pairs'
+import { PageWrapper, Wrapper } from 'pages/AddLiquidity/styled'
+import { Dots } from 'pages/Pool/styleds'
 import { useCallback, useState } from 'react'
 import { Plus } from 'react-feather'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Text } from 'rebass'
-import styled, { useTheme } from 'styled-components/macro'
+import { useTheme } from 'styled-components/macro'
 import { regexTokenSymbol } from 'utils/regexTokenSymbol'
 
-import { ButtonError, ButtonLight, ButtonPrimary } from '../../components/Button'
 import { BlueCard, LightCard } from '../../components/Card'
 import { AutoColumn, ColumnCenter } from '../../components/Column'
-import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
-import { AddRemoveTabs } from '../../components/NavigationTabs'
-import { MinimalPositionCard } from '../../components/PositionCard'
 import Row, { RowBetween, RowFlat } from '../../components/Row'
-import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
 import { ZERO_PERCENT } from '../../constants/misc'
 import { WRAPPED_NATIVE_CURRENCY } from '../../constants/tokens'
 import { useCurrency } from '../../hooks/Tokens'
@@ -30,7 +33,6 @@ import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallbac
 import { useV2RouterContract } from '../../hooks/useContract'
 import { useIsSwapUnsupported } from '../../hooks/useIsSwapUnsupported'
 import useTransactionDeadline from '../../hooks/useTransactionDeadline'
-import { PairState } from '../../hooks/useV2Pairs'
 import { Field } from '../../state/mint/actions'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '../../state/mint/hooks'
 import { useTransactionAdder } from '../../state/transactions/hooks'
@@ -41,7 +43,6 @@ import { calculateGasMargin } from '../../utils/calculateGasMargin'
 import { calculateSlippageAmount } from '../../utils/calculateSlippageAmount'
 import { currencyId } from '../../utils/currencyId'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
-import { Dots, Wrapper } from '../Pool/styleds'
 import { ConfirmAddModalBottom } from './ConfirmAddModalBottom'
 import { PoolPriceBar } from './PoolPriceBar'
 
@@ -344,20 +345,9 @@ export default function AddLiquidity() {
 
   const addIsUnsupported = useIsSwapUnsupported(currencies?.CURRENCY_A, currencies?.CURRENCY_B)
 
-  const BodyWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 420px;
-    background: ${({ theme }) => theme.backgroundScrolledSurface};
-    border-radius: 16px;
-    box-shadow: ${({ theme }) => theme.deepShadow};
-    margin-top: 72px;
-  `
-
   return (
     <>
-      <BodyWrapper>
+      <PageWrapper wide={false}>
         <AddRemoveTabs creating={isCreate} adding={true} defaultSlippage={DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE} />
         <Wrapper>
           <TransactionConfirmationModal
@@ -526,7 +516,7 @@ export default function AddLiquidity() {
             )}
           </AutoColumn>
         </Wrapper>
-      </BodyWrapper>
+      </PageWrapper>
       <SwitchLocaleLink />
 
       {!addIsUnsupported ? (
