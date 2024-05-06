@@ -1,3 +1,4 @@
+import { i18n } from '@lingui/core'
 import { Trans } from '@lingui/macro'
 import { Token } from '@pollum-io/sdk-core'
 import { formatNumber } from '@uniswap/conedison/format'
@@ -8,17 +9,20 @@ import DoubleCurrencyLogo from 'components/DoubleLogo'
 import ModalAddLiquidity from 'components/ModalAddLiquidity'
 import Row, { RowBetween } from 'components/Row'
 import SubTitleContainer from 'components/SubTitleContainer/SubTitleContainer'
+import { MouseoverTooltip } from 'components/Tooltip'
 import TransactionConfirmationModal, { ConfirmationModalContent } from 'components/TransactionConfirmationModal'
 import { Contract } from 'ethers/lib/ethers'
 import { ApprovalState } from 'hooks/useApproveCallback'
 import { useIsMobile } from 'nft/hooks'
 import React, { useCallback, useState } from 'react'
+import { Info } from 'react-feather'
 import { Text } from 'rebass'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import styled, { useTheme } from 'styled-components/macro'
 import { CloseIcon, ThemedText } from 'theme'
 import { useIsDarkMode } from 'theme/components/ThemeToggle'
 import { useTransactionFinalizer } from 'utils/farmUtils'
+import { regexTokenSymbol } from 'utils/regexTokenSymbol'
 
 import gammaLogo from '../../../assets/svg/gamma_logo.svg'
 import gammaLogoWhite from '../../../assets/svg/gamma_logo_white.svg'
@@ -225,7 +229,7 @@ export default function ModalAddGammaLiquidity({
             {'Withdraw' + ' '}
             {formatNumber(Number(unStakeGamma)) + ' '}
             <Text as="span" color={theme.accentActive}>
-              {lpTokenSymbol}
+              {regexTokenSymbol(lpTokenSymbol)}
             </Text>
           </Text>
         </Row>
@@ -295,6 +299,15 @@ export default function ModalAddGammaLiquidity({
       transactionWithdrawErrorMessage: transactionErrorMessage,
       txHashWithdraw: txHash,
     })
+  }
+
+  function getDepositValidation(balance: string, depositAmount: string, approvalState: ApprovalState) {
+    if (Number(balance) < Number(depositAmount)) {
+      return i18n._('Insufficient Balance')
+    } else if (approvalState !== ApprovalState.APPROVED) {
+      return i18n._('Approve Required')
+    }
+    return i18n._('Ready to Deposit')
   }
 
   return (
@@ -392,15 +405,11 @@ export default function ModalAddGammaLiquidity({
                     <GridItemAddLiquidity
                       titleText="Deposit: "
                       availableStakeAmount={token0Balance}
-                      textButton={validationTextButton0}
+                      textButton={getDepositValidation(token0Balance, deposit0, approvalToken0)}
                       tokenSymbol={tokenStake0?.symbol || ''}
                       depositValue={deposit0}
-                      disabledButton={
-                        approvalToken0 === ApprovalState.APPROVED || approvalToken0 === ApprovalState.UNKNOWN
-                      }
-                      isApproved={
-                        approvalToken0 === ApprovalState.APPROVED && approvalToken1 === ApprovalState.APPROVED
-                      }
+                      disabledButton={Number(token0Balance) < Number(deposit0)}
+                      isApproved={approvalToken0 === ApprovalState.APPROVED}
                       setDepositAmount={(amount: string) => {
                         setDeposit0(amount)
                         if (uniProxyContract)
@@ -426,15 +435,11 @@ export default function ModalAddGammaLiquidity({
                     <GridItemAddLiquidity
                       titleText="Deposit: "
                       availableStakeAmount={token1Balance}
-                      textButton={validationTextButton1}
+                      textButton={getDepositValidation(token1Balance, deposit1, approvalToken1)}
                       tokenSymbol={tokenStake1?.symbol || ''}
                       depositValue={deposit1}
-                      disabledButton={
-                        approvalToken1 === ApprovalState.APPROVED || approvalToken1 === ApprovalState.UNKNOWN
-                      }
-                      isApproved={
-                        approvalToken0 === ApprovalState.APPROVED && approvalToken1 === ApprovalState.APPROVED
-                      }
+                      disabledButton={Number(token1Balance) < Number(deposit1)}
+                      isApproved={approvalToken1 === ApprovalState.APPROVED}
                       setDepositAmount={(amount: string) => {
                         setDeposit1(amount)
                         if (uniProxyContract)
@@ -460,7 +465,14 @@ export default function ModalAddGammaLiquidity({
                 {approvalToken0 === ApprovalState.APPROVED && approvalToken1 === ApprovalState.APPROVED && (
                   <DepositButton>
                     <ButtonPrimary
-                      style={{ height: '40px', fontSize: '16px' }}
+                      style={{
+                        height: '40px',
+                        fontSize: '16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '5px',
+                      }}
                       disabled={false}
                       onClick={() => {
                         setTransactionModal({
@@ -471,6 +483,17 @@ export default function ModalAddGammaLiquidity({
                         })
                       }}
                     >
+                      <MouseoverTooltip
+                        style={{ height: 'auto', display: 'flex' }}
+                        text={
+                          <Trans>
+                            Permission is required for Pegasys farm to swap each token. This will expire after one month
+                            for your security.
+                          </Trans>
+                        }
+                      >
+                        <Info size={17} />
+                      </MouseoverTooltip>
                       Confirm Deposit
                     </ButtonPrimary>
                   </DepositButton>
@@ -482,7 +505,7 @@ export default function ModalAddGammaLiquidity({
                   titleText="Withdraw: "
                   availableStakeAmount={lpTokenBalance}
                   textButton="Withdraw"
-                  tokenSymbol={lpTokenSymbol}
+                  tokenSymbol={regexTokenSymbol(lpTokenSymbol) || ''}
                   depositValue={unStakeGamma}
                   disabledButton={!(Number(unStakeGamma) > 0)}
                   isApproved={false}
