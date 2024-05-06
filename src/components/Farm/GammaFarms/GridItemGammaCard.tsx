@@ -1,6 +1,9 @@
+import { Trans } from '@lingui/macro'
 import { formatNumber } from '@uniswap/conedison/format'
 import { ButtonPrimary } from 'components/Button'
 import { StyledBalanceMax } from 'components/CurrencyInputPanel'
+import { MouseoverTooltip } from 'components/Tooltip'
+import { Info } from 'react-feather'
 import styled, { useTheme } from 'styled-components/macro'
 
 import { Input as NumericalInput } from '../../NumericalInput'
@@ -97,7 +100,22 @@ export function GridItemGammaCard({
 
       <div style={{ marginTop: 5 }}>
         {approveOrStakeLP && (
-          <ButtonPrimary style={{ height: '40px' }} disabled={stakeButtonDisabled} onClick={approveOrStakeLP}>
+          <ButtonPrimary
+            style={{ height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}
+            disabled={stakeButtonDisabled}
+            onClick={approveOrStakeLP}
+          >
+            <MouseoverTooltip
+              style={{ height: 'auto', display: 'flex' }}
+              text={
+                <Trans>
+                  Permission is required for Pegasys farm to swap each token. This will expire after one month for your
+                  security.
+                </Trans>
+              }
+            >
+              <Info size={17} />
+            </MouseoverTooltip>
             {textButton}
           </ButtonPrimary>
         )}
