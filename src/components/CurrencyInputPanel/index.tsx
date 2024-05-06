@@ -219,8 +219,8 @@ export default function CurrencyInputPanel({
   const theme = useTheme()
 
   const handleDismissSearch = useCallback(() => {
-    setModalOpen(false)
-  }, [setModalOpen])
+    if (modalOpen === true) setModalOpen(false)
+  }, [modalOpen])
 
   const chainAllowed = isSupportedChain(chainId)
 
