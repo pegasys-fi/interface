@@ -5,24 +5,27 @@ import { Currency, CurrencyAmount, Percent } from '@pollum-io/sdk-core'
 import { useWeb3React } from '@web3-react/core'
 import { useToggleAccountDrawer } from 'components/AccountDrawer'
 import { sendEvent } from 'components/analytics'
+import { ButtonError, ButtonLight, ButtonPrimary } from 'components/Button'
+import CurrencyInputPanel from 'components/CurrencyInputPanel'
+import { AddRemoveTabs } from 'components/NavigationTabs'
+import { MinimalPositionCard } from 'components/PositionCard'
 import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter'
 import { SwitchLocaleLink } from 'components/SwitchLocaleLink'
+import TransactionConfirmationModal, { ConfirmationModalContent } from 'components/TransactionConfirmationModal'
+import { PairState } from 'hooks/useV2Pairs'
+import { PageWrapper, Wrapper } from 'pages/AddLiquidity/styled'
+import { Dots } from 'pages/Pool/styleds'
 import { useCallback, useState } from 'react'
 import { Plus } from 'react-feather'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Text } from 'rebass'
-import styled, { useTheme } from 'styled-components/macro'
+import { useTheme } from 'styled-components/macro'
 import { regexTokenSymbol } from 'utils/regexTokenSymbol'
 
-import { ButtonError, ButtonLight, ButtonPrimary } from '../../components/Button'
 import { BlueCard, LightCard } from '../../components/Card'
 import { AutoColumn, ColumnCenter } from '../../components/Column'
-import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
-import { AddRemoveTabs } from '../../components/NavigationTabs'
-import { MinimalPositionCard } from '../../components/PositionCard'
 import Row, { RowBetween, RowFlat } from '../../components/Row'
-import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
 import { ZERO_PERCENT } from '../../constants/misc'
 import { WRAPPED_NATIVE_CURRENCY } from '../../constants/tokens'
 import { useCurrency } from '../../hooks/Tokens'
@@ -30,7 +33,6 @@ import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallbac
 import { useV2RouterContract } from '../../hooks/useContract'
 import { useIsSwapUnsupported } from '../../hooks/useIsSwapUnsupported'
 import useTransactionDeadline from '../../hooks/useTransactionDeadline'
-import { PairState } from '../../hooks/useV2Pairs'
 import { Field } from '../../state/mint/actions'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '../../state/mint/hooks'
 import { useTransactionAdder } from '../../state/transactions/hooks'
@@ -41,7 +43,6 @@ import { calculateGasMargin } from '../../utils/calculateGasMargin'
 import { calculateSlippageAmount } from '../../utils/calculateSlippageAmount'
 import { currencyId } from '../../utils/currencyId'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
-import { Dots, Wrapper } from '../Pool/styleds'
 import { ConfirmAddModalBottom } from './ConfirmAddModalBottom'
 import { PoolPriceBar } from './PoolPriceBar'
 
@@ -137,6 +138,7 @@ export default function AddLiquidity() {
     if (!chainId || !provider || !account || !router) return
 
     const { [Field.CURRENCY_A]: parsedAmountA, [Field.CURRENCY_B]: parsedAmountB } = parsedAmounts
+
     if (!parsedAmountA || !parsedAmountB || !currencyA || !currencyB || !deadline) {
       return
     }
@@ -178,7 +180,7 @@ export default function AddLiquidity() {
       ]
       value = null
     }
-    // console.log(args)
+
     setAttemptingTxn(true)
     await estimate(...args, value ? { value } : {})
       .then((estimatedGasLimit) =>
@@ -277,32 +279,56 @@ export default function AddLiquidity() {
     </Trans>
   )
 
-  const handleCurrencyASelect = useCallback(
-    (currencyA: Currency) => {
-      const newCurrencyIdA = currencyId(currencyA)
-      if (newCurrencyIdA === currencyIdB) {
-        navigate(`/add/v2/${currencyIdB}/${currencyIdA}`)
+  const handleCurrencySelect = useCallback(
+    (currencyNew: Currency, currencyIdOther?: string): (string | undefined)[] => {
+      const currencyIdNew = currencyId(currencyNew)
+
+      if (currencyIdNew === currencyIdOther) {
+        // not ideal, but for now clobber the other if the currency ids are equal
+        return [currencyIdNew, undefined]
       } else {
-        navigate(`/add/v2/${newCurrencyIdA}/${currencyIdB}`)
+        // prevent weth + eth
+        const isETHOrWETHNew =
+          currencyIdNew === 'SYS' ||
+          (chainId !== undefined && currencyIdNew === WRAPPED_NATIVE_CURRENCY[chainId]?.address)
+        const isETHOrWETHOther =
+          currencyIdOther !== undefined &&
+          (currencyIdOther === 'SYS' ||
+            (chainId !== undefined && currencyIdOther === WRAPPED_NATIVE_CURRENCY[chainId]?.address))
+
+        if (isETHOrWETHNew && isETHOrWETHOther) {
+          return [currencyIdNew, undefined]
+        } else {
+          return [currencyIdNew, currencyIdOther]
+        }
       }
     },
-    [currencyIdB, navigate, currencyIdA]
+    [chainId]
+  )
+
+  const handleCurrencyASelect = useCallback(
+    (currencyA: Currency) => {
+      const [idA, idB] = handleCurrencySelect(currencyA, currencyIdB)
+
+      if (idB === undefined) {
+        navigate(`/add/v2/${idA}`)
+      } else {
+        navigate(`/add/v2/${idA}/${idB}`)
+      }
+    },
+    [handleCurrencySelect, currencyIdB, navigate]
   )
 
   const handleCurrencyBSelect = useCallback(
     (currencyB: Currency) => {
-      const newCurrencyIdB = currencyId(currencyB)
-      if (currencyIdA === newCurrencyIdB) {
-        if (currencyIdB) {
-          navigate(`/add/v2/${currencyIdB}/${newCurrencyIdB}`)
-        } else {
-          navigate(`/add/v2/${newCurrencyIdB}`)
-        }
+      const [idB, idA] = handleCurrencySelect(currencyB, currencyIdA)
+      if (idA === undefined) {
+        navigate(`/add/v2/${idB}`)
       } else {
-        navigate(`/add/v2/${currencyIdA ? currencyIdA : 'SYS'}/${newCurrencyIdB}`)
+        navigate(`/add/v2/${idA}/${idB}`)
       }
     },
-    [currencyIdA, navigate, currencyIdB]
+    [handleCurrencySelect, currencyIdA, navigate]
   )
 
   const handleDismissConfirmation = useCallback(() => {
@@ -319,20 +345,9 @@ export default function AddLiquidity() {
 
   const addIsUnsupported = useIsSwapUnsupported(currencies?.CURRENCY_A, currencies?.CURRENCY_B)
 
-  const BodyWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 420px;
-    background: ${({ theme }) => theme.backgroundScrolledSurface};
-    border-radius: 16px;
-    box-shadow: ${({ theme }) => theme.deepShadow};
-    margin-top: 72px;
-  `
-
   return (
     <>
-      <BodyWrapper>
+      <PageWrapper wide={false}>
         <AddRemoveTabs creating={isCreate} adding={true} defaultSlippage={DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE} />
         <Wrapper>
           <TransactionConfirmationModal
@@ -397,7 +412,6 @@ export default function AddLiquidity() {
               showMaxButton={!atMaxAmounts[Field.CURRENCY_A]}
               currency={currencies[Field.CURRENCY_A] ?? null}
               id="add-liquidity-input-tokena"
-              showCommonBases
             />
             <ColumnCenter>
               <Plus size="16" color={theme.textSecondary} />
@@ -412,7 +426,6 @@ export default function AddLiquidity() {
               showMaxButton={!atMaxAmounts[Field.CURRENCY_B]}
               currency={currencies[Field.CURRENCY_B] ?? null}
               id="add-liquidity-input-tokenb"
-              showCommonBases
             />
             {currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B] && pairState !== PairState.INVALID && (
               <>
@@ -503,7 +516,7 @@ export default function AddLiquidity() {
             )}
           </AutoColumn>
         </Wrapper>
-      </BodyWrapper>
+      </PageWrapper>
       <SwitchLocaleLink />
 
       {!addIsUnsupported ? (
