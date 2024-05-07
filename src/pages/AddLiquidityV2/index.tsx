@@ -323,9 +323,9 @@ export default function AddLiquidity() {
     (currencyB: Currency) => {
       const [idB, idA] = handleCurrencySelect(currencyB, currencyIdA)
       if (idA === undefined) {
-        navigate(`/add/${idB}`)
+        navigate(`/add/v2/${idB}`)
       } else {
-        navigate(`/add/${idA}/${idB}`)
+        navigate(`/add/v2/${idA}/${idB}`)
       }
     },
     [handleCurrencySelect, currencyIdA, navigate]
