@@ -7,6 +7,7 @@ import { useWeb3React } from '@web3-react/core'
 import { useToggleAccountDrawer } from 'components/AccountDrawer'
 import { sendEvent } from 'components/analytics'
 import { useV2LiquidityTokenPermit } from 'hooks/useV2LiquidityTokenPermit'
+import { PageWrapper } from 'pages/AddLiquidity/styled'
 import { useCallback, useMemo, useState } from 'react'
 import { ArrowDown, Plus } from 'react-feather'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -40,7 +41,6 @@ import { StyledInternalLink, ThemedText } from '../../theme'
 import { calculateGasMargin } from '../../utils/calculateGasMargin'
 import { calculateSlippageAmount } from '../../utils/calculateSlippageAmount'
 import { currencyId } from '../../utils/currencyId'
-import AppBody from '../AppBody'
 import { ClickableText, MaxButton, Wrapper } from '../Pool/styleds'
 
 const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
@@ -428,7 +428,7 @@ export default function RemoveLiquidity() {
 
   return (
     <>
-      <AppBody>
+      <PageWrapper wide={false}>
         <AddRemoveTabs creating={false} adding={false} defaultSlippage={DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE} />
         <Wrapper>
           <TransactionConfirmationModal
@@ -449,9 +449,9 @@ export default function RemoveLiquidity() {
           <AutoColumn gap="md">
             <BlueCard>
               <AutoColumn gap="10px">
-                <ThemedText.DeprecatedLink fontWeight={400} color="accentAction">
+                <ThemedText.DeprecatedLink fontWeight={400} color={theme.accentAction}>
                   <Trans>
-                    <b>Tip:</b> Removing pool tokens converts your position back into underlying tokens at the current
+                    <b>Tip: </b> Removing pool tokens converts your position back into underlying tokens at the current
                     rate, proportional to your share of the pool. Accrued fees are included in the amounts you receive.
                   </Trans>
                 </ThemedText.DeprecatedLink>
@@ -661,7 +661,7 @@ export default function RemoveLiquidity() {
             </div>
           </AutoColumn>
         </Wrapper>
-      </AppBody>
+      </PageWrapper>
 
       {pair ? (
         <AutoColumn style={{ minWidth: '20rem', width: '100%', maxWidth: '400px', marginTop: '1rem' }}>
