@@ -234,16 +234,6 @@ export default function Pool() {
     {
       content: (
         <PoolMenuItem>
-          <Trans>V2 liquidity</Trans>
-          <Layers size={16} />
-        </PoolMenuItem>
-      ),
-      link: '/pools/v2',
-      external: false,
-    },
-    {
-      content: (
-        <PoolMenuItem>
           <Trans>Learn</Trans>
           <BookOpen size={16} />
         </PoolMenuItem>
@@ -279,6 +269,15 @@ export default function Pool() {
                 )}
                 <ResponsiveButtonPrimary data-cy="join-pool-button" id="join-pool-button" as={Link} to="/add/SYS">
                   + <Trans>New Position</Trans>
+                </ResponsiveButtonPrimary>
+                <ResponsiveButtonPrimary
+                  data-cy="join-pool-button"
+                  id="join-pool-button"
+                  as={Link}
+                  to="/pools/v2"
+                  style={{ marginLeft: '5px', gap: '5px' }}
+                >
+                  <Layers size={16} /> <Trans>V2 liquidity</Trans>
                 </ResponsiveButtonPrimary>
               </ButtonRow>
             </TitleRow>
