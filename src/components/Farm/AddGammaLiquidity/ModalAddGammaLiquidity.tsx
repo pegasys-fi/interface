@@ -304,6 +304,8 @@ export default function ModalAddGammaLiquidity({
   function getDepositValidation(balance: string, depositAmount: string, approvalState: ApprovalState) {
     if (Number(balance) < Number(depositAmount)) {
       return i18n._('Insufficient Balance')
+    } else if (Number(depositAmount) <= 0) {
+      return i18n._('Enter an amount')
     } else if (approvalState !== ApprovalState.APPROVED) {
       return i18n._('Approve Required')
     }
@@ -408,7 +410,7 @@ export default function ModalAddGammaLiquidity({
                       textButton={getDepositValidation(token0Balance, deposit0, approvalToken0)}
                       tokenSymbol={tokenStake0?.symbol || ''}
                       depositValue={deposit0}
-                      disabledButton={Number(token0Balance) < Number(deposit0)}
+                      disabledButton={Number(token0Balance) < Number(deposit0) || Number(token0Balance) <= 0}
                       isApproved={approvalToken0 === ApprovalState.APPROVED}
                       setDepositAmount={(amount: string) => {
                         setDeposit0(amount)
@@ -438,7 +440,7 @@ export default function ModalAddGammaLiquidity({
                       textButton={getDepositValidation(token1Balance, deposit1, approvalToken1)}
                       tokenSymbol={tokenStake1?.symbol || ''}
                       depositValue={deposit1}
-                      disabledButton={Number(token1Balance) < Number(deposit1)}
+                      disabledButton={Number(token1Balance) < Number(deposit1) || Number(token1Balance) <= 0}
                       isApproved={approvalToken1 === ApprovalState.APPROVED}
                       setDepositAmount={(amount: string) => {
                         setDeposit1(amount)
@@ -483,17 +485,19 @@ export default function ModalAddGammaLiquidity({
                         })
                       }}
                     >
-                      <MouseoverTooltip
-                        style={{ height: 'auto', display: 'flex' }}
-                        text={
-                          <Trans>
-                            Permission is required for Pegasys farm to swap each token. This will expire after one month
-                            for your security.
-                          </Trans>
-                        }
-                      >
-                        <Info size={17} />
-                      </MouseoverTooltip>
+                      {!ApprovalState.APPROVED && (
+                        <MouseoverTooltip
+                          style={{ height: 'auto', display: 'flex' }}
+                          text={
+                            <Trans>
+                              Permission is required for Pegasys farm to swap each token. This will expire after one
+                              month for your security.
+                            </Trans>
+                          }
+                        >
+                          <Info size={17} />
+                        </MouseoverTooltip>
+                      )}
                       Confirm Deposit
                     </ButtonPrimary>
                   </DepositButton>
