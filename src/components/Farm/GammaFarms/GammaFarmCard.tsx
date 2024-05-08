@@ -263,6 +263,11 @@ export function GammaFarmCard({ data, rewardData, pairData, token0, token1 }: Ga
     lpSymbol,
   }
 
+  const hasAnyStakeOrBalance = () =>
+    parseFloat(dataDetails.stakedAmount) > 0 ||
+    parseFloat(dataDetails.availableStakeAmount) > 0 ||
+    dataDetails.stakedUSD > 0
+
   return (
     <>
       <ModalAddGammaLiquidity
@@ -375,51 +380,54 @@ export function GammaFarmCard({ data, rewardData, pairData, token0, token1 }: Ga
             </Box>
           </div>
         </div>
-        {showDetails &&
-          (parseFloat(dataDetails.availableStakeAmount) > 0 ? (
-            <GammaFarmCardDetails
-              pairData={pairData}
-              rewardData={rewardData}
-              dataDetails={{
-                stakeAmount,
-                stakedAmount,
-                lpTokenBalance,
-                lpBalanceBN,
-                approval,
-                approveCallback,
-                parsedStakeAmount,
-                availableStakeAmount,
-                stakedAmountBN,
-                masterChefContract,
-                stakedUSD,
-                availableStakeUSD,
-                setStakeAmount,
-                lpSymbol,
-              }}
-              forceUpdate={forceUpdate}
-            />
-          ) : parseFloat(dataDetails.availableStakeAmount) === 0 ? (
-            <div style={{ padding: '20px' }}>
-              <ButtonPrimary
-                style={{
-                  height: '40px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '5px',
-                }}
-                onClick={() => setModalOpen(true)}
-              >
-                <MouseoverTooltip
-                  style={{ height: 'auto', display: 'flex' }}
-                  text={<Trans>Make sure to Add Gamma liquidity before adding LP liquidity.</Trans>}
+        {showDetails && (
+          <>
+            {!hasAnyStakeOrBalance() ? (
+              <div style={{ padding: '20px' }}>
+                <ButtonPrimary
+                  style={{
+                    height: '40px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '5px',
+                  }}
+                  onClick={() => setModalOpen(true)}
                 >
-                  <Info size={17} />
-                </MouseoverTooltip>
-                Add Farm Liquidity
-              </ButtonPrimary>
-            </div>
-          ) : null)}
+                  <MouseoverTooltip
+                    style={{ height: 'auto', display: 'flex' }}
+                    text={<Trans>Make sure to Add Gamma liquidity before adding LP liquidity.</Trans>}
+                  >
+                    <Info size={17} />
+                  </MouseoverTooltip>
+                  Add Farm Liquidity
+                </ButtonPrimary>
+              </div>
+            ) : (
+              <GammaFarmCardDetails
+                pairData={pairData}
+                rewardData={rewardData}
+                dataDetails={{
+                  stakeAmount,
+                  stakedAmount,
+                  lpTokenBalance,
+                  lpBalanceBN,
+                  approval,
+                  approveCallback,
+                  parsedStakeAmount,
+                  availableStakeAmount,
+                  stakedAmountBN,
+                  masterChefContract,
+                  stakedUSD,
+                  availableStakeUSD,
+                  setStakeAmount,
+                  lpSymbol,
+                }}
+                forceUpdate={forceUpdate}
+              />
+            )}
+          </>
+        )}
       </CardContainer>
     </>
   )
