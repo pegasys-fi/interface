@@ -311,6 +311,59 @@ export default function ModalAddGammaLiquidity({
     }
     return i18n._('Ready to Deposit')
   }
+  function changeApprovalState(
+    token0Balance: string,
+    deposit0: string,
+    approvalToken0: ApprovalState,
+    token1Balance: string,
+    deposit1: string,
+    approvalToken1: ApprovalState
+  ): ApprovalState {
+    if (
+      approvalToken0 === ApprovalState.APPROVED &&
+      approvalToken1 === ApprovalState.APPROVED &&
+      Number(token0Balance) >= Number(deposit0) &&
+      Number(token1Balance) >= Number(deposit1)
+    ) {
+      return ApprovalState.APPROVED
+    }
+    return ApprovalState.PENDING
+  }
+
+  const depositApprovalState = changeApprovalState(
+    token0Balance,
+    deposit0,
+    approvalToken0,
+    token1Balance,
+    deposit1,
+    approvalToken1
+  )
+
+  function getDepositButtonText(
+    token0Balance: string,
+    deposit0: string,
+    approvalToken0: ApprovalState,
+    token1Balance: string,
+    deposit1: string,
+    approvalToken1: ApprovalState
+  ): string {
+    if (approvalToken0 !== ApprovalState.APPROVED || approvalToken1 !== ApprovalState.APPROVED) {
+      return 'Approve Required'
+    }
+    if (Number(token0Balance) < Number(deposit0) || Number(token1Balance) < Number(deposit1)) {
+      return 'Insufficient Balance'
+    }
+    return 'Confirm Deposit'
+  }
+
+  const depositButtonText = getDepositButtonText(
+    token0Balance,
+    deposit0,
+    approvalToken0,
+    token1Balance,
+    deposit1,
+    approvalToken1
+  )
 
   return (
     <>
@@ -483,7 +536,7 @@ export default function ModalAddGammaLiquidity({
                         justifyContent: 'center',
                         gap: '5px',
                       }}
-                      disabled={false}
+                      disabled={depositButtonText !== 'Confirm Deposit'}
                       onClick={() => {
                         setTransactionModal({
                           attemptingTxn: false,
@@ -506,7 +559,7 @@ export default function ModalAddGammaLiquidity({
                           <Info size={17} />
                         </MouseoverTooltip>
                       )}
-                      Confirm Deposit
+                      {depositButtonText}
                     </ButtonPrimary>
                   </DepositButton>
                 )}
