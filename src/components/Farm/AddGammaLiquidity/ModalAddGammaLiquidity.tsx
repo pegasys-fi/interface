@@ -464,6 +464,7 @@ export default function ModalAddGammaLiquidity({
                       tokenSymbol={tokenStake0?.symbol || ''}
                       depositValue={deposit0}
                       disabledButton={
+                        getDepositValidation(token0Balance, deposit0, approvalToken0) === i18n._('Enter an amount') ||
                         Number(token0Balance) < Number(deposit0) ||
                         Number(token0Balance) <= 0 ||
                         Number(token1Balance) <= 0
@@ -498,6 +499,7 @@ export default function ModalAddGammaLiquidity({
                       tokenSymbol={tokenStake1?.symbol || ''}
                       depositValue={deposit1}
                       disabledButton={
+                        getDepositValidation(token1Balance, deposit1, approvalToken1) === i18n._('Enter an amount') ||
                         Number(token1Balance) < Number(deposit1) ||
                         Number(token0Balance) <= 0 ||
                         Number(token1Balance) <= 0
