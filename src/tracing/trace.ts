@@ -1,5 +1,4 @@
 import * as Sentry from '@sentry/react'
-import { Span, SpanStatusType } from '@sentry/tracing'
 
 type TraceTags = {
   is_widget: boolean
@@ -28,7 +27,7 @@ interface TraceCallbackOptions {
    * Sets the status of a trace. If unset, the status will be set to 'ok' (or 'internal_error' if the callback throws).
    * @param status - If a number is passed, the corresponding http status will be used.
    */
-  setTraceStatus(status: number | SpanStatusType): void
+  setTraceStatus(status: number | any): void
   /** Sets the error data of a trace. If unset and the callback throws, the thrown error will be set. */
   setTraceError(error: unknown): void
 }
@@ -38,7 +37,7 @@ type TraceCallback<T> = (options: TraceCallbackOptions) => Promise<T>
  * Sets up TraceCallbackOptions for a Span (NB: Transaction extends Span).
  * @returns a handler which will run a TraceCallback and propagate its result.
  */
-function traceSpan(span?: Span) {
+function traceSpan(span?: any) {
   const traceChild = <T>(name: string, callback: TraceCallback<T>, metadata?: TraceMetadata) => {
     const child = span?.startChild({ ...metadata, op: name })
     return traceSpan(child)(callback)
@@ -49,7 +48,7 @@ function traceSpan(span?: Span) {
   const setTraceTag = (key: string, value: string | number | boolean) => {
     span?.setTag(key, value)
   }
-  const setTraceStatus = (status: number | SpanStatusType) => {
+  const setTraceStatus = (status: number | any) => {
     if (typeof status === 'number') {
       span?.setHttpStatus(status)
     } else {
