@@ -1,4 +1,3 @@
-import { Trans } from '@lingui/macro'
 import { Token } from '@pollum-io/sdk-core'
 import { formatNumber } from '@uniswap/conedison/format'
 import { CallState } from '@uniswap/redux-multicall'
@@ -7,7 +6,6 @@ import { useWeb3React } from '@web3-react/core'
 import { ButtonEmpty, ButtonPrimary } from 'components/Button'
 import DoubleCurrencyLogo from 'components/DoubleLogo'
 import ModalAddGammaLiquidity from 'components/Farm/AddGammaLiquidity/ModalAddGammaLiquidity'
-import { MouseoverTooltip } from 'components/Tooltip'
 import TotalAPRTooltip from 'components/TotalAPRTooltip/TotalAPRTooltip'
 import { formatUnits } from 'ethers/lib/utils'
 import { useToken } from 'hooks/Tokens'
@@ -22,7 +20,7 @@ import { useSingleCallResult } from 'lib/hooks/multicall'
 import tryParseCurrencyAmount from 'lib/utils/tryParseCurrencyAmount'
 import { useIsMobile } from 'nft/hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { AlertCircle, ChevronDown, ChevronUp, Info } from 'react-feather'
+import { AlertCircle, ChevronDown, ChevronUp } from 'react-feather'
 import { Box } from 'rebass'
 import { WrappedTokenInfo } from 'state/lists/wrappedTokenInfo'
 import styled, { useTheme } from 'styled-components/macro'
@@ -380,54 +378,55 @@ export function GammaFarmCard({ data, rewardData, pairData, token0, token1 }: Ga
             </Box>
           </div>
         </div>
-        {showDetails && (
-          <>
-            {!hasAnyStakeOrBalance() ? (
-              <div style={{ padding: '20px' }}>
-                <ButtonPrimary
-                  style={{
-                    height: '40px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '5px',
-                  }}
-                  onClick={() => setModalOpen(true)}
-                >
-                  <MouseoverTooltip
-                    style={{ height: 'auto', display: 'flex' }}
-                    text={<Trans>Make sure to Add Gamma liquidity before adding LP liquidity.</Trans>}
-                  >
-                    <Info size={17} />
-                  </MouseoverTooltip>
-                  Add Farm Liquidity
-                </ButtonPrimary>
-              </div>
-            ) : (
-              <GammaFarmCardDetails
-                pairData={pairData}
-                rewardData={rewardData}
-                dataDetails={{
-                  stakeAmount,
-                  stakedAmount,
-                  lpTokenBalance,
-                  lpBalanceBN,
-                  approval,
-                  approveCallback,
-                  parsedStakeAmount,
-                  availableStakeAmount,
-                  stakedAmountBN,
-                  masterChefContract,
-                  stakedUSD,
-                  availableStakeUSD,
-                  setStakeAmount,
-                  lpSymbol,
+        {showDetails &&
+          (parseFloat(dataDetails.availableStakeAmount) > 0 ? (
+            <GammaFarmCardDetails
+              pairData={pairData}
+              rewardData={rewardData}
+              dataDetails={{
+                stakeAmount,
+                stakedAmount,
+                lpTokenBalance,
+                lpBalanceBN,
+                approval,
+                approveCallback,
+                parsedStakeAmount,
+                availableStakeAmount,
+                stakedAmountBN,
+                masterChefContract,
+                stakedUSD,
+                availableStakeUSD,
+                setStakeAmount,
+                lpSymbol,
+              }}
+              forceUpdate={forceUpdate}
+            />
+          ) : parseFloat(dataDetails.availableStakeAmount) === 0 ? (
+            <div
+              style={{
+                padding: '20px',
+                display: 'flex',
+                width: '300px',
+                flexDirection: 'column',
+                gap: '10px',
+                textAlign: 'center',
+              }}
+            >
+              <small>You have no liquidity to deposit in this Pool. Add liquidity before</small>
+              <ButtonPrimary
+                style={{
+                  height: '40px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '5px',
                 }}
-                forceUpdate={forceUpdate}
-              />
-            )}
-          </>
-        )}
+                onClick={() => setModalOpen(true)}
+              >
+                Add Farm Liquidity
+              </ButtonPrimary>
+            </div>
+          ) : null)}
       </CardContainer>
     </>
   )
