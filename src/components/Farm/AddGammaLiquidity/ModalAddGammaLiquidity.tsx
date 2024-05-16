@@ -566,29 +566,30 @@ export default function ModalAddGammaLiquidity({
                   </DepositButton>
                 )}
               </ApprovedArea>
-
-              <Withdraw>
-                <GridItemAddLiquidity
-                  titleText="Withdraw: "
-                  availableStakeAmount={lpTokenBalance}
-                  textButton="Withdraw"
-                  tokenSymbol={regexTokenSymbol(lpTokenSymbol) || ''}
-                  depositValue={unStakeGamma}
-                  disabledButton={!(Number(unStakeGamma) > 0)}
-                  isApproved={false}
-                  setDepositAmount={(amount: string) => {
-                    setUnStakeGamma(amount)
-                  }}
-                  approveOrStakeLPOrWithdraw={() => {
-                    setTransactionWithdrawModal({
-                      attemptingWithdrawTxn: false,
-                      showTransactionWithdrawModal: true,
-                      transactionWithdrawErrorMessage: undefined,
-                      txHashWithdraw: undefined,
-                    })
-                  }}
-                />
-              </Withdraw>
+              {lpTokenBalance && Number(lpTokenBalance) != 0 && (
+                <Withdraw>
+                  <GridItemAddLiquidity
+                    titleText="Withdraw: "
+                    availableStakeAmount={lpTokenBalance}
+                    textButton="Withdraw"
+                    tokenSymbol={regexTokenSymbol(lpTokenSymbol) || ''}
+                    depositValue={unStakeGamma}
+                    disabledButton={!(Number(unStakeGamma) > 0)}
+                    isApproved={false}
+                    setDepositAmount={(amount: string) => {
+                      setUnStakeGamma(amount)
+                    }}
+                    approveOrStakeLPOrWithdraw={() => {
+                      setTransactionWithdrawModal({
+                        attemptingWithdrawTxn: false,
+                        showTransactionWithdrawModal: true,
+                        transactionWithdrawErrorMessage: undefined,
+                        txHashWithdraw: undefined,
+                      })
+                    }}
+                  />
+                </Withdraw>
+              )}
             </Container>
           </Body>
         </Wrapper>
