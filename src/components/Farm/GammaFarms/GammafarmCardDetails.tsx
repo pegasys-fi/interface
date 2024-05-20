@@ -575,28 +575,30 @@ const GammaFarmCardDetails: React.FC<{
               tokenLPSymbol={regexTokenSymbol(dataDetails.lpSymbol) || ''}
             />
 
-            <GridItemGammaCard
-              titleText="Deposited:"
-              stakedUSD={dataDetails.stakedUSD}
-              setUnStakeAmount={setUnStakeAmount}
-              stakedAmount={dataDetails.stakedAmount}
-              unStakeAmount={unStakeAmount}
-              unStakeButtonDisabled={unStakeButtonDisabled}
-              textButton={attemptUnstaking ? 'Withdrawing' : 'Withdraw'}
-              setStakeAmount={dataDetails.setStakeAmount}
-              stakeAmount={dataDetails.stakeAmount}
-              unStakeLP={() =>
-                setTransactionWithdrawModal({
-                  attemptingWithdrawTxn: false,
-                  showTransactionWithdrawModal: true,
-                  transactionWithdrawErrorMessage: undefined,
-                  txHashWithdraw: undefined,
-                })
-              }
-              tokenLPSymbol={regexTokenSymbol(dataDetails.lpSymbol) || ''}
-            />
+            {dataDetails.stakedUSD != 0 && (
+              <GridItemGammaCard
+                titleText="Deposited:"
+                stakedUSD={dataDetails.stakedUSD}
+                setUnStakeAmount={setUnStakeAmount}
+                stakedAmount={dataDetails.stakedAmount}
+                unStakeAmount={unStakeAmount}
+                unStakeButtonDisabled={unStakeButtonDisabled}
+                textButton={attemptUnstaking ? 'Withdrawing' : 'Withdraw'}
+                setStakeAmount={dataDetails.setStakeAmount}
+                stakeAmount={dataDetails.stakeAmount}
+                unStakeLP={() =>
+                  setTransactionWithdrawModal({
+                    attemptingWithdrawTxn: false,
+                    showTransactionWithdrawModal: true,
+                    transactionWithdrawErrorMessage: undefined,
+                    txHashWithdraw: undefined,
+                  })
+                }
+                tokenLPSymbol={regexTokenSymbol(dataDetails.lpSymbol) || ''}
+              />
+            )}
 
-            {rewardToken && (
+            {rewardToken && Number(rewardsAmount) != 0 ? (
               <GridItem>
                 <ClaimContainer>
                   <small style={{ color: theme.textSecondary }}>Earned Rewards: </small>
@@ -631,7 +633,7 @@ const GammaFarmCardDetails: React.FC<{
                   </Box>
                 </ClaimContainer>
               </GridItem>
-            )}
+            ) : null}
           </Grid>
         </div>
       </Box>
