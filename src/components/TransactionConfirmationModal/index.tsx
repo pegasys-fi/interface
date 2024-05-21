@@ -251,6 +251,10 @@ function L2Content({
 
   const info = getChainInfo(chainId)
 
+  if (confirmed && transactionSuccess) {
+    onDismiss()
+  }
+
   return (
     <Wrapper>
       <Section inline={inline}>
@@ -279,7 +283,7 @@ function L2Content({
         <AutoColumn gap="md" justify="center">
           <Text fontWeight={500} fontSize={20} textAlign="center">
             {!hash ? (
-              <Trans>Confirm transaction in wallet</Trans>
+              <Trans>Confirm transaction in wallettt</Trans>
             ) : !confirmed ? (
               <Trans>Transaction Submitted</Trans>
             ) : transactionSuccess ? (
