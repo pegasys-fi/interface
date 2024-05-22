@@ -173,6 +173,7 @@ export default function ModalAddGammaLiquidity({
     // if there was a tx hash, we want to clear the input
     if (txHash) {
       finalStateTransactionDismiss()
+      handleDismiss()
     }
   }, [attemptingTxn, finalStateTransactionDismiss, transactionErrorMessage, txHash])
 
@@ -186,6 +187,7 @@ export default function ModalAddGammaLiquidity({
     // if there was a tx hash, we want to clear the input
     if (txHashWithdraw) {
       finalStateTransactionDismiss()
+      handleDismiss()
     }
   }, [attemptingWithdrawTxn, finalStateTransactionDismiss, transactionWithdrawErrorMessage, txHashWithdraw])
 
