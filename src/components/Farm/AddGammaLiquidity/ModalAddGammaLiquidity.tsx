@@ -311,35 +311,8 @@ export default function ModalAddGammaLiquidity({
     } else if (approvalState !== ApprovalState.APPROVED) {
       return i18n._('Approve Required')
     }
-    return i18n._('Ready to Deposit')
+    return i18n._('Approved')
   }
-  function changeApprovalState(
-    token0Balance: string,
-    deposit0: string,
-    approvalToken0: ApprovalState,
-    token1Balance: string,
-    deposit1: string,
-    approvalToken1: ApprovalState
-  ): ApprovalState {
-    if (
-      approvalToken0 === ApprovalState.APPROVED &&
-      approvalToken1 === ApprovalState.APPROVED &&
-      Number(token0Balance) >= Number(deposit0) &&
-      Number(token1Balance) >= Number(deposit1)
-    ) {
-      return ApprovalState.APPROVED
-    }
-    return ApprovalState.PENDING
-  }
-
-  const depositApprovalState = changeApprovalState(
-    token0Balance,
-    deposit0,
-    approvalToken0,
-    token1Balance,
-    deposit1,
-    approvalToken1
-  )
 
   function getDepositButtonText(
     token0Balance: string,
@@ -467,11 +440,14 @@ export default function ModalAddGammaLiquidity({
                       depositValue={deposit0}
                       disabledButton={
                         getDepositValidation(token0Balance, deposit0, approvalToken0) === i18n._('Enter an amount') ||
+                        getDepositValidation(token0Balance, deposit0, approvalToken0) === i18n._('Approved') ||
                         Number(token0Balance) < Number(deposit0) ||
                         Number(token0Balance) <= 0 ||
                         Number(token1Balance) <= 0
                       }
-                      isApproved={approvalToken0 === ApprovalState.APPROVED}
+                      isApproved={
+                        approvalToken0 === ApprovalState.APPROVED && approvalToken1 === ApprovalState.APPROVED
+                      }
                       setDepositAmount={(amount: string) => {
                         setDeposit0(amount)
                         if (uniProxyContract)
@@ -502,11 +478,14 @@ export default function ModalAddGammaLiquidity({
                       depositValue={deposit1}
                       disabledButton={
                         getDepositValidation(token1Balance, deposit1, approvalToken1) === i18n._('Enter an amount') ||
+                        getDepositValidation(token1Balance, deposit1, approvalToken1) === i18n._('Approved') ||
                         Number(token1Balance) < Number(deposit1) ||
                         Number(token0Balance) <= 0 ||
                         Number(token1Balance) <= 0
                       }
-                      isApproved={approvalToken1 === ApprovalState.APPROVED}
+                      isApproved={
+                        approvalToken1 === ApprovalState.APPROVED && approvalToken0 === ApprovalState.APPROVED
+                      }
                       setDepositAmount={(amount: string) => {
                         setDeposit1(amount)
                         if (uniProxyContract)
