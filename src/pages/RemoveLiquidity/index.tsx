@@ -370,7 +370,7 @@ export default function RemoveLiquidity() {
 
   const pendingText = (
     <Trans>
-      Removing {parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} {currencyA?.symbol} and
+      Removing {parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} {currencyA?.symbol} and{' '}
       {parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)} {currencyB?.symbol}
     </Trans>
   )
