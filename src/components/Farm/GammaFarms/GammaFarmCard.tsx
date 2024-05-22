@@ -379,7 +379,7 @@ export function GammaFarmCard({ data, rewardData, pairData, token0, token1 }: Ga
           </div>
         </div>
         {showDetails &&
-          (parseFloat(dataDetails.availableStakeAmount) > 0 ? (
+          (parseFloat(dataDetails.availableStakeAmount) > 0 || stakedUSD > 0 ? (
             <GammaFarmCardDetails
               pairData={pairData}
               rewardData={rewardData}
