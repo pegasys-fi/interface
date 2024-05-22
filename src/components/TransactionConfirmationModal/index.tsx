@@ -283,7 +283,7 @@ function L2Content({
         <AutoColumn gap="md" justify="center">
           <Text fontWeight={500} fontSize={20} textAlign="center">
             {!hash ? (
-              <Trans>Confirm transaction in wallettt</Trans>
+              <Trans>Confirm transaction in wallet</Trans>
             ) : !confirmed ? (
               <Trans>Transaction Submitted</Trans>
             ) : transactionSuccess ? (
