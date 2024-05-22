@@ -598,7 +598,7 @@ const GammaFarmCardDetails: React.FC<{
               />
             )}
 
-            {rewardToken && Number(rewardsAmount) != 0 ? (
+            {rewardToken && dataDetails.stakedUSD != 0 && (
               <GridItem>
                 <ClaimContainer>
                   <small style={{ color: theme.textSecondary }}>Earned Rewards: </small>
@@ -633,7 +633,7 @@ const GammaFarmCardDetails: React.FC<{
                   </Box>
                 </ClaimContainer>
               </GridItem>
-            ) : null}
+            )}
           </Grid>
         </div>
       </Box>
