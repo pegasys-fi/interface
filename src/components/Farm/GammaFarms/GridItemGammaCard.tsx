@@ -1,4 +1,5 @@
 import { Trans } from '@lingui/macro'
+import { formatNumber } from '@uniswap/conedison/format'
 import { ButtonPrimary } from 'components/Button'
 import { StyledBalanceMax } from 'components/CurrencyInputPanel'
 import { MouseoverTooltip } from 'components/Tooltip'
@@ -73,13 +74,13 @@ export function GridItemGammaCard({
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <small style={{ color: theme.textSecondary }}>{titleText}</small>
         {availableStakeAmount && availableStakeUSD && (
-          <small>{`${Number(availableStakeAmount).toFixed(3)} ${tokenLPSymbol} $${Number(availableStakeUSD).toFixed(
-            3
+          <small>{`${formatNumber(Number(availableStakeAmount))} ${tokenLPSymbol} $${formatNumber(
+            availableStakeUSD
           )}`}</small>
         )}
 
         {stakedAmount && stakedUSD && (
-          <small>{`${Number(stakedAmount).toFixed(3)} ${tokenLPSymbol} $${Number(stakedUSD).toFixed(3)}`}</small>
+          <small>{`${formatNumber(Number(stakedAmount))} ${tokenLPSymbol} $${formatNumber(stakedUSD)}`}</small>
         )}
       </div>
 
