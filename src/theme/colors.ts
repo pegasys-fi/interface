@@ -42,7 +42,7 @@ export const colors = {
   gray800: '#1A202C',
   gray900: '#171923',
 
-  bgDark: '#010101',
+  bgDark: '#000913',
   bgLight: '#e6faff',
 
   deep: '#081120',
