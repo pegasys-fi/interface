@@ -323,15 +323,15 @@ const GammaFarmCardDetails: React.FC<{
 
   // text to show while loading
   const pendingTextClaim = useMemo(
-    () => `Claiming ${formatNumber(Number(rewardsAmount))} ${rewardToken?.symbol}`,
+    () => `Claiming ${Number(rewardsAmount).toString().slice(0, 6)} ${rewardToken?.symbol}`,
     [rewardToken?.symbol, rewardsAmount]
   )
 
-  const pendingTextDeposit = `Depositing ${formatNumber(Number(dataDetails.stakeAmount))} ${regexTokenSymbol(
+  const pendingTextDeposit = `Depositing ${Number(dataDetails.stakeAmount).toString().slice(0, 6)} ${regexTokenSymbol(
     dataDetails.lpSymbol
   )}`
 
-  const pendingTextWithdraw = `Withdraw ${formatNumber(Number(unStakeAmount))} ${regexTokenSymbol(
+  const pendingTextWithdraw = `Withdraw ${Number(unStakeAmount).toString().slice(0, 6)} ${regexTokenSymbol(
     dataDetails.lpSymbol
   )}`
 
