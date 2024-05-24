@@ -132,7 +132,7 @@ const DropdownWrapper = styled(Column)<{ isOpen: boolean }>`
   border-radius: 12px;
   gap: 12px;
   z-index: ${Z_INDEX.modalBackdrop};
-  box-shadow: ${({ theme }) => theme.deepShadow};
+  /* box-shadow: ${({ theme }) => theme.deepShadow}; */
   border: 0.5px solid ${({ theme }) => theme.backgroundOutline};
 `
 

@@ -41,7 +41,7 @@ const StyledDialogContent = styled(AnimatedDialogContent)<StyledDialogProps>`
   &[data-reach-dialog-content] {
     margin: auto;
     background-color: ${({ theme }) => theme.backgroundSurface};
-    box-shadow: ${({ theme }) => theme.deepShadow};
+    /* box-shadow: ${({ theme }) => theme.deepShadow}; */
     padding: 0px;
     width: 50vw;
     overflow-y: auto;

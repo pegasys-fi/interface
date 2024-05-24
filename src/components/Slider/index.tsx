@@ -23,11 +23,11 @@ const StyledRangeInput = styled.input<{ size: number }>`
     border-radius: 100%;
     border: none;
     transform: translateY(-50%);
-    box-shadow: ${({ theme }) => theme.deepShadow};
+    /* box-shadow: ${({ theme }) => theme.deepShadow}; */
 
     &:hover,
     &:focus {
-      box-shadow: ${({ theme }) => theme.deepShadow};
+      /* box-shadow: ${({ theme }) => theme.deepShadow}; */
     }
   }
 
@@ -39,7 +39,7 @@ const StyledRangeInput = styled.input<{ size: number }>`
 
     &:hover,
     &:focus {
-      box-shadow: ${({ theme }) => theme.deepShadow};
+      /* box-shadow: ${({ theme }) => theme.deepShadow}; */
     }
   }
 
@@ -50,7 +50,7 @@ const StyledRangeInput = styled.input<{ size: number }>`
 
     &:hover,
     &:focus {
-      box-shadow: ${({ theme }) => theme.deepShadow};
+      /* box-shadow: ${({ theme }) => theme.deepShadow}; */
     }
   }
 

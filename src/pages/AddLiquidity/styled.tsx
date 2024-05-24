@@ -8,7 +8,7 @@ export const PageWrapper = styled.div<{ wide: boolean }>`
   width: 100%;
   background: ${({ theme }) => theme.backgroundScrolledSurface};
   border-radius: 20px;
-  box-shadow: ${({ theme }) => theme.deepShadow};
+  /* box-shadow: ${({ theme }) => theme.deepShadow}; */
   padding: ${({ wide }) => (wide ? '10px' : '0')};
 
   ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToMedium`

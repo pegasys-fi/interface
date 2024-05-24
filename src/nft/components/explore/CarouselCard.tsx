@@ -33,7 +33,8 @@ const CarouselCardBorder = styled.div`
     bottom: 0;
     border-radius: 21px;
     z-index: -1;
-    box-shadow: ${({ theme }) => theme.deepShadow};
+    /* box-shadow: ${({ theme }) => theme.deepShadow}; */
+    border: 1px solid ${({ theme }) => theme.backgroundOutline};
     transition-property: opacity;
     transition-duration: ${({ theme }) => theme.transition.duration.fast};
     transition-timing-function: ${({ theme }) => theme.transition.timing.inOut};

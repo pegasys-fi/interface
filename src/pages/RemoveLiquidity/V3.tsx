@@ -281,7 +281,7 @@ function Remove({ tokenId }: { tokenId: BigNumber }) {
     width: 100%;
     background: ${({ theme }) => theme.backgroundScrolledSurface};
     border-radius: 16px;
-    box-shadow: ${({ theme }) => theme.deepShadow};
+    /* box-shadow: ${({ theme }) => theme.deepShadow}; */
   `
 
   return (
