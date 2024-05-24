@@ -122,32 +122,18 @@ export function GammaFarmCard({ data, rewardData, pairData, token0, token1 }: Ga
       ? token1DecimalsRequest.result[0]
       : undefined
 
-  function formatUnitsRoundedDown(valueBN: number, decimals: number) {
-    const valueStr = valueBN.toString()
-    const factor = Math.pow(10, decimals - 3)
-    const adjustedValue = Math.floor(parseFloat(valueStr) / factor) * factor
-    const adjustedValueStr = adjustedValue.toString()
-
-    const integerPart = adjustedValueStr.slice(0, -decimals) || '0'
-    const decimalPart = adjustedValueStr.slice(-decimals) || '000'
-    const truncatedDecimalPart = decimalPart.slice(0, 3)
-
-    return `${integerPart}.${truncatedDecimalPart}`
-  }
-
   const token0BalanceBN =
     !token0BalanceRequest.loading && token0BalanceRequest.result && token0BalanceRequest.result.length > 0
       ? token0BalanceRequest.result[0]
       : undefined
-  const token0Balance =
-    token0BalanceBN && token0Decimals ? formatUnitsRoundedDown(token0BalanceBN, token1Decimals) : '0'
+  const token0Balance = token0BalanceBN && token0Decimals ? formatUnits(token0BalanceBN, token0Decimals) : '0'
 
   const token1BalanceBN =
     !token1BalanceRequest.loading && token1BalanceRequest.result && token1BalanceRequest.result.length > 0
       ? token1BalanceRequest.result[0]
       : undefined
-  const token1Balance =
-    token1BalanceBN && token1Decimals ? formatUnitsRoundedDown(token1BalanceBN, token1Decimals) : '0'
+  const token1Balance = token1BalanceBN && token1Decimals ? formatUnits(token1BalanceBN, token1Decimals) : '0'
+
   const stakedAmountBN =
     !stakedData.loading && stakedData.result && stakedData.result.length > 0 ? stakedData.result[0] : undefined
   const stakedAmount = stakedAmountBN ? formatUnits(stakedAmountBN, 18) : '0'
