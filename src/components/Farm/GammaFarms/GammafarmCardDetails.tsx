@@ -342,7 +342,7 @@ const GammaFarmCardDetails: React.FC<{
           {rewardToken && <CurrencyLogo currency={rewardToken} size="24px" />}
           <Text fontSize="18px">
             {'Claim' + ' '}
-            {formatNumber(Number(rewardsAmount)) + ' '}
+            {Number(rewardsAmount).toString().slice(0, 6) + ' '}
             <Text as="span" color={theme.accentActive}>
               {rewardToken?.symbol}
             </Text>
@@ -358,7 +358,7 @@ const GammaFarmCardDetails: React.FC<{
         <Row style={{ padding: '20px', display: 'flex', justifyContent: 'center' }}>
           <Text fontSize="18px">
             {'Deposit' + ' '}
-            {formatNumber(Number(dataDetails.stakeAmount)) + ' '}
+            {Number(dataDetails.stakeAmount).toString().slice(0, 6) + ' '}
             <Text as="span" color={theme.accentActive}>
               {regexTokenSymbol(dataDetails.lpSymbol)}
             </Text>
@@ -389,7 +389,7 @@ const GammaFarmCardDetails: React.FC<{
         <Row style={{ padding: '20px', display: 'flex', justifyContent: 'center' }}>
           <Text fontSize="18px">
             {'Withdraw' + ' '}
-            {formatNumber(Number(unStakeAmount)) + ' '}
+            {Number(unStakeAmount).toString().slice(0, 6) + ' '}
             <Text as="span" color={theme.accentActive}>
               {regexTokenSymbol(dataDetails.lpSymbol)}
             </Text>
