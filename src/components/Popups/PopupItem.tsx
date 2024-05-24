@@ -25,7 +25,8 @@ const PopupCss = css<{ show: boolean }>`
   border: 1px solid ${({ theme }) => theme.backgroundOutline};
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: ${({ theme }) => theme.deepShadow};
+  /* box-shadow: ${({ theme }) => theme.deepShadow}; */
+  border: 1px solid ${({ theme }) => theme.backgroundOutline};
   transition: ${({ theme }) => `visibility ${theme.transition.duration.fast} ease-in-out`};
 
   ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToSmall`

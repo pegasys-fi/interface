@@ -11,7 +11,7 @@ const DropdownWrapper = styled(Column)<{ $width: number }>`
   padding: 8px;
   width: ${({ $width }) => $width}px;
   border-radius: 12px;
-  box-shadow: ${({ theme }) => theme.deepShadow};
+  /* box-shadow: ${({ theme }) => theme.deepShadow}; */
   border: 1px solid ${({ theme }) => theme.backgroundOutline};
 `
 

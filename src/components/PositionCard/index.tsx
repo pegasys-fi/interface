@@ -31,7 +31,8 @@ export const FixedHeightRow = styled(RowBetween)`
 const StyledPositionCard = styled(LightCard)`
   border: none;
   background: ${({ theme }) => theme.backgroundScrolledSurface};
-  box-shadow: ${({ theme }) => theme.deepShadow};
+  /* box-shadow: ${({ theme }) => theme.deepShadow}; */
+  border: 1px solid ${({ theme }) => theme.backgroundOutline};
   position: relative;
   overflow: hidden;
 `

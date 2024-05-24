@@ -147,7 +147,8 @@ export const ButtonGray = styled(BaseButton)`
   color: ${({ theme }) => theme.textSecondary};
   font-size: 16px;
   font-weight: 500;
-  box-shadow: ${({ theme }) => theme.deepShadow};
+  /* box-shadow: ${({ theme }) => theme.deepShadow}; */
+  border: 1px solid ${({ theme }) => theme.backgroundOutline};
   border-radius: 30px;
 
   &:hover {
