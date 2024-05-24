@@ -27,16 +27,17 @@ export const PageWrapper = styled.div<{ isOnSwapPage?: boolean }>`
 export const SwapWrapper = styled.main<{ chainId?: number }>`
   position: relative;
   background: ${({ theme }) => theme.backgroundSurface};
-  box-shadow: ${({ theme }) => theme.deepShadow};
+  /* box-shadow: ${({ theme }) => theme.deepShadow}; */
   border-radius: 30px;
-  border: 1px solid ${({ theme }) => theme.backgroundBorderGradient};
+  /* border: 1px solid ${({ theme }) => theme.backgroundBorderGradient}; */
+  border: 1px solid ${({ theme }) => theme.backgroundOutline};
   padding: 8px;
   z-index: ${Z_INDEX.deprecated_content};
   transition: transform 250ms ease;
 
-  &:hover {
+  /* &:hover {
     border: 1px solid ${({ theme }) => theme.backgroundOutline};
-  }
+  } */
 `
 
 export const ArrowWrapper = styled.div<{ clickable: boolean }>`

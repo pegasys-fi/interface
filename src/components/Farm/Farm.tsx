@@ -25,7 +25,8 @@ const FarmsLayout = styled.div`
   padding: 0 12px 0;
   gap: 10px;
   background: ${({ theme }) => theme.backgroundScrolledSurface};
-  box-shadow: ${({ theme }) => theme.deepShadow};
+  border: 1px solid ${({ theme }) => theme.backgroundOutline};
+  /* box-shadow: ${({ theme }) => theme.deepShadow}; */
   max-width: ${MAX_WIDTH_MEDIA_BREAKPOINT};
   margin-left: auto;
   margin-right: auto;
