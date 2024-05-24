@@ -133,7 +133,8 @@ const ResponsiveButtonPrimary = styled(ButtonPrimary)`
 
 const MainContentWrapper = styled.main`
   background-color: ${({ theme }) => theme.backgroundSurface};
-  box-shadow: ${({ theme }) => theme.deepShadow};
+  /* box-shadow: ${({ theme }) => theme.deepShadow}; */
+  border: 1px solid ${({ theme }) => theme.backgroundOutline};
   padding: 0;
   border-radius: 16px;
   display: flex;

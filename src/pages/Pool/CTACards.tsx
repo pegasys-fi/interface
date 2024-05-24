@@ -24,7 +24,9 @@ const CTA = styled(ExternalLink)`
   border-radius: 20px;
   position: relative;
   overflow: hidden;
-  box-shadow: ${({ theme }) => theme.deepShadow};
+  /* box-shadow: ${({ theme }) => theme.deepShadow}; */
+  border: 1px solid ${({ theme }) => theme.backgroundOutline};
+
   background: ${({ theme }) => theme.backgroundScrolledSurface};
 
   * {
