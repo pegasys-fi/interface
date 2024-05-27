@@ -198,7 +198,7 @@ function Web3StatusInner() {
       >
         {!hasPendingTransactions && <StatusIcon size={24} connection={connection} showMiniIcons={false} />}
         {hasPendingTransactions ? (
-          <RowBetween>
+          <RowBetween style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
             <Text>
               <Trans>{pending?.length} Pending</Trans>
             </Text>{' '}
