@@ -449,8 +449,8 @@ export default function ModalAddGammaLiquidity({
                         approvalToken0 === ApprovalState.APPROVED && approvalToken1 === ApprovalState.APPROVED
                       }
                       setDepositAmount={(amount: string) => {
-                        setDeposit0(amount)
-                        if (uniProxyContract)
+                        setDeposit0(amount === '' ? '' : amount)
+                        if (uniProxyContract && amount !== '')
                           getDepositAmounts(
                             0,
                             uniProxyContract,
@@ -487,8 +487,8 @@ export default function ModalAddGammaLiquidity({
                         approvalToken1 === ApprovalState.APPROVED && approvalToken0 === ApprovalState.APPROVED
                       }
                       setDepositAmount={(amount: string) => {
-                        setDeposit1(amount)
-                        if (uniProxyContract)
+                        setDeposit1(amount === '' ? '' : amount)
+                        if (uniProxyContract && amount !== '')
                           getDepositAmounts(
                             1,
                             uniProxyContract,
