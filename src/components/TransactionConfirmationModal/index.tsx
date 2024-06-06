@@ -8,7 +8,7 @@ import { LoaderGif } from 'components/Icons/LoadingSpinner'
 import { getChainInfo } from 'constants/chainInfo'
 import { SupportedL2ChainId } from 'constants/chains'
 import useCurrencyLogoURIs from 'lib/hooks/useCurrencyLogoURIs'
-import { ReactNode, useCallback, useState } from 'react'
+import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { AlertCircle, AlertTriangle, ArrowUpCircle, CheckCircle } from 'react-feather'
 import { Text } from 'rebass'
 import { useIsTransactionConfirmed, useTransaction } from 'state/transactions/hooks'
@@ -251,9 +251,11 @@ function L2Content({
 
   const info = getChainInfo(chainId)
 
-  if (confirmed && transactionSuccess) {
-    onDismiss()
-  }
+  useEffect(() => {
+    if (confirmed && transactionSuccess) {
+      onDismiss()
+    }
+  }, [confirmed, transactionSuccess, onDismiss])
 
   return (
     <Wrapper>
@@ -348,9 +350,18 @@ export default function TransactionConfirmationModal({
 }: ConfirmationModalProps) {
   const { chainId } = useWeb3React()
 
-  if (!chainId) return null
+  const transaction = useTransaction(hash)
+  const confirmed = useIsTransactionConfirmed(hash)
+  const transactionSuccess = transaction?.receipt?.status === 1
 
-  // confirmation screen
+  useEffect(() => {
+    if (confirmed && transactionSuccess) {
+      onDismiss()
+    }
+  }, [confirmed, transactionSuccess, onDismiss])
+
+  if (!chainId || (confirmed && transactionSuccess)) return null
+
   return (
     <Modal isOpen={isOpen} $scrollOverlay={true} onDismiss={onDismiss} maxHeight={90}>
       {hash || attemptingTxn ? (
