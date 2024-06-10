@@ -354,6 +354,7 @@ export default function TransactionConfirmationModal({
   const confirmed = useIsTransactionConfirmed(hash)
   const transactionSuccess = transaction?.receipt?.status === 1
 
+  // auto close modal
   useEffect(() => {
     if (confirmed && transactionSuccess) {
       onDismiss()
