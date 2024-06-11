@@ -41,7 +41,7 @@ const DoubleLogoContainer = styled.div`
 `
 
 type MultiLogoProps = {
-  chainId: ChainId
+  chainId?: ChainId
   accountAddress?: string
   currencies?: Array<Currency | undefined>
   images?: (string | undefined)[]
@@ -90,9 +90,9 @@ const L2LogoContainer = styled.div<{ $backgroundColor?: string }>`
  */
 export function PortfolioLogo({
   chainId = ChainId.ROLLUX,
-  accountAddress,
-  currencies,
-  images,
+  accountAddress = '',
+  currencies = [],
+  images = [],
   size = '40px',
   style,
 }: MultiLogoProps) {
