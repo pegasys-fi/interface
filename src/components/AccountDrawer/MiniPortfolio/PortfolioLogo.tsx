@@ -13,6 +13,7 @@ import useENSAvatar from 'hooks/useENSAvatar'
 import React from 'react'
 import styled, { useTheme } from 'styled-components/macro'
 import { useIsDarkMode } from 'theme/components/ThemeToggle'
+
 const UnknownContract = styled(UnknownStatus)`
   color: ${({ theme }) => theme.textSecondary};
 `
@@ -100,8 +101,8 @@ export function PortfolioLogo({
   const { avatar, loading } = useENSAvatar(accountAddress, false)
   const theme = useTheme()
   const isDarkMode = useIsDarkMode()
-  const [src, nextSrc] = useTokenLogoSource(currencies?.[0]?.wrapped.address, chainId, currencies?.[0]?.isNative)
-  const [src2, nextSrc2] = useTokenLogoSource(currencies?.[1]?.wrapped.address, chainId, currencies?.[1]?.isNative)
+  const [src, nextSrc] = useTokenLogoSource(currencies?.[0]?.wrapped?.address, chainId, currencies?.[0]?.isNative)
+  const [src2, nextSrc2] = useTokenLogoSource(currencies?.[1]?.wrapped?.address, chainId, currencies?.[1]?.isNative)
 
   let component
   if (accountAddress) {
