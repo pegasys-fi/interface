@@ -1,4 +1,5 @@
 import { Trans } from '@lingui/macro'
+import { formatNumber } from '@uniswap/conedison/format'
 import { ButtonPrimary } from 'components/Button'
 import { StyledBalanceMax } from 'components/CurrencyInputPanel'
 import { MouseoverTooltip } from 'components/Tooltip'
@@ -62,7 +63,13 @@ export function GridItemAddLiquidity({
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <small style={{ color: theme.textSecondary }}>{titleText}</small>
         {availableStakeAmount && tokenSymbol && (
-          <small>{`${Number(availableStakeAmount).toString().slice(0, 6)}  ${tokenSymbol}`}</small>
+          <small>
+            {`${
+              tokenSymbol === 'WETH' || tokenSymbol === 'WSYS-ETH'
+                ? formatNumber(Number(availableStakeAmount))
+                : Number(availableStakeAmount).toString().slice(0, 6)
+            } ${tokenSymbol}`}
+          </small>
         )}
       </div>
 
