@@ -129,7 +129,7 @@ export const routingApi = createApi({
               amount,
               type,
             })
-            return (await fetch(`quote?${query}`)) as { data: GetQuoteResult } | { error: FetchBaseQueryError }
+            return (await fetch(`https://api.pegasys.fi/prod/quote?${query}`)) as { data: GetQuoteResult } | { error: FetchBaseQueryError }
           } else {
             const router = getRouter(args.tokenInChainId)
             return await getClientSideQuote(

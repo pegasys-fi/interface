@@ -30,7 +30,7 @@ describe('Swap', () => {
     cy.get('#swap-currency-output .token-amount-input').clear().type('0.0').should('have.value', '0.0')
   })
 
-  it.skip('can swap ETH for DAI', () => {
+  it.skip('can swap ETH for USDC', () => {
     cy.get('#swap-currency-output .open-currency-select-button').click()
     cy.get('.token-item-0xc7AD46e0b8a400Bb3C915120d284AafbA8fc4735').click()
     cy.get('#swap-currency-input .token-amount-input').clear().type('0.0000001')

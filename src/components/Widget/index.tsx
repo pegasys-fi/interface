@@ -158,10 +158,10 @@ export default function Widget({
           {...settings}
           {...transactions}
           onReviewSwapClick={onReviewSwapClick}
-          onSubmitSwapClick={onSubmitSwapClick}
+          // onSubmitSwapClick={onSubmitSwapClick}
           onSwapApprove={onApproveToken}
-          onInitialSwapQuote={onInitialSwapQuote}
-          onSwapPriceUpdateAck={onSwapPriceUpdateAck}
+          // onInitialSwapQuote={onInitialSwapQuote}
+          // onSwapPriceUpdateAck={onSwapPriceUpdateAck}
           dialogOptions={{
             pageCentered: true,
             animationType: DialogAnimationType.FADE,

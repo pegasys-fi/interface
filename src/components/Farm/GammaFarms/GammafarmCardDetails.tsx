@@ -323,17 +323,26 @@ const GammaFarmCardDetails: React.FC<{
 
   // text to show while loading
   const pendingTextClaim = useMemo(
-    () => `Claiming ${formatNumber(Number(rewardsAmount))} ${rewardToken?.symbol}`,
-    [rewardToken?.symbol, rewardsAmount]
+    () =>
+      `Claiming ${
+        dataDetails.lpSymbol === 'xWSYS-ETH05'
+          ? formatNumber(Number(dataDetails.stakeAmount))
+          : Number(dataDetails.stakeAmount).toString().slice(0, 6)
+      }  ${rewardToken?.symbol}`,
+    [dataDetails.lpSymbol, dataDetails.stakeAmount, rewardToken?.symbol]
   )
 
-  const pendingTextDeposit = `Depositing ${formatNumber(Number(dataDetails.stakeAmount))} ${regexTokenSymbol(
-    dataDetails.lpSymbol
-  )}`
+  const pendingTextDeposit = `Depositing ${
+    dataDetails.lpSymbol === 'xWSYS-ETH05'
+      ? formatNumber(Number(dataDetails.stakeAmount))
+      : Number(dataDetails.stakeAmount).toString().slice(0, 6)
+  } ${regexTokenSymbol(dataDetails.lpSymbol)}`
 
-  const pendingTextWithdraw = `Withdraw ${formatNumber(Number(unStakeAmount))} ${regexTokenSymbol(
-    dataDetails.lpSymbol
-  )}`
+  const pendingTextWithdraw = `Withdraw ${
+    dataDetails.lpSymbol === 'xWSYS-ETH05'
+      ? formatNumber(Number(dataDetails.stakeAmount))
+      : Number(dataDetails.stakeAmount).toString().slice(0, 6)
+  } ${regexTokenSymbol(dataDetails.lpSymbol)}`
 
   const modalHeader = () => {
     return (
@@ -342,7 +351,9 @@ const GammaFarmCardDetails: React.FC<{
           {rewardToken && <CurrencyLogo currency={rewardToken} size="24px" />}
           <Text fontSize="18px">
             {'Claim' + ' '}
-            {formatNumber(Number(rewardsAmount)) + ' '}
+            {rewardToken?.symbol === 'WSYS-ETH'
+              ? formatNumber(Number(rewardsAmount)) + ' '
+              : Number(rewardsAmount).toString().slice(0, 6) + ' '}
             <Text as="span" color={theme.accentActive}>
               {rewardToken?.symbol}
             </Text>
@@ -358,7 +369,9 @@ const GammaFarmCardDetails: React.FC<{
         <Row style={{ padding: '20px', display: 'flex', justifyContent: 'center' }}>
           <Text fontSize="18px">
             {'Deposit' + ' '}
-            {formatNumber(Number(dataDetails.stakeAmount)) + ' '}
+            {dataDetails.lpSymbol === 'xWSYS-ETH05'
+              ? formatNumber(Number(dataDetails.stakeAmount)) + ' '
+              : Number(dataDetails.stakeAmount).toString().slice(0, 6) + ' '}
             <Text as="span" color={theme.accentActive}>
               {regexTokenSymbol(dataDetails.lpSymbol)}
             </Text>
@@ -389,7 +402,9 @@ const GammaFarmCardDetails: React.FC<{
         <Row style={{ padding: '20px', display: 'flex', justifyContent: 'center' }}>
           <Text fontSize="18px">
             {'Withdraw' + ' '}
-            {formatNumber(Number(unStakeAmount)) + ' '}
+            {dataDetails.lpSymbol === 'xWSYS-ETH05'
+              ? formatNumber(Number(unStakeAmount)) + ' '
+              : Number(unStakeAmount).toString().slice(0, 6) + ' '}
             <Text as="span" color={theme.accentActive}>
               {regexTokenSymbol(dataDetails.lpSymbol)}
             </Text>
@@ -575,28 +590,30 @@ const GammaFarmCardDetails: React.FC<{
               tokenLPSymbol={regexTokenSymbol(dataDetails.lpSymbol) || ''}
             />
 
-            <GridItemGammaCard
-              titleText="Deposited:"
-              stakedUSD={dataDetails.stakedUSD}
-              setUnStakeAmount={setUnStakeAmount}
-              stakedAmount={dataDetails.stakedAmount}
-              unStakeAmount={unStakeAmount}
-              unStakeButtonDisabled={unStakeButtonDisabled}
-              textButton={attemptUnstaking ? 'Withdrawing' : 'Withdraw'}
-              setStakeAmount={dataDetails.setStakeAmount}
-              stakeAmount={dataDetails.stakeAmount}
-              unStakeLP={() =>
-                setTransactionWithdrawModal({
-                  attemptingWithdrawTxn: false,
-                  showTransactionWithdrawModal: true,
-                  transactionWithdrawErrorMessage: undefined,
-                  txHashWithdraw: undefined,
-                })
-              }
-              tokenLPSymbol={regexTokenSymbol(dataDetails.lpSymbol) || ''}
-            />
+            {dataDetails.stakedUSD != 0 && (
+              <GridItemGammaCard
+                titleText="Deposited:"
+                stakedUSD={dataDetails.stakedUSD}
+                setUnStakeAmount={setUnStakeAmount}
+                stakedAmount={dataDetails.stakedAmount}
+                unStakeAmount={unStakeAmount}
+                unStakeButtonDisabled={unStakeButtonDisabled}
+                textButton={attemptUnstaking ? 'Withdrawing' : 'Withdraw'}
+                setStakeAmount={dataDetails.setStakeAmount}
+                stakeAmount={dataDetails.stakeAmount}
+                unStakeLP={() =>
+                  setTransactionWithdrawModal({
+                    attemptingWithdrawTxn: false,
+                    showTransactionWithdrawModal: true,
+                    transactionWithdrawErrorMessage: undefined,
+                    txHashWithdraw: undefined,
+                  })
+                }
+                tokenLPSymbol={regexTokenSymbol(dataDetails.lpSymbol) || ''}
+              />
+            )}
 
-            {rewardToken && (
+            {rewardToken && dataDetails.stakedUSD != 0 && (
               <GridItem>
                 <ClaimContainer>
                   <small style={{ color: theme.textSecondary }}>Earned Rewards: </small>

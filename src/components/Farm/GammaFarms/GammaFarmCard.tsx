@@ -261,6 +261,11 @@ export function GammaFarmCard({ data, rewardData, pairData, token0, token1 }: Ga
     lpSymbol,
   }
 
+  const hasAnyStakeOrBalance = () =>
+    parseFloat(dataDetails.stakedAmount) > 0 ||
+    parseFloat(dataDetails.availableStakeAmount) > 0 ||
+    dataDetails.stakedUSD > 0
+
   return (
     <>
       <ModalAddGammaLiquidity
@@ -373,29 +378,55 @@ export function GammaFarmCard({ data, rewardData, pairData, token0, token1 }: Ga
             </Box>
           </div>
         </div>
-        {showDetails && (
-          <GammaFarmCardDetails
-            pairData={pairData}
-            rewardData={rewardData}
-            dataDetails={{
-              stakeAmount,
-              stakedAmount,
-              lpTokenBalance,
-              lpBalanceBN,
-              approval,
-              approveCallback,
-              parsedStakeAmount,
-              availableStakeAmount,
-              stakedAmountBN,
-              masterChefContract,
-              stakedUSD,
-              availableStakeUSD,
-              setStakeAmount,
-              lpSymbol,
-            }}
-            forceUpdate={forceUpdate}
-          />
-        )}
+        {showDetails &&
+          (parseFloat(dataDetails.availableStakeAmount) > 0 || stakedUSD > 0 ? (
+            <GammaFarmCardDetails
+              pairData={pairData}
+              rewardData={rewardData}
+              dataDetails={{
+                stakeAmount,
+                stakedAmount,
+                lpTokenBalance,
+                lpBalanceBN,
+                approval,
+                approveCallback,
+                parsedStakeAmount,
+                availableStakeAmount,
+                stakedAmountBN,
+                masterChefContract,
+                stakedUSD,
+                availableStakeUSD,
+                setStakeAmount,
+                lpSymbol,
+              }}
+              forceUpdate={forceUpdate}
+            />
+          ) : parseFloat(dataDetails.availableStakeAmount) === 0 ? (
+            <div
+              style={{
+                padding: '20px',
+                display: 'flex',
+                width: '300px',
+                flexDirection: 'column',
+                gap: '10px',
+                textAlign: 'center',
+              }}
+            >
+              <small>You have no liquidity to deposit in this Pool. Add liquidity before</small>
+              <ButtonPrimary
+                style={{
+                  height: '40px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '5px',
+                }}
+                onClick={() => setModalOpen(true)}
+              >
+                Add Farm Liquidity
+              </ButtonPrimary>
+            </div>
+          ) : null)}
       </CardContainer>
     </>
   )

@@ -5,7 +5,7 @@ import useTransactionDeadline from './useTransactionDeadline'
 
 const REMOVE_V2_LIQUIDITY_PERMIT_INFO: PermitInfo = {
   version: '1',
-  name: 'Pegasys V2',
+  name: 'Pegasys LP Token',
   type: PermitType.AMOUNT,
 }
 

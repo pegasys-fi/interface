@@ -1,7 +1,7 @@
-import { Currency } from '@pollum-io/sdk-core'
-import styled from 'styled-components/macro'
+import { Currency } from '@pollum-io/sdk-core';
+import styled from 'styled-components/macro';
 
-import CurrencyLogo from '../Logo/CurrencyLogo'
+import CurrencyLogo from '../Logo/CurrencyLogo';
 
 const Wrapper = styled.div<{ margin: boolean; sizeraw: number }>`
   position: relative;

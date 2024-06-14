@@ -74,13 +74,21 @@ export function GridItemGammaCard({
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <small style={{ color: theme.textSecondary }}>{titleText}</small>
         {availableStakeAmount && availableStakeUSD && (
-          <small>{`${formatNumber(Number(availableStakeAmount))} ${tokenLPSymbol} $${formatNumber(
-            availableStakeUSD
-          )}`}</small>
+          <small>{`${
+            tokenLPSymbol === 'WSYS-ETH'
+              ? formatNumber(Number(availableStakeAmount))
+              : Number(availableStakeAmount).toString().slice(0, 6)
+          } ${tokenLPSymbol} $${formatNumber(availableStakeUSD)}`}</small>
         )}
 
         {stakedAmount && stakedUSD && (
-          <small>{`${formatNumber(Number(stakedAmount))} ${tokenLPSymbol} $${formatNumber(stakedUSD)}`}</small>
+          <small>
+            {`${
+              tokenLPSymbol === 'WSYS-ETH'
+                ? formatNumber(Number(stakedAmount))
+                : Number(stakedAmount).toString().slice(0, 6)
+            } ${tokenLPSymbol} $${formatNumber(stakedUSD)}`}
+          </small>
         )}
       </div>
 

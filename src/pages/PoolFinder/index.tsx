@@ -101,7 +101,7 @@ export default function PoolFinder() {
     max-width: 420px;
     background: ${({ theme }) => theme.backgroundScrolledSurface};
     border-radius: 16px;
-    box-shadow: ${({ theme }) => theme.deepShadow};
+    /* box-shadow: ${({ theme }) => theme.deepShadow}; */
     margin-top: 72px;
   `
 

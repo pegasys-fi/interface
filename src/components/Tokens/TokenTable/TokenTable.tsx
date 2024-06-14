@@ -1,11 +1,13 @@
-import { Trans } from '@lingui/macro'
+import LoadingGifLight from 'assets/images/lightLoading.gif'
+import LoadingGif from 'assets/images/loading.gif'
+import { LoaderGif } from 'components/Icons/LoadingSpinner'
 import { useNewTopTokens } from 'graphql/tokens/NewTopTokens'
 import { PAGE_SIZE, TokenData } from 'graphql/tokens/TokenData'
 import { useFetchedTokenData } from 'graphql/tokens/TokenData'
 import { useAtomValue } from 'jotai'
 import { ReactNode, useMemo } from 'react'
-import { AlertTriangle } from 'react-feather'
 import styled from 'styled-components/macro'
+import { useIsDarkMode } from 'theme/components/ThemeToggle'
 
 import { MAX_WIDTH_MEDIA_BREAKPOINT } from '../constants'
 import { filterStringAtom, filterTimeAtom, sortAscendingAtom, sortMethodAtom } from '../state'
@@ -16,7 +18,8 @@ const GridContainer = styled.div`
   flex-direction: column;
   max-width: ${MAX_WIDTH_MEDIA_BREAKPOINT};
   background-color: ${({ theme }) => theme.backgroundSurface};
-  box-shadow: ${({ theme }) => theme.deepShadow};
+  /* box-shadow: ${({ theme }) => theme.deepShadow}; */
+  border: 1px solid ${({ theme }) => theme.backgroundOutline};
   margin-left: auto;
   margin-right: auto;
   border-radius: 12px;
@@ -36,7 +39,7 @@ const NoTokenDisplay = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  height: 60px;
+  height: 100px;
   color: ${({ theme }) => theme.textSecondary};
   font-size: 16px;
   font-weight: 500;
@@ -83,6 +86,7 @@ export default function TokenTable() {
   const sortMethod = useAtomValue(sortMethodAtom)
   const sortAscending = useAtomValue(sortAscendingAtom)
   const timePeriod = useAtomValue(filterTimeAtom)
+  const isDarkMode = useIsDarkMode()
 
   const filteredAndSortedData = useMemo(() => {
     const sortMethodMapping: { [key: string]: keyof TokenData } = {
@@ -123,8 +127,18 @@ export default function TokenTable() {
       <NoTokensState
         message={
           <>
-            <AlertTriangle size={16} />
-            <Trans>An error occurred loading tokens. Please try again.</Trans>
+            {/* <AlertTriangle size={16} />
+            <Trans>An error occurred loading tokens. Please try again.</Trans> */}
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: '80px !important',
+              }}
+            >
+              <LoaderGif gif={isDarkMode ? LoadingGif : LoadingGifLight} size="3.5rem" />
+            </div>
           </>
         }
       />

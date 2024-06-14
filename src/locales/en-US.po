@@ -1433,16 +1433,16 @@ msgid "Migrate your liquidity tokens from Pegasys V1 to Pegasys V3."
 msgstr "Migrate your liquidity tokens from Pegasys V1 to Pegasys V3."
 
 #: 
-#~ msgid "Migrate your liquidity tokens from Pegasys V2 to Uniswap V3."
-#~ msgstr "Migrate your liquidity tokens from Pegasys V2 to Uniswap V3."
+#~ msgid "Migrate your liquidity tokens from Pegasys V2 to Pegasys V3."
+#~ msgstr "Migrate your liquidity tokens from Pegasys V2 to Pegasys V3."
 
 #: 
 #~ msgid "Migrate your liquidity tokens from Pegasys to PegasysV2."
 #~ msgstr "Migrate your liquidity tokens from Pegasys to PegasysV2."
 
 #: 
-#~ msgid "Migrate your liquidity tokens from Uniswap V2 to Uniswap V3."
-#~ msgstr "Migrate your liquidity tokens from Uniswap V2 to Uniswap V3."
+#~ msgid "Migrate your liquidity tokens from Pegasys V2 to Pegasys V3."
+#~ msgstr "Migrate your liquidity tokens from Pegasys V2 to Pegasys V3."
 
 #: src/components/AccountDetails/TransactionSummary.tsx
 msgid "Migrate {0}/{1} liquidity to V3"

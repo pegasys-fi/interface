@@ -5,18 +5,18 @@ import { queryParametersToSwapState } from './hooks'
 
 describe('hooks', () => {
   describe('#queryParametersToSwapState', () => {
-    test('ETH to DAI', () => {
+    test('SYS to USDC', () => {
       expect(
         queryParametersToSwapState(
           parse(
-            '?inputCurrency=ETH&outputCurrency=0x6b175474e89094c44da98b954eedeac495271d0f&exactAmount=20.5&exactField=output',
+            '?inputCurrency=SYS&outputCurrency=0x368433CaC2A0B8D76E64681a9835502a1f2A8A30&exactAmount=1&exactField=output',
             { parseArrays: false, ignoreQueryPrefix: true }
           )
         )
       ).toEqual({
-        [Field.OUTPUT]: { currencyId: '0x6B175474E89094C44Da98b954EedeAC495271d0F' },
-        [Field.INPUT]: { currencyId: 'ETH' },
-        typedValue: '20.5',
+        [Field.OUTPUT]: { currencyId: '0x368433CaC2A0B8D76E64681a9835502a1f2A8A30' },
+        [Field.INPUT]: { currencyId: 'SYS' },
+        typedValue: '1',
         independentField: Field.OUTPUT,
         recipient: null,
       })
@@ -26,7 +26,7 @@ describe('hooks', () => {
       expect(
         queryParametersToSwapState(parse('?outputCurrency=invalid', { parseArrays: false, ignoreQueryPrefix: true }))
       ).toEqual({
-        [Field.INPUT]: { currencyId: 'ETH' },
+        [Field.INPUT]: { currencyId: 'SYS' },
         [Field.OUTPUT]: { currencyId: null },
         typedValue: '',
         independentField: Field.INPUT,
@@ -34,15 +34,15 @@ describe('hooks', () => {
       })
     })
 
-    test('output ETH only', () => {
+    test('output SYS only', () => {
       expect(
         queryParametersToSwapState(
-          parse('?outputCurrency=eth&exactAmount=20.5', { parseArrays: false, ignoreQueryPrefix: true })
+          parse('?outputCurrency=eth&exactAmount=1', { parseArrays: false, ignoreQueryPrefix: true })
         )
       ).toEqual({
-        [Field.OUTPUT]: { currencyId: 'ETH' },
+        [Field.OUTPUT]: { currencyId: 'SYS' },
         [Field.INPUT]: { currencyId: null },
-        typedValue: '20.5',
+        typedValue: '1',
         independentField: Field.INPUT,
         recipient: null,
       })
@@ -51,12 +51,12 @@ describe('hooks', () => {
     test('invalid recipient', () => {
       expect(
         queryParametersToSwapState(
-          parse('?outputCurrency=eth&exactAmount=20.5&recipient=abc', { parseArrays: false, ignoreQueryPrefix: true })
+          parse('?outputCurrency=eth&exactAmount=1&recipient=abc', { parseArrays: false, ignoreQueryPrefix: true })
         )
       ).toEqual({
-        [Field.OUTPUT]: { currencyId: 'ETH' },
+        [Field.OUTPUT]: { currencyId: 'SYS' },
         [Field.INPUT]: { currencyId: null },
-        typedValue: '20.5',
+        typedValue: '1',
         independentField: Field.INPUT,
         recipient: null,
       })
@@ -65,15 +65,15 @@ describe('hooks', () => {
     test('valid recipient', () => {
       expect(
         queryParametersToSwapState(
-          parse('?outputCurrency=eth&exactAmount=20.5&recipient=0x0fF2D1eFd7A57B7562b2bf27F3f37899dB27F4a5', {
+          parse('?outputCurrency=eth&exactAmount=1&recipient=0x0fF2D1eFd7A57B7562b2bf27F3f37899dB27F4a5', {
             parseArrays: false,
             ignoreQueryPrefix: true,
           })
         )
       ).toEqual({
-        [Field.OUTPUT]: { currencyId: 'ETH' },
+        [Field.OUTPUT]: { currencyId: 'SYS' },
         [Field.INPUT]: { currencyId: null },
-        typedValue: '20.5',
+        typedValue: '1',
         independentField: Field.INPUT,
         recipient: '0x0fF2D1eFd7A57B7562b2bf27F3f37899dB27F4a5',
       })
@@ -81,15 +81,15 @@ describe('hooks', () => {
     test('accepts any recipient', () => {
       expect(
         queryParametersToSwapState(
-          parse('?outputCurrency=eth&exactAmount=20.5&recipient=bob.argent.xyz', {
+          parse('?outputCurrency=eth&exactAmount=1&recipient=bob.argent.xyz', {
             parseArrays: false,
             ignoreQueryPrefix: true,
           })
         )
       ).toEqual({
-        [Field.OUTPUT]: { currencyId: 'ETH' },
+        [Field.OUTPUT]: { currencyId: 'SYS' },
         [Field.INPUT]: { currencyId: null },
-        typedValue: '20.5',
+        typedValue: '1',
         independentField: Field.INPUT,
         recipient: 'bob.argent.xyz',
       })

@@ -24,21 +24,25 @@ import {
 import { getActivityTitle } from '../constants'
 import { Activity, ActivityMap } from './types'
 
-function getCurrency(currencyId: string, chainId: ChainId, tokens: TokenAddressMap): Currency | undefined {
-  return currencyId === 'ETH' ? nativeOnChain(chainId) : tokens[chainId]?.[currencyId]?.token
+function getCurrency(currencyId: string, chainId: ChainId, tokens: TokenAddressMap): Currency {
+  if (currencyId === 'SYS') {
+    return nativeOnChain(chainId)
+  }
+  const token = tokens[chainId]?.[currencyId]?.token
+  return token || ({ symbol: 'Unknown Token', name: 'Unknown Token' } as Currency)
 }
 
 function buildCurrencyDescriptor(
-  currencyA: Currency | undefined,
+  currencyA: Currency,
   amtA: string,
-  currencyB: Currency | undefined,
+  currencyB: Currency,
   amtB: string,
   delimiter = t`for`
 ) {
-  const formattedA = currencyA ? formatCurrencyAmount(CurrencyAmount.fromRawAmount(currencyA, amtA)) : t`Unknown`
-  const symbolA = currencyA?.symbol ?? ''
-  const formattedB = currencyB ? formatCurrencyAmount(CurrencyAmount.fromRawAmount(currencyB, amtB)) : t`Unknown`
-  const symbolB = currencyB?.symbol ?? ''
+  const formattedA = formatCurrencyAmount(CurrencyAmount.fromRawAmount(currencyA, amtA))
+  const symbolA = currencyA.symbol
+  const formattedB = formatCurrencyAmount(CurrencyAmount.fromRawAmount(currencyB, amtB))
+  const symbolB = currencyB.symbol
   return [formattedA, symbolA, delimiter, formattedB, symbolB].filter(Boolean).join(' ')
 }
 
@@ -73,9 +77,8 @@ function parseWrap(wrap: WrapTransactionInfo, chainId: ChainId, status: Transact
 }
 
 function parseApproval(approval: ApproveTransactionInfo, chainId: ChainId, tokens: TokenAddressMap): Partial<Activity> {
-  // TODO: Add 'amount' approved to ApproveTransactionInfo so we can distinguish between revoke and approve
   const currency = getCurrency(approval.tokenAddress, chainId, tokens)
-  const descriptor = currency?.symbol ?? currency?.name ?? t`Unknown`
+  const descriptor = currency.symbol ?? currency.name
   return {
     descriptor,
     currencies: [currency],
@@ -116,9 +119,9 @@ function parseMigrateCreateV3(
   tokens: TokenAddressMap
 ): Partial<Activity> {
   const baseCurrency = getCurrency(lp.baseCurrencyId, chainId, tokens)
-  const baseSymbol = baseCurrency?.symbol ?? t`Unknown`
+  const baseSymbol = baseCurrency.symbol
   const quoteCurrency = getCurrency(lp.quoteCurrencyId, chainId, tokens)
-  const quoteSymbol = quoteCurrency?.symbol ?? t`Unknown`
+  const quoteSymbol = quoteCurrency.symbol
   const descriptor = t`${baseSymbol} and ${quoteSymbol}`
 
   return { descriptor, currencies: [baseCurrency, quoteCurrency] }
@@ -170,7 +173,7 @@ export function parseLocalActivity(
       additionalFields = parseLP(info, chainId, tokens)
     } else if (info.type === TransactionType.CLAIM_FARM) {
       const currency = getCurrency(info.tokenAddress, chainId, tokens)
-      const descriptor = currency ? `${info.amount} ${currency?.symbol}` : t`Unknown`
+      const descriptor = currency ? `${info.amount} ${currency.symbol}` : t`Unknown Token`
       additionalFields = {
         descriptor,
         currencies: [currency],
@@ -191,8 +194,8 @@ export function parseLocalActivity(
       const formatted1 = currency1 ? info.amount1 : undefined
       const descriptor =
         formatted0 && formatted1
-          ? `${formatted0} ${currency0?.symbol} and ${formatted1} ${currency1?.symbol}`
-          : 'Unknown'
+          ? `${formatted0} ${currency0.symbol} and ${formatted1} ${currency1.symbol}`
+          : t`Unknown Tokens`
       additionalFields = {
         descriptor,
         currencies: [currency0, currency1],

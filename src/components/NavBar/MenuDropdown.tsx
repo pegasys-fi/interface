@@ -177,7 +177,9 @@ export const MenuDropdown = () => {
             top={{ sm: 'unset', lg: '56' }}
             bottom={{ sm: '56', lg: 'unset' }}
             right="0"
-            style={{ boxShadow: theme.deepShadow, background: theme.backgroundModule }}
+            style={{
+              background: theme.backgroundModule,
+            }}
           >
             <Column gap="16">
               <Column paddingX="8" gap="4">

@@ -122,7 +122,8 @@ const AccountDrawerWrapper = styled.div<{ open: boolean }>`
   font-size: 16px;
   background-color: ${({ theme }) => theme.backgroundSurface};
 
-  box-shadow: ${({ theme }) => theme.deepShadow};
+  /* box-shadow: ${({ theme }) => theme.deepShadow}; */
+  border: 1px solid ${({ theme }) => theme.backgroundOutline};
   transition: margin-right ${({ theme }) => theme.transition.duration.medium};
 `
 

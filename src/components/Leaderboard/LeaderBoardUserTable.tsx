@@ -15,7 +15,8 @@ const GridContainer = styled.div`
   flex-direction: column;
   max-width: ${MAX_WIDTH_MEDIA_BREAKPOINT};
   background-color: ${({ theme }) => theme.backgroundSurface};
-  box-shadow: ${({ theme }) => theme.deepShadow};
+  /* box-shadow: ${({ theme }) => theme.deepShadow}; */
+  border: 1px solid ${({ theme }) => theme.backgroundOutline};
   margin-left: auto;
   margin-right: auto;
   border-radius: 12px;

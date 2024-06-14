@@ -1,6 +1,6 @@
 import { AutoColumn } from 'components/Column'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
-import Input from 'components/NumericalInput'
+import { Input } from 'components/NumericalInput'
 import styled from 'styled-components/macro'
 
 export const PageWrapper = styled.div<{ wide: boolean }>`
@@ -8,7 +8,7 @@ export const PageWrapper = styled.div<{ wide: boolean }>`
   width: 100%;
   background: ${({ theme }) => theme.backgroundScrolledSurface};
   border-radius: 20px;
-  box-shadow: ${({ theme }) => theme.deepShadow};
+  /* box-shadow: ${({ theme }) => theme.deepShadow}; */
   padding: ${({ wide }) => (wide ? '10px' : '0')};
 
   ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToMedium`

@@ -63,7 +63,13 @@ export function GridItemAddLiquidity({
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <small style={{ color: theme.textSecondary }}>{titleText}</small>
         {availableStakeAmount && tokenSymbol && (
-          <small>{`${formatNumber(Number(availableStakeAmount))}  ${tokenSymbol}`}</small>
+          <small>
+            {`${
+              tokenSymbol === 'WETH' || tokenSymbol === 'WSYS-ETH'
+                ? formatNumber(Number(availableStakeAmount))
+                : Number(availableStakeAmount).toString().slice(0, 6)
+            } ${tokenSymbol}`}
+          </small>
         )}
       </div>
 

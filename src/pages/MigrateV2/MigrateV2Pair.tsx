@@ -593,9 +593,9 @@ function V2PairMigration({
                   <ThemedText.DeprecatedBlack fontSize={12}>
                     <Trans>
                       At least {formatCurrencyAmount(refund0, 4)}{' '}
-                      {chainId && WRAPPED_NATIVE_CURRENCY[chainId]?.equals(token0) ? 'ETH' : token0.symbol} and{' '}
+                      {chainId && WRAPPED_NATIVE_CURRENCY[chainId]?.equals(token0) ? 'SYS' : token0.symbol} and{' '}
                       {formatCurrencyAmount(refund1, 4)}{' '}
-                      {chainId && WRAPPED_NATIVE_CURRENCY[chainId]?.equals(token1) ? 'ETH' : token1.symbol} will be
+                      {chainId && WRAPPED_NATIVE_CURRENCY[chainId]?.equals(token1) ? 'SYS' : token1.symbol} will be
                       refunded to your wallet due to selected price range.
                     </Trans>
                   </ThemedText.DeprecatedBlack>
