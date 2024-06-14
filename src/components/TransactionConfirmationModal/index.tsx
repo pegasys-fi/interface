@@ -362,6 +362,7 @@ export default function TransactionConfirmationModal({
 
   if (!chainId || (confirmed && transactionSuccess)) return null
 
+  // confirmation screen
   return (
     <Modal isOpen={isOpen} $scrollOverlay={true} onDismiss={onDismiss} maxHeight={90}>
       {hash || attemptingTxn ? (
