@@ -101,8 +101,9 @@ export default function TokenTable() {
       const nameMatch = obj.name.toLowerCase().includes(filterString.toLowerCase())
       const symbolMatch = obj.symbol.toLowerCase().includes(filterString.toLowerCase())
       const notBanned = !bannedTokenNames.includes(obj.name)
+      const luxyCondition = obj.name !== 'LUXY' || (obj.name === 'LUXY' && obj.tvlUSD !== 0)
 
-      return nameMatch && symbolMatch && notBanned
+      return nameMatch && symbolMatch && notBanned && luxyCondition
     })
 
     const sorted = filtered?.sort((a, b) => {

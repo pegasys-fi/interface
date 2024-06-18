@@ -9,7 +9,6 @@ export const bannedTokenNames: TokenName[] = [
   'DANTE',
   'SysCat',
   'SKIBIDI TOILET',
-  'LUXY',
   'TEST',
   'Pepe Fomo',
   'Fish Token',
