@@ -8,6 +8,7 @@ import { useAtomValue } from 'jotai'
 import { ReactNode, useMemo } from 'react'
 import styled from 'styled-components/macro'
 import { useIsDarkMode } from 'theme/components/ThemeToggle'
+import { bannedTokenNames } from 'utils/bannedTokenNames'
 
 import { MAX_WIDTH_MEDIA_BREAKPOINT } from '../constants'
 import { filterStringAtom, filterTimeAtom, sortAscendingAtom, sortMethodAtom } from '../state'
@@ -99,8 +100,9 @@ export default function TokenTable() {
     const filtered = tokenData?.filter((obj) => {
       const nameMatch = obj.name.toLowerCase().includes(filterString.toLowerCase())
       const symbolMatch = obj.symbol.toLowerCase().includes(filterString.toLowerCase())
+      const notBanned = !bannedTokenNames.includes(obj.name)
 
-      return nameMatch || symbolMatch
+      return nameMatch && symbolMatch && notBanned
     })
 
     const sorted = filtered?.sort((a, b) => {
@@ -127,8 +129,6 @@ export default function TokenTable() {
       <NoTokensState
         message={
           <>
-            {/* <AlertTriangle size={16} />
-            <Trans>An error occurred loading tokens. Please try again.</Trans> */}
             <div
               style={{
                 display: 'flex',
