@@ -2,13 +2,13 @@ import LoadingGifLight from 'assets/images/lightLoading.gif'
 import LoadingGif from 'assets/images/loading.gif'
 import { LoaderGif } from 'components/Icons/LoadingSpinner'
 import { useNewTopTokens } from 'graphql/tokens/NewTopTokens'
-import { PAGE_SIZE, TokenData } from 'graphql/tokens/TokenData'
+import { PAGE_SIZE } from 'graphql/tokens/TokenData'
 import { useFetchedTokenData } from 'graphql/tokens/TokenData'
+import { useDefaultActiveTokens } from 'hooks/Tokens'
 import { useAtomValue } from 'jotai'
-import { ReactNode, useMemo } from 'react'
+import { ReactNode, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components/macro'
 import { useIsDarkMode } from 'theme/components/ThemeToggle'
-import { bannedTokenNames } from 'utils/bannedTokenNames'
 
 import { MAX_WIDTH_MEDIA_BREAKPOINT } from '../constants'
 import { filterStringAtom, filterTimeAtom, sortAscendingAtom, sortMethodAtom } from '../state'
@@ -89,27 +89,46 @@ export default function TokenTable() {
   const timePeriod = useAtomValue(filterTimeAtom)
   const isDarkMode = useIsDarkMode()
 
+  const defaultTokens = useDefaultActiveTokens()
+  const [tokenNames, setTokenNames] = useState<any>([])
+  const [tokenAddresses, setTokenAddresses] = useState<any>([])
+
+  const excludedAddresses = [
+    '0xe088f571af1d38e60e3a6393162dda4966386443',
+    '0x534cd1fe31a0c15bcdf3fc1ce690e26bcfd3719c',
+  ].map((address) => address.toLowerCase())
+
+  useEffect(() => {
+    if (defaultTokens && typeof defaultTokens === 'object') {
+      const tokens = Object.values(defaultTokens)
+      const names = tokens.map((token) => token.name?.toLowerCase())
+      const addresses = tokens.map((token) => token.address.toLowerCase())
+      setTokenNames(names)
+      setTokenAddresses(addresses)
+    }
+  }, [defaultTokens])
+
   const filteredAndSortedData = useMemo(() => {
-    const sortMethodMapping: { [key: string]: keyof TokenData } = {
+    const sortMethodMapping = {
       Change: timePeriod === 0 ? 'priceUSDChange' : 'priceUSDChangeWeek',
       TVL: 'tvlUSD',
       Price: 'priceUSD',
       Volume: timePeriod === 0 ? 'volumeUSD' : 'volumeUSDWeek',
     }
 
-    const filtered = tokenData?.filter((obj) => {
-      const nameMatch = obj.name.toLowerCase().includes(filterString.toLowerCase())
-      const symbolMatch = obj.symbol.toLowerCase().includes(filterString.toLowerCase())
-      const notBanned = !bannedTokenNames.includes(obj.name)
-      const luxyCondition = obj.name !== 'LUXY' || (obj.name === 'LUXY' && obj.tvlUSD !== 0)
-
-      return nameMatch && symbolMatch && notBanned && luxyCondition
+    const filtered = tokenData?.filter((token) => {
+      const nameMatch = tokenNames.includes(token.name?.toLowerCase())
+      const addressMatch = tokenAddresses.includes(token.address?.toLowerCase())
+      const filterMatch =
+        token.name.toLowerCase().includes(filterString.toLowerCase()) ||
+        token.symbol.toLowerCase().includes(filterString.toLowerCase())
+      const notExcluded = !excludedAddresses.includes(token.address.toLowerCase())
+      return (nameMatch || addressMatch) && filterMatch && notExcluded
     })
 
     const sorted = filtered?.sort((a, b) => {
-      const fieldA = a[sortMethodMapping[sortMethod]]
-      const fieldB = b[sortMethodMapping[sortMethod]]
-
+      const fieldA = a[sortMethodMapping[sortMethod] as keyof typeof a]
+      const fieldB = b[sortMethodMapping[sortMethod] as keyof typeof b]
       if (fieldA < fieldB) {
         return sortAscending ? -1 : 1
       }
@@ -120,27 +139,17 @@ export default function TokenTable() {
     })
 
     return sorted
-  }, [filterString, sortAscending, sortMethod, timePeriod, tokenData])
+  }, [tokenData, tokenNames, tokenAddresses, filterString, sortMethod, sortAscending, timePeriod, excludedAddresses])
 
-  /* loading and error state */
   if (loading && tokenDataLoading && !newTokens && !tokenData) {
     return <LoadingTokenTable rowCount={PAGE_SIZE} />
-  } else if (!filteredAndSortedData) {
+  } else if (!filteredAndSortedData || filteredAndSortedData.length === 0) {
     return (
       <NoTokensState
         message={
-          <>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: '80px !important',
-              }}
-            >
-              <LoaderGif gif={isDarkMode ? LoadingGif : LoadingGifLight} size="3.5rem" />
-            </div>
-          </>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '80px !important' }}>
+            <LoaderGif gif={isDarkMode ? LoadingGif : LoadingGifLight} size="3.5rem" />
+          </div>
         }
       />
     )
@@ -149,18 +158,15 @@ export default function TokenTable() {
       <GridContainer>
         <HeaderRow />
         <TokenDataContainer>
-          {filteredAndSortedData?.map(
-            (token, index) =>
-              token?.address && (
-                <LoadedRow
-                  key={token.address}
-                  tokenListIndex={index}
-                  tokenListLength={filteredAndSortedData.length}
-                  token={token}
-                  sortRank={index + 1}
-                />
-              )
-          )}
+          {filteredAndSortedData.map((token, index) => (
+            <LoadedRow
+              key={token.address}
+              tokenListIndex={index}
+              tokenListLength={filteredAndSortedData.length}
+              token={token}
+              sortRank={index + 1}
+            />
+          ))}
         </TokenDataContainer>
       </GridContainer>
     )
