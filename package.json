@@ -142,7 +142,6 @@
     "@looksrare/sdk": "^0.10.2",
     "@metamask/jazzicon": "^2.0.0",
     "@opensea/seaport-js": "^1.0.10",
-    "@pollum-io/default-token-list": "^0.0.6",
     "@pollum-io/pegasys-protocol": "0.0.17",
     "@pollum-io/router-sdk": "0.0.6",
     "@pollum-io/sdk-core": "^0.0.3",

@@ -5209,7 +5209,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pollum-io/default-token-list@latest, @pollum-io/default-token-list@npm:^0.0.6":
+"@pollum-io/default-token-list@latest":
   version: 0.0.6
   resolution: "@pollum-io/default-token-list@npm:0.0.6"
   checksum: f286ad5dca40ec7782c1a4ab9590da11a60a014b651e62497c0165da358d823cbeae3c511cf1dd5e27b0b661f5bdae8c720bed8e8dd8a52f8b27b1ee292f3a17
@@ -5242,7 +5242,6 @@ __metadata:
     "@looksrare/sdk": ^0.10.2
     "@metamask/jazzicon": ^2.0.0
     "@opensea/seaport-js": ^1.0.10
-    "@pollum-io/default-token-list": ^0.0.6
     "@pollum-io/pegasys-protocol": 0.0.17
     "@pollum-io/router-sdk": 0.0.6
     "@pollum-io/sdk-core": ^0.0.3
