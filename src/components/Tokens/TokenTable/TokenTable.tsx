@@ -2,10 +2,11 @@ import LoadingGifLight from 'assets/images/lightLoading.gif'
 import LoadingGif from 'assets/images/loading.gif'
 import { LoaderGif } from 'components/Icons/LoadingSpinner'
 import { useNewTopTokens } from 'graphql/tokens/NewTopTokens'
-import { PAGE_SIZE, TokenData } from 'graphql/tokens/TokenData'
+import { PAGE_SIZE } from 'graphql/tokens/TokenData'
 import { useFetchedTokenData } from 'graphql/tokens/TokenData'
+import { useDefaultActiveTokens } from 'hooks/Tokens'
 import { useAtomValue } from 'jotai'
-import { ReactNode, useMemo } from 'react'
+import { ReactNode, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components/macro'
 import { useIsDarkMode } from 'theme/components/ThemeToggle'
 
@@ -88,25 +89,37 @@ export default function TokenTable() {
   const timePeriod = useAtomValue(filterTimeAtom)
   const isDarkMode = useIsDarkMode()
 
+  const defaultTokens = useDefaultActiveTokens()
+  const [tokenAddresses, setTokenAddresses] = useState<string[]>([])
+
+  useEffect(() => {
+    if (defaultTokens && typeof defaultTokens === 'object') {
+      const tokens = Object.values(defaultTokens)
+      const addresses = tokens.map((token) => token.address.toLowerCase())
+
+      setTokenAddresses(addresses)
+    }
+  }, [defaultTokens])
+
   const filteredAndSortedData = useMemo(() => {
-    const sortMethodMapping: { [key: string]: keyof TokenData } = {
+    const sortMethodMapping = {
       Change: timePeriod === 0 ? 'priceUSDChange' : 'priceUSDChangeWeek',
       TVL: 'tvlUSD',
       Price: 'priceUSD',
       Volume: timePeriod === 0 ? 'volumeUSD' : 'volumeUSDWeek',
     }
 
-    const filtered = tokenData?.filter((obj) => {
-      const nameMatch = obj.name.toLowerCase().includes(filterString.toLowerCase())
-      const symbolMatch = obj.symbol.toLowerCase().includes(filterString.toLowerCase())
-
-      return nameMatch || symbolMatch
+    const filtered = tokenData?.filter((token) => {
+      const addressMatch = tokenAddresses.includes(token.address?.toLowerCase())
+      const filterMatch =
+        token.name.toLowerCase().includes(filterString.toLowerCase()) ||
+        token.symbol.toLowerCase().includes(filterString.toLowerCase())
+      return addressMatch && filterMatch
     })
 
     const sorted = filtered?.sort((a, b) => {
-      const fieldA = a[sortMethodMapping[sortMethod]]
-      const fieldB = b[sortMethodMapping[sortMethod]]
-
+      const fieldA = a[sortMethodMapping[sortMethod] as keyof typeof a]
+      const fieldB = b[sortMethodMapping[sortMethod] as keyof typeof b]
       if (fieldA < fieldB) {
         return sortAscending ? -1 : 1
       }
@@ -117,29 +130,17 @@ export default function TokenTable() {
     })
 
     return sorted
-  }, [filterString, sortAscending, sortMethod, timePeriod, tokenData])
+  }, [tokenData, tokenAddresses, filterString, sortMethod, sortAscending, timePeriod])
 
-  /* loading and error state */
   if (loading && tokenDataLoading && !newTokens && !tokenData) {
     return <LoadingTokenTable rowCount={PAGE_SIZE} />
-  } else if (!filteredAndSortedData) {
+  } else if (!filteredAndSortedData || filteredAndSortedData.length === 0) {
     return (
       <NoTokensState
         message={
-          <>
-            {/* <AlertTriangle size={16} />
-            <Trans>An error occurred loading tokens. Please try again.</Trans> */}
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: '80px !important',
-              }}
-            >
-              <LoaderGif gif={isDarkMode ? LoadingGif : LoadingGifLight} size="3.5rem" />
-            </div>
-          </>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '80px !important' }}>
+            <LoaderGif gif={isDarkMode ? LoadingGif : LoadingGifLight} size="3.5rem" />
+          </div>
         }
       />
     )
@@ -148,18 +149,15 @@ export default function TokenTable() {
       <GridContainer>
         <HeaderRow />
         <TokenDataContainer>
-          {filteredAndSortedData?.map(
-            (token, index) =>
-              token?.address && (
-                <LoadedRow
-                  key={token.address}
-                  tokenListIndex={index}
-                  tokenListLength={filteredAndSortedData.length}
-                  token={token}
-                  sortRank={index + 1}
-                />
-              )
-          )}
+          {filteredAndSortedData.map((token, index) => (
+            <LoadedRow
+              key={token.address}
+              tokenListIndex={index}
+              tokenListLength={filteredAndSortedData.length}
+              token={token}
+              sortRank={index + 1}
+            />
+          ))}
         </TokenDataContainer>
       </GridContainer>
     )
