@@ -90,20 +90,13 @@ export default function TokenTable() {
   const isDarkMode = useIsDarkMode()
 
   const defaultTokens = useDefaultActiveTokens()
-  const [tokenNames, setTokenNames] = useState<any>([])
-  const [tokenAddresses, setTokenAddresses] = useState<any>([])
-
-  const excludedAddresses = [
-    '0xe088f571af1d38e60e3a6393162dda4966386443',
-    '0x534cd1fe31a0c15bcdf3fc1ce690e26bcfd3719c',
-  ].map((address) => address.toLowerCase())
+  const [tokenAddresses, setTokenAddresses] = useState<string[]>([])
 
   useEffect(() => {
     if (defaultTokens && typeof defaultTokens === 'object') {
       const tokens = Object.values(defaultTokens)
-      const names = tokens.map((token) => token.name?.toLowerCase())
       const addresses = tokens.map((token) => token.address.toLowerCase())
-      setTokenNames(names)
+
       setTokenAddresses(addresses)
     }
   }, [defaultTokens])
@@ -117,13 +110,11 @@ export default function TokenTable() {
     }
 
     const filtered = tokenData?.filter((token) => {
-      const nameMatch = tokenNames.includes(token.name?.toLowerCase())
       const addressMatch = tokenAddresses.includes(token.address?.toLowerCase())
       const filterMatch =
         token.name.toLowerCase().includes(filterString.toLowerCase()) ||
         token.symbol.toLowerCase().includes(filterString.toLowerCase())
-      const notExcluded = !excludedAddresses.includes(token.address.toLowerCase())
-      return (nameMatch || addressMatch) && filterMatch && notExcluded
+      return addressMatch && filterMatch
     })
 
     const sorted = filtered?.sort((a, b) => {
@@ -139,7 +130,7 @@ export default function TokenTable() {
     })
 
     return sorted
-  }, [tokenData, tokenNames, tokenAddresses, filterString, sortMethod, sortAscending, timePeriod, excludedAddresses])
+  }, [tokenData, tokenAddresses, filterString, sortMethod, sortAscending, timePeriod])
 
   if (loading && tokenDataLoading && !newTokens && !tokenData) {
     return <LoadingTokenTable rowCount={PAGE_SIZE} />
