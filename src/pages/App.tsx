@@ -15,8 +15,7 @@ import { Z_INDEX } from 'theme/zIndex'
 
 import { useAnalyticsReporter } from '../components/analytics'
 import ErrorBoundary from '../components/ErrorBoundary'
-import { PageTabs } from '../components/NavBar'
-import NavBar from '../components/NavBar'
+import NavBar, { PageTabs } from '../components/NavBar'
 import Polling from '../components/Polling'
 import Popups from '../components/Popups'
 import DarkModeQueryParamReader from '../theme/components/DarkModeQueryParamReader'
@@ -29,6 +28,7 @@ import Landing from './Landing'
 import { LeaderBoard } from './Leaderboard'
 import MigrateV2 from './MigrateV2'
 import MigrateV2Pair from './MigrateV2/MigrateV2Pair'
+import Migration from './Migration'
 import NotFound from './NotFound'
 import Pool from './Pool'
 import PositionPage from './Pool/PositionPage'
@@ -141,7 +141,6 @@ export default function App() {
           {isLoaded ? (
             <Routes>
               <Route path="/" element={<Landing />} />
-
               <Route path="tokens" element={<Tokens />}>
                 <Route path=":chainName" />
               </Route>
@@ -157,17 +156,14 @@ export default function App() {
               <Route path="create-proposal" element={<Navigate to="/vote/create-proposal" replace />} />
               <Route path="send" element={<RedirectPathToSwapOnly />} />
               <Route path="swap" element={<Swap />} />
-
               <Route path="pool/v2/find" element={<PoolFinder />} />
               <Route path="pool/v2" element={<PoolV2 />} />
               <Route path="pool" element={<Pool />} />
               <Route path="pool/:tokenId" element={<PositionPage />} />
-
               <Route path="pools/v2/find" element={<PoolFinder />} />
               <Route path="pools/v2" element={<PoolV2 />} />
               <Route path="pools" element={<Pool />} />
               <Route path="pools/:tokenId" element={<PositionPage />} />
-
               <Route path="add/v2" element={<RedirectDuplicateTokenIdsV2 />}>
                 <Route path=":currencyIdA" />
                 <Route path=":currencyIdA/:currencyIdB" />
@@ -178,23 +174,19 @@ export default function App() {
                 <Route path=":currencyIdA/:currencyIdB" />
                 <Route path=":currencyIdA/:currencyIdB/:feeAmount" />
               </Route>
-
               <Route path="increase" element={<AddLiquidity />}>
                 <Route path=":currencyIdA" />
                 <Route path=":currencyIdA/:currencyIdB" />
                 <Route path=":currencyIdA/:currencyIdB/:feeAmount" />
                 <Route path=":currencyIdA/:currencyIdB/:feeAmount/:tokenId" />
               </Route>
-
               <Route path="remove/v2/:currencyIdA/:currencyIdB" element={<RemoveLiquidity />} />
               <Route path="remove/:tokenId" element={<RemoveLiquidityV3 />} />
-
               <Route path="migrate/v2" element={<MigrateV2 />} />
               <Route path="migrate/v2/:address" element={<MigrateV2Pair />} />
-
               <Route path="leaderboard" element={<LeaderBoard />} />
               <Route path="farm" element={<Farm />} />
-
+              <Route path="/migration" element={<Migration />} />
               <Route path="*" element={<Navigate to="/not-found" replace />} />
               <Route path="/not-found" element={<NotFound />} />
             </Routes>

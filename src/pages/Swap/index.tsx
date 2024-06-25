@@ -193,6 +193,7 @@ export default function Swap({ className }: { className?: string }) {
   const [isExpertMode] = useExpertModeManager()
   // swap state
   const { independentField, typedValue, recipient } = useSwapState()
+
   const {
     trade: { state: tradeState, trade },
     allowedSlippage,

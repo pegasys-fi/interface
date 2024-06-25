@@ -79,6 +79,13 @@ export const PageTabs = () => {
         <Trans>Swap</Trans>
       </MenuItem>
       <MenuItem
+        href="/migration"
+        isActive={pathname.startsWith('/migration')}
+        background={pathname.startsWith('/migration') ? theme.backgroundNavBarButton : 'none'}
+      >
+        <Trans>Migration</Trans>
+      </MenuItem>
+      <MenuItem
         href="/farm"
         isActive={pathname.startsWith('/farm')}
         background={pathname.startsWith('/farm') ? theme.backgroundNavBarButton : 'none'}
