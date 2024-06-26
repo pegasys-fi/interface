@@ -1,25 +1,26 @@
 import { Trans } from '@lingui/macro'
-import { CurrencyAmount, Token } from '@pollum-io/sdk-core'
 import { useWeb3React } from '@web3-react/core'
 import LoadingGifLight from 'assets/images/lightLoading.gif'
 import LoadingGif from 'assets/images/loading.gif'
 import { useToggleAccountDrawer } from 'components/AccountDrawer'
 import { ButtonPrimary } from 'components/Button'
 import { AutoColumn } from 'components/Column'
+import Confettis from 'components/Confetti'
 import { LoaderGif } from 'components/Icons/LoadingSpinner'
 import Row from 'components/Row'
 import { MouseoverTooltip } from 'components/Tooltip'
 import TransactionConfirmationModal, { ConfirmationModalContent } from 'components/TransactionConfirmationModal'
-import { isSupportedChain } from 'constants/chains'
 import { useCurrency } from 'hooks/Tokens'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { useMigrateRollexContract, useTokenContract } from 'hooks/useContract'
-import usePermit2Allowance, { AllowanceState } from 'hooks/usePermit2Allowance'
 import { useSingleCallResult } from 'lib/hooks/multicall'
 import useCurrencyBalance from 'lib/hooks/useCurrencyBalance'
 import { headlineSmall } from 'nft/css/common.css'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Info, RefreshCcw } from 'react-feather'
 import { Text } from 'rebass'
+import { useTransactionAdder } from 'state/transactions/hooks'
+import { TransactionType } from 'state/transactions/types'
 import styled, { useTheme } from 'styled-components/macro'
 import { useIsDarkMode } from 'theme/components/ThemeToggle'
 import { Z_INDEX } from 'theme/zIndex'
@@ -106,12 +107,14 @@ const Placeholder = styled.div`
 
 export default function Migration() {
   const theme = useTheme()
-  const { account, chainId } = useWeb3React()
+  const { account } = useWeb3React()
+  const addTransaction = useTransactionAdder()
+  const migrationContract = useMigrateRollexContract()
   const toggleWalletDrawer = useToggleAccountDrawer()
-  // const currency = useCurrency('0x48023b16c3e81AA7F6eFFbdEB35Bb83f4f31a8fd') // PSYS address
+  // const currency = useCurrency(PSYS_ADDRESS) // PSYS address
   const currency = useCurrency('0xE60bD82d0faEAD2F327D8C7F15907664800452f6') // PSYS address
 
-  // const contract = useTokenContract('0x48023b16c3e81AA7F6eFFbdEB35Bb83f4f31a8fd') // PSYS address
+  // const contract = useTokenContract(PSYS_ADDRESS) // PSYS address
   const contract = useTokenContract('0xE60bD82d0faEAD2F327D8C7F15907664800452f6') // PSYS mocked
   const psysCurrency = useCurrencyBalance(account || undefined, currency || undefined)
   const amountPSYS = formatTransactionAmount(currencyAmountToPreciseFloat(psysCurrency))
@@ -119,15 +122,11 @@ export default function Migration() {
 
   const balancePSYS = useSingleCallResult(contract, 'balanceOf', [account])
 
-  const migrationContract = useMigrateRollexContract()
+  const [approvalToken, approveCallbackToken] = useApproveCallback(psysCurrency, migrationContract?.address)
 
-  const allowance = usePermit2Allowance(
-    (psysCurrency as CurrencyAmount<Token>) || undefined,
-    isSupportedChain(chainId) ? migrationContract?.address : undefined
-  )
-
-  const isApprovalLoading = allowance.state === AllowanceState.REQUIRED && allowance.isApprovalLoading
+  const isApprovalLoading = approvalToken === ApprovalState.PENDING
   const [isAllowancePending, setIsAllowancePending] = useState(false)
+  const [showConffeti, setShowConfetti] = useState(false)
 
   const [{ showTransactionModal, transactionErrorMessage, attemptingTxn, txHash }, setTransactionModal] = useState<{
     showTransactionModal: boolean
@@ -142,16 +141,16 @@ export default function Migration() {
   })
 
   const updateAllowance = useCallback(async () => {
-    invariant(allowance.state === AllowanceState.REQUIRED)
+    invariant(approvalToken === ApprovalState.NOT_APPROVED)
     setIsAllowancePending(true)
     try {
-      await allowance.approveAndPermit()
+      await approveCallbackToken()
     } catch (e) {
       console.error(e)
     } finally {
       setIsAllowancePending(false)
     }
-  }, [allowance])
+  }, [approvalToken, approveCallbackToken])
 
   const handleMigration = useCallback(async () => {
     if (
@@ -163,16 +162,21 @@ export default function Migration() {
       try {
         stateTransaction(true, true, undefined, undefined)
         // const response = await migrationContract.migrateFromPSYS(balancePSYS.result?.toString())
-        console.log('migrationContract', migrationContract)
+
         const response = await migrationContract.migrateFromPSYS('1')
-        console.log('response', response)
-        stateTransaction(false, true, undefined, response.transactionHash)
+
+        addTransaction(response, {
+          type: TransactionType.ROLLEX_MIGRATION,
+          amount: amountPSYS,
+        })
+
+        stateTransaction(false, true, undefined, response.hash)
       } catch (e) {
         stateTransaction(false, true, e.message, undefined)
         console.error(e)
       }
     }
-  }, [migrationContract, balancePSYS])
+  }, [migrationContract, balancePSYS.result, balancePSYS.loading, balancePSYS.error, addTransaction, amountPSYS])
 
   const stateTransaction = (
     attemptingTxn: boolean,
@@ -190,11 +194,13 @@ export default function Migration() {
 
   const handleDismissTransaction = useCallback(() => {
     setTransactionModal({ showTransactionModal: false, attemptingTxn, transactionErrorMessage, txHash })
-    // if there was a tx hash, we want to clear the input
-    if (txHash) {
-      // active confetti
-    }
   }, [attemptingTxn, transactionErrorMessage, txHash])
+
+  useEffect(() => {
+    if (txHash !== undefined && showTransactionModal) {
+      setShowConfetti(!showConffeti)
+    }
+  }, [showConffeti, showTransactionModal, txHash])
 
   const modalHeader = () => {
     return (
@@ -203,8 +209,9 @@ export default function Migration() {
           <Text fontSize="18px">
             {'Migration' + ' '}
             <Text as="span" color={theme.accentActive}>
-              {(balancePSYS.result?.toString() || 0) + ' PSYS to ROLLEX'}
+              {balancePSYS.result?.toString() || 0}
             </Text>
+            {' ' + 'PSYS to ROLLEX'}
           </Text>
         </Row>
       </AutoColumn>
@@ -213,6 +220,7 @@ export default function Migration() {
 
   return (
     <>
+      <Confettis start={showConffeti} />
       <TransactionConfirmationModal
         isOpen={showTransactionModal}
         onDismiss={handleDismissTransaction}
@@ -273,7 +281,7 @@ export default function Migration() {
             <ButtonPrimary onClick={toggleWalletDrawer} fontWeight={600}>
               Connect Wallet
             </ButtonPrimary>
-          ) : +(balancePSYS.result?.toString() || 0) > 0 && allowance.state === AllowanceState.REQUIRED ? (
+          ) : +(balancePSYS.result?.toString() || 0) > 0 && approvalToken === ApprovalState.NOT_APPROVED ? (
             <ButtonPrimary
               onClick={updateAllowance}
               disabled={isAllowancePending || isApprovalLoading}

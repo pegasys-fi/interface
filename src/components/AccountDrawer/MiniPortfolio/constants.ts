@@ -161,6 +161,11 @@ const TransactionTitleTable: { [key in TransactionType]: { [state in Transaction
     [TransactionStatus.Confirmed]: t`Removed`,
     [TransactionStatus.Failed]: t`Remove Gamma`,
   },
+  [TransactionType.ROLLEX_MIGRATION]: {
+    [TransactionStatus.Pending]: t`Migrating`,
+    [TransactionStatus.Confirmed]: t`Migrated`,
+    [TransactionStatus.Failed]: t`Migrate failed`,
+  },
 }
 const AlternateTransactionTitleTable: { [key in TransactionType]?: { [state in TransactionStatus]: string } } = {
   [TransactionType.WRAP]: {

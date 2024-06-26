@@ -49,6 +49,7 @@ export enum TransactionType {
   CLAIM_FARM,
   REMOVE_LIQUIDITY_GAMMA,
   ADD_LIQUIDITY_GAMMA,
+  ROLLEX_MIGRATION,
 }
 
 interface BaseTransactionInfo {
@@ -60,6 +61,10 @@ export interface RemoveLiquidityGammaTransactionInfo {
   amount: string
   tokenAddress: string
   symbol: string
+}
+export interface RollexMigrationTransactionInfo {
+  type: TransactionType.ROLLEX_MIGRATION
+  amount: string
 }
 
 export interface AddLiquidityGammaTransactionInfo {
@@ -244,6 +249,7 @@ export type TransactionInfo =
   | ClaimFarmTransactionInfo
   | AddLiquidityGammaTransactionInfo
   | RemoveLiquidityGammaTransactionInfo
+  | RollexMigrationTransactionInfo
 
 export interface TransactionDetails {
   hash: string

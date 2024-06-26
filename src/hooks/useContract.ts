@@ -27,7 +27,7 @@ import {
   MULTICALL_ADDRESS,
   NONFUNGIBLE_POSITION_MANAGER_ADDRESSES,
   QUOTER_ADDRESSES,
-  ROLLEX_ADDRESS,
+  ROLLEX_MIGRATOR_ADDRESS,
   TICK_LENS_ADDRESSES,
   V2_ROUTER_ADDRESS,
   V3_MIGRATOR_ADDRESSES,
@@ -179,7 +179,7 @@ export function useMasterChefContract(withSignerIfPossible?: boolean, abi?: any)
 }
 
 export function useMigrateRollexContract() {
-  return useContract(ROLLEX_ADDRESS, RollexABI)
+  return useContract(ROLLEX_MIGRATOR_ADDRESS, RollexABI)
 }
 
 // export function useMasterChefContracts(withSignerIfPossible?: boolean) {
