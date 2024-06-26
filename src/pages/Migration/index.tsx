@@ -1,13 +1,25 @@
+import { Trans } from '@lingui/macro'
+import { CurrencyAmount, Token } from '@pollum-io/sdk-core'
+import { UNIVERSAL_ROUTER_ADDRESS } from '@pollum-io/universal-router-sdk'
 import { useWeb3React } from '@web3-react/core'
+import LoadingGifLight from 'assets/images/lightLoading.gif'
+import LoadingGif from 'assets/images/loading.gif'
 import { useToggleAccountDrawer } from 'components/AccountDrawer'
 import { ButtonPrimary } from 'components/Button'
-import DoubleCurrencyLogo from 'components/DoubleLogo'
-import { RowFixed } from 'components/Row'
+import { LoaderGif } from 'components/Icons/LoadingSpinner'
+import { MouseoverTooltip } from 'components/Tooltip'
+import { isSupportedChain } from 'constants/chains'
 import { useCurrency } from 'hooks/Tokens'
-import { useCurrencyBalances } from 'lib/hooks/useCurrencyBalance'
+import usePermit2Allowance, { AllowanceState } from 'hooks/usePermit2Allowance'
+import useCurrencyBalance from 'lib/hooks/useCurrencyBalance'
 import { headlineSmall } from 'nft/css/common.css'
-import styled from 'styled-components/macro'
+import { useCallback, useState } from 'react'
+import { Info, RefreshCcw } from 'react-feather'
+import styled, { useTheme } from 'styled-components/macro'
+import { useIsDarkMode } from 'theme/components/ThemeToggle'
 import { Z_INDEX } from 'theme/zIndex'
+import invariant from 'tiny-invariant'
+import { currencyAmountToPreciseFloat, formatTransactionAmount } from 'utils/formatNumbers'
 
 const PageWrapper = styled.div`
   padding: 68px 8px 0px;
@@ -59,6 +71,7 @@ const BalanceInfo = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-bottom: 16px;
 `
 
 const BalanceRow = styled.div`
@@ -79,24 +92,64 @@ const BalanceValue = styled.div`
 
 const Placeholder = styled.div`
   color: ${({ theme }) => theme.textSecondary};
+  justify-content: center;
+  align-items: center;
   text-align: center;
   margin-top: 16px;
   margin-bottom: 16px;
 `
 
 export default function Migration() {
-  const { account } = useWeb3React()
+  const theme = useTheme()
+  const { account, chainId } = useWeb3React()
   const toggleWalletDrawer = useToggleAccountDrawer()
   const currency = useCurrency('0x48023b16c3e81AA7F6eFFbdEB35Bb83f4f31a8fd') // PSYS address
-  const psysBalance = useCurrencyBalances(account ?? undefined, [currency ?? undefined])
+  const psysCurrency = useCurrencyBalance(account || undefined, currency || undefined)
+  const amountPSYS = formatTransactionAmount(currencyAmountToPreciseFloat(psysCurrency))
+  const isDarkMode = useIsDarkMode()
+
+  const allowance = usePermit2Allowance(
+    (psysCurrency as CurrencyAmount<Token>) || undefined,
+    isSupportedChain(chainId) ? UNIVERSAL_ROUTER_ADDRESS(chainId) : undefined
+  )
+
+  const isApprovalLoading = allowance.state === AllowanceState.REQUIRED && allowance.isApprovalLoading
+  const [isAllowancePending, setIsAllowancePending] = useState(false)
+
+  const updateAllowance = useCallback(async () => {
+    invariant(allowance.state === AllowanceState.REQUIRED)
+    setIsAllowancePending(true)
+    try {
+      await allowance.approveAndPermit()
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setIsAllowancePending(false)
+    }
+  }, [allowance])
 
   return (
     <PageWrapper>
       <MigrationWrapper>
-        <RowFixed align="center" justify="center">
+        <div>
           <TextHeader className={headlineSmall}>Migration Portal</TextHeader>
-          <DoubleCurrencyLogo size={30} /> {/*TODO: get tokens to show Logo*/}
-        </RowFixed>
+          <div
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+              flex: 'row',
+              display: 'flex',
+              paddingTop: '16px',
+              paddingBottom: '16px',
+              gap: '20px',
+            }}
+          >
+            <img src="/icons/logo_pegasys.svg" alt="PSYS" height={60} width={60} />
+            <RefreshCcw size="16" color={theme.accentActive} />
+            <img src="/icons/rollex.png" alt="REX" height={60} width={60} />
+          </div>
+        </div>
         <ExchangeRate>
           <strong>1 PSYS</strong> = <strong>1 REX</strong>
         </ExchangeRate>
@@ -104,21 +157,60 @@ export default function Migration() {
           <BalanceRow>
             <BalanceLabel>PSYS Balance in wallet</BalanceLabel>
             <BalanceValue>
-              <img src="/icons/logo_pegasys.svg" alt="PSYS" style={{ marginRight: 4 }} height={24} width={24} />0 PSYS
+              {amountPSYS || 0} PSYS
+              <img src="/icons/logo_pegasys.svg" alt="PSYS" style={{ marginLeft: 4 }} height={24} width={24} />
             </BalanceValue>
           </BalanceRow>
           <BalanceRow>
             <BalanceLabel>You will receive</BalanceLabel>
             <BalanceValue>
-              {/* <img src="/path/to/aave-icon.png" alt="REX" style={{ marginRight: 4 }} />  */}0 REX
+              {amountPSYS || 0} REX
+              <img src="/icons/rollex.png" alt="REX" style={{ marginLeft: 4 }} height={24} width={24} />
             </BalanceValue>
           </BalanceRow>
         </BalanceInfo>
-        <Placeholder>There is no PSYS in your account.</Placeholder>
-        {!account && (
+        {+amountPSYS == 0 && <Placeholder>There is no PSYS in your account.</Placeholder>}
+        {!account ? (
           <ButtonPrimary onClick={toggleWalletDrawer} fontWeight={600}>
             Connect Wallet
           </ButtonPrimary>
+        ) : (
+          +amountPSYS > 0 &&
+          allowance.state === AllowanceState.REQUIRED && (
+            <ButtonPrimary
+              onClick={updateAllowance}
+              disabled={isAllowancePending || isApprovalLoading}
+              style={{ gap: 14 }}
+            >
+              {isAllowancePending ? (
+                <>
+                  <LoaderGif size="20px" gif={isDarkMode ? LoadingGif : LoadingGifLight} />
+                  <Trans>Approve in your wallet</Trans>
+                </>
+              ) : isApprovalLoading ? (
+                <>
+                  <LoaderGif size="20px" gif={isDarkMode ? LoadingGif : LoadingGifLight} />
+                  <Trans>Approval pending</Trans>
+                </>
+              ) : (
+                <>
+                  <div style={{ height: 20 }}>
+                    <MouseoverTooltip
+                      text={
+                        <Trans>
+                          Permission is required for Pegasys to swap each token. This will expire after one month for
+                          your security.
+                        </Trans>
+                      }
+                    >
+                      <Info size={20} />
+                    </MouseoverTooltip>
+                  </div>
+                  <Trans>Approve use of PSYS</Trans>
+                </>
+              )}
+            </ButtonPrimary>
+          )
         )}
       </MigrationWrapper>
     </PageWrapper>
