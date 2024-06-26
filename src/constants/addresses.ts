@@ -83,6 +83,9 @@ export const GAMMA_MASTERCHEF_ADDRESSES: AddressMap = {
   ...constructSameAddressMap('0x70e0461e476de1211d789e9ea4ec2d3bb126d16a'),
 }
 
+// Rollex address
+export const ROLLEX_ADDRESS = '0x0419734d93CC3C33623F7ad250030dd4BD26Ea5D'
+
 export const GAMMA_UNIPROXY_ADDRESSES: AddressMap = {
   ...constructSameAddressMap('0xFc13Ebe7FEB9595D70195E9168aA7F3acE153621'),
 }

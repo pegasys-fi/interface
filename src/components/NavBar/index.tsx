@@ -47,7 +47,7 @@ const MigrationButton = styled.a`
   border-radius: 9999px;
   cursor: pointer;
   height: 40px;
-  background: linear-gradient(197deg, rgba(189, 62, 120, 0.8) 25%, rgba(218, 225, 123, 0.8) 89%);
+  background: linear-gradient(197deg, rgba(218, 225, 123, 0.8) 25%, rgba(189, 62, 120, 0.8) 89%);
   color: ${({ theme }) => theme.white};
   font-weight: 700;
   font-size: 18px;
