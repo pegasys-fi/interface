@@ -199,7 +199,7 @@ function RemoveLiquidityGammaSummary({ info }: { info: RemoveLiquidityGammaTrans
 }
 
 function RollexMigrationSummary({ info }: { info: RollexMigrationTransactionInfo }) {
-  const Text = `Migrate ${info.amount} PSYS`
+  const Text = `🎉 Welcome to Rollex DAO 🎉`
   return <div>{Text}</div>
 }
 

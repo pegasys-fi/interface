@@ -16,9 +16,9 @@ import { useMigrateRollexContract, useTokenContract } from 'hooks/useContract'
 import { useSingleCallResult } from 'lib/hooks/multicall'
 import useCurrencyBalance from 'lib/hooks/useCurrencyBalance'
 import { headlineSmall } from 'nft/css/common.css'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Info, RefreshCcw } from 'react-feather'
-import { Text } from 'rebass'
+import { Box, Text } from 'rebass'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { TransactionType } from 'state/transactions/types'
 import styled, { useTheme } from 'styled-components/macro'
@@ -126,19 +126,21 @@ export default function Migration() {
 
   const isApprovalLoading = approvalToken === ApprovalState.PENDING
   const [isAllowancePending, setIsAllowancePending] = useState(false)
-  const [showConffeti, setShowConfetti] = useState(false)
 
-  const [{ showTransactionModal, transactionErrorMessage, attemptingTxn, txHash }, setTransactionModal] = useState<{
-    showTransactionModal: boolean
-    attemptingTxn: boolean
-    transactionErrorMessage?: string
-    txHash?: string
-  }>({
-    showTransactionModal: false,
-    attemptingTxn: false,
-    transactionErrorMessage: undefined,
-    txHash: undefined,
-  })
+  const [{ showTransactionModal, transactionErrorMessage, attemptingTxn, txHash, showConfetti }, setTransactionModal] =
+    useState<{
+      showTransactionModal: boolean
+      attemptingTxn: boolean
+      transactionErrorMessage?: string
+      txHash?: string
+      showConfetti: boolean
+    }>({
+      showTransactionModal: false,
+      attemptingTxn: false,
+      transactionErrorMessage: undefined,
+      txHash: undefined,
+      showConfetti: false,
+    })
 
   const updateAllowance = useCallback(async () => {
     invariant(approvalToken === ApprovalState.NOT_APPROVED)
@@ -160,7 +162,7 @@ export default function Migration() {
       !balancePSYS.error
     ) {
       try {
-        stateTransaction(true, true, undefined, undefined)
+        stateTransaction(true, true, undefined, undefined, false)
         // const response = await migrationContract.migrateFromPSYS(balancePSYS.result?.toString())
 
         const response = await migrationContract.migrateFromPSYS('1')
@@ -170,9 +172,9 @@ export default function Migration() {
           amount: amountPSYS,
         })
 
-        stateTransaction(false, true, undefined, response.hash)
+        stateTransaction(false, true, undefined, response.hash, true)
       } catch (e) {
-        stateTransaction(false, true, e.message, undefined)
+        stateTransaction(false, true, e.code, undefined, false)
         console.error(e)
       }
     }
@@ -182,50 +184,63 @@ export default function Migration() {
     attemptingTxn: boolean,
     showTransactionModal: boolean,
     transactionErrorMessage: string | undefined,
-    txHash: string | undefined
+    txHash: string | undefined,
+    showConfetti: boolean
   ) => {
     setTransactionModal({
       attemptingTxn,
       showTransactionModal,
       transactionErrorMessage,
       txHash,
+      showConfetti,
     })
   }
 
   const handleDismissTransaction = useCallback(() => {
-    setTransactionModal({ showTransactionModal: false, attemptingTxn, transactionErrorMessage, txHash })
+    setTransactionModal({
+      showTransactionModal: false,
+      attemptingTxn,
+      transactionErrorMessage,
+      txHash,
+      showConfetti: false,
+    })
   }, [attemptingTxn, transactionErrorMessage, txHash])
-
-  useEffect(() => {
-    if (txHash !== undefined && showTransactionModal) {
-      setShowConfetti(!showConffeti)
-    }
-  }, [showConffeti, showTransactionModal, txHash])
 
   const modalHeader = () => {
     return (
-      <AutoColumn>
-        <Row style={{ padding: '20px', display: 'flex', justifyContent: 'center' }}>
-          <Text fontSize="18px">
-            {'Migration' + ' '}
-            <Text as="span" color={theme.accentActive}>
-              {balancePSYS.result?.toString() || 0}
+      <AutoColumn justify="center" gap="10px">
+        {transactionErrorMessage ? (
+          <Box justifyItems="center" alignItems="center" padding={2} textAlign="center">
+            <Text fontSize="18px">
+              {transactionErrorMessage === 'ACTION_REJECTED' ? 'User rejected the transaction' : 'Something went wrong'}
             </Text>
-            {' ' + 'PSYS to ROLLEX'}
-          </Text>
-        </Row>
+            <Text color={theme.accentActive} fontSize="16px" alignItems="center">
+              {'Code: ' + transactionErrorMessage}
+            </Text>
+          </Box>
+        ) : (
+          <Row style={{ padding: '20px', display: 'flex', justifyContent: 'center' }}>
+            <Text fontSize="18px">
+              {'Migration' + ' '}
+              <Text as="span" color={theme.accentActive}>
+                {balancePSYS.result?.toString() || 0}
+              </Text>
+              {' ' + 'PSYS to ROLLEX'}
+            </Text>
+          </Row>
+        )}
       </AutoColumn>
     )
   }
 
   return (
     <>
-      <Confettis start={showConffeti} />
+      <Confettis start={showConfetti} />
       <TransactionConfirmationModal
         isOpen={showTransactionModal}
         onDismiss={handleDismissTransaction}
         attemptingTxn={attemptingTxn}
-        pendingText={`You are migrate ${balancePSYS.result?.toString() || 0} PSYS to ROLLEX`}
+        pendingText={`You are migrating ${amountPSYS || 0} PSYS to ROLLEX`}
         hash={txHash}
         content={() => (
           <ConfirmationModalContent
