@@ -204,6 +204,11 @@ export function parseLocalActivity(
       additionalFields = parseCollectFees(info, chainId, tokens)
     } else if (info.type === TransactionType.MIGRATE_LIQUIDITY_V3 || info.type === TransactionType.CREATE_V3_POOL) {
       additionalFields = parseMigrateCreateV3(info, chainId, tokens)
+    } else if (info.type === TransactionType.ROLLEX_MIGRATION) {
+      additionalFields = {
+        descriptor: `${info.amount} PSYS`,
+        logos: ['/icons/logo_pegasys.svg'],
+      }
     }
 
     return { ...defaultFields, ...additionalFields }

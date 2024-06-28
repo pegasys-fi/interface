@@ -3,21 +3,21 @@ import IPegasysPairJson from '@pollum-io/pegasys-protocol/artifacts/contracts/pe
 import IPegasysRouterJson from '@pollum-io/pegasys-protocol/artifacts/contracts/pegasys-periphery/interfaces/IPegasysRouter.sol/IPegasysRouter.json'
 import { ChainId } from '@pollum-io/smart-order-router'
 import QuoterV2Json from '@pollum-io/swap-router-contracts/artifacts/contracts/lens/QuoterV2.sol/QuoterV2.json'
+import NonfungiblePositionManagerJson from '@pollum-io/v3-periphery/artifacts/contracts/NonfungiblePositionManager.sol/NonfungiblePositionManager.json'
+import V3MigratorJson from '@pollum-io/v3-periphery/artifacts/contracts/V3Migrator.sol/V3Migrator.json'
 import PegasysInterfaceMulticallJson from '@pollum-io/v3-periphery/artifacts/contracts/lens/PegasysInterfaceMulticall.sol/PegasysInterfaceMulticall.json'
 import QuoterJson from '@pollum-io/v3-periphery/artifacts/contracts/lens/Quoter.sol/Quoter.json'
 import TickLensJson from '@pollum-io/v3-periphery/artifacts/contracts/lens/TickLens.sol/TickLens.json'
-import NonfungiblePositionManagerJson from '@pollum-io/v3-periphery/artifacts/contracts/NonfungiblePositionManager.sol/NonfungiblePositionManager.json'
-import V3MigratorJson from '@pollum-io/v3-periphery/artifacts/contracts/V3Migrator.sol/V3Migrator.json'
 import { useWeb3React } from '@web3-react/core'
 import ARGENT_WALLET_DETECTOR_ABI from 'abis/argent-wallet-detector.json'
 import EIP_2612 from 'abis/eip_2612.json'
 import ENS_PUBLIC_RESOLVER_ABI from 'abis/ens-public-resolver.json'
 import ENS_ABI from 'abis/ens-registrar.json'
+import ERC1155_ABI from 'abis/erc1155.json'
 import ERC20_ABI from 'abis/erc20.json'
 import ERC20_BYTES32_ABI from 'abis/erc20_bytes32.json'
 import ERC721_ABI from 'abis/erc721.json'
-import ERC1155_ABI from 'abis/erc1155.json'
-import { ArgentWalletDetector, EnsPublicResolver, EnsRegistrar, Erc20, Erc721, Erc1155, Weth } from 'abis/types'
+import { ArgentWalletDetector, EnsPublicResolver, EnsRegistrar, Erc1155, Erc20, Erc721, Weth } from 'abis/types'
 import WETH_ABI from 'abis/weth.json'
 import {
   ARGENT_WALLET_DETECTOR_ADDRESS,
@@ -27,6 +27,7 @@ import {
   MULTICALL_ADDRESS,
   NONFUNGIBLE_POSITION_MANAGER_ADDRESSES,
   QUOTER_ADDRESSES,
+  ROLLEX_MIGRATOR_ADDRESS,
   TICK_LENS_ADDRESSES,
   V2_ROUTER_ADDRESS,
   V3_MIGRATOR_ADDRESSES,
@@ -39,6 +40,7 @@ import { V3Migrator } from 'types/v3/V3Migrator'
 import GammaPairABI from '../abis/gamma-hypervisor.json'
 import GammaMasterChef from '../abis/gamma-masterchef.json'
 import GammaUniProxyABI from '../abis/gamma-uniorixy.json'
+import RollexABI from '../abis/rollex-contract.json'
 import { getContract } from '../utils'
 
 const { abi: IUniswapV2PairABI } = IPegasysPairJson
@@ -174,6 +176,10 @@ export function useTickLens(): TickLens | null {
 
 export function useMasterChefContract(withSignerIfPossible?: boolean, abi?: any) {
   return useContract(GAMMA_MASTERCHEF_ADDRESSES[ChainId.ROLLUX], abi ?? GammaMasterChef, withSignerIfPossible)
+}
+
+export function useMigrateRollexContract() {
+  return useContract(ROLLEX_MIGRATOR_ADDRESS, RollexABI)
 }
 
 // export function useMasterChefContracts(withSignerIfPossible?: boolean) {

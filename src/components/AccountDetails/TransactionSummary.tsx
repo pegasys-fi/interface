@@ -24,6 +24,7 @@ import {
   QueueTransactionInfo,
   RemoveLiquidityGammaTransactionInfo,
   RemoveLiquidityV3TransactionInfo,
+  RollexMigrationTransactionInfo,
   TransactionInfo,
   TransactionType,
   VoteTransactionInfo,
@@ -194,6 +195,11 @@ function AddLiquidityGammaSummary({ info }: { info: AddLiquidityGammaTransaction
 
 function RemoveLiquidityGammaSummary({ info }: { info: RemoveLiquidityGammaTransactionInfo }) {
   const Text = `Remove ${info.amount} ${info.symbol}`
+  return <div>{Text}</div>
+}
+
+function RollexMigrationSummary({ info }: { info: RollexMigrationTransactionInfo }) {
+  const Text = `🎉 Welcome to Rollex DAO 🎉`
   return <div>{Text}</div>
 }
 
@@ -403,6 +409,9 @@ export function TransactionSummary({ info }: { info: TransactionInfo }) {
 
     case TransactionType.REMOVE_LIQUIDITY_GAMMA:
       return <RemoveLiquidityGammaSummary info={info} />
+
+    case TransactionType.ROLLEX_MIGRATION:
+      return <RollexMigrationSummary info={info} />
 
     default:
       return <div>Unknown Transaction Type</div>

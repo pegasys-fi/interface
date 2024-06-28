@@ -10,10 +10,13 @@ import { Row } from 'nft/components/Flex'
 import { PegasysIcon } from 'nft/components/icons'
 import { useProfilePageState } from 'nft/hooks'
 import { ProfilePageStateType } from 'nft/types'
+import { rgb } from 'polished'
 import { ReactNode } from 'react'
 import { NavLink, NavLinkProps, useLocation, useNavigate } from 'react-router-dom'
 import { shouldDisableNFTRoutesAtom } from 'state/application/atoms'
 import styled, { useTheme } from 'styled-components/macro'
+import { colors } from 'theme/colors'
+import { opacify } from 'theme/utils'
 
 import { Bag } from './Bag'
 import Blur from './Blur'
@@ -34,6 +37,21 @@ const NavBody = styled.div`
   border-radius: 30px;
   align-items: center;
   gap: 5px;
+`
+
+const MigrationButton = styled.a`
+  text-decoration: none;
+  width: 100%;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  height: 40px;
+  background: linear-gradient(197deg, rgba(218, 225, 123, 0.8) 25%, rgba(189, 62, 120, 0.8) 89%);
+  color: ${({ theme }) => theme.white};
+  font-weight: 700;
+  font-size: 18px;
+  box-shadow: ${`0px 10px 24px ${opacify(24, rgb(218, 225, 123))}, 10px 0px 24px ${opacify(24, colors.magenta300)}`};
 `
 
 interface MenuItemProps {
@@ -162,6 +180,9 @@ const Navbar = ({ blur }: { blur: boolean }) => {
                 <SearchBar />
               </Box>
               {isNftPage && sellPageState !== ProfilePageStateType.LISTING && <Bag />}
+              <NavLink to="/migration" style={{ textDecoration: 'none' }}>
+                <MigrationButton>Migration</MigrationButton>
+              </NavLink>
               {!isNftPage && (
                 <Box display={{ sm: 'none', lg: 'flex' }}>
                   <ChainSelector />
