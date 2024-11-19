@@ -53,6 +53,13 @@ export function toHistoryDuration(timePeriod: TimePeriod): HistoryDuration {
   }
 }
 
+export function convertDateToTimestamp(date?: Date) {
+  if (!date) return
+  const microsecondsMap = new WeakMap<Date, number>()
+  const microseconds = microsecondsMap.get(date) || 0
+  return date.getTime() / 1000 + microseconds / 1000000
+}
+
 export type PricePoint = { timestamp: number; value: number }
 
 // export function isPricePoint(p: PricePoint | null): p is PricePoint {
@@ -81,6 +88,7 @@ const GQL_CHAINS: number[] = [
 export function isGqlSupportedChain(chainId: number | undefined): chainId is SupportedChainId {
   return !!chainId && GQL_CHAINS.includes(chainId)
 }
+
 export function toContractInput(currency: Currency): ContractInput {
   const chain = chainIdToBackendName(currency.chainId)
   return { chain, address: currency.isToken ? currency.address : getNativeTokenDBAddress(chain) }

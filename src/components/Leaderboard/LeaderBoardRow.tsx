@@ -32,7 +32,7 @@ const StyledTokenRow = styled.div<{
   background-color: transparent;
   display: grid;
   font-size: 16px;
-  grid-template-columns: 1fr 7fr 2fr 2fr;
+  grid-template-columns: 1fr 7fr 2fr 2fr 2fr;
   line-height: 24px;
   max-width: ${MAX_WIDTH_MEDIA_BREAKPOINT};
   min-width: 390px;
@@ -196,6 +196,9 @@ const StyledLink = styled(Link)`
 
 const HEADER_DESCRIPTIONS: Record<LeaderboardSortMethod, ReactNode | undefined> = {
   [LeaderboardSortMethod.TRADES]: undefined,
+  [LeaderboardSortMethod.VOLUME_UNO]: (
+    <Trans>UNO Trade Volume is the amount of the asset that has been traded on Pegasys v3.</Trans>
+  ),
   [LeaderboardSortMethod.VOLUME_USDT]: (
     <Trans>Volume is the amount of the asset that has been traded on Pegasys v3 during the selected time frame.</Trans>
   ),
@@ -240,6 +243,7 @@ function LeaderBoardRow({
   address,
   trades,
   volumeUSDT,
+  tradeUnoVolume,
   ...rest
 }: {
   first?: boolean
@@ -249,6 +253,7 @@ function LeaderBoardRow({
   address: ReactNode
   trades: ReactNode
   volumeUSDT: ReactNode
+  tradeUnoVolume: ReactNode
   last?: boolean
   style?: CSSProperties
 }) {
@@ -269,6 +274,9 @@ function LeaderBoardRow({
       <VolumeCell data-testid="volume-cell" sortable={header}>
         {volumeUSDT}
       </VolumeCell>
+      <VolumeCell data-testid="volume-cell" sortable={header}>
+        {tradeUnoVolume}
+      </VolumeCell>
     </>
   )
   if (header) return <StyledHeaderRow data-testid="header-row">{rowCells}</StyledHeaderRow>
@@ -284,6 +292,7 @@ export function HeaderRow() {
       address={<Trans>Address</Trans>}
       trades={<HeaderCell category={LeaderboardSortMethod.TRADES} />}
       volumeUSDT={<HeaderCell category={LeaderboardSortMethod.VOLUME_USDT} />}
+      tradeUnoVolume={<HeaderCell category={LeaderboardSortMethod.VOLUME_UNO} />}
     />
   )
 }
@@ -298,6 +307,7 @@ export function LoadingRow(props: { first?: boolean; last?: boolean }) {
       address={<MediumLoadingBubble />}
       trades={<SmallLoadingBubble />}
       volumeUSDT={<LoadingBubble />}
+      tradeUnoVolume={<LoadingBubble />}
       {...props}
     />
   )
@@ -316,6 +326,7 @@ interface LoadedUserRowProps {
   leaderboard: NonNullable<Omit<LeaderBoard, 'address' | 'date'>>
   sortRank: number
 }
+
 /* Loaded State: row component with token information */
 export const LoadedRow = forwardRef((props: LoadedRowProps, ref: ForwardedRef<HTMLDivElement>) => {
   const { leaderboardListIndex, leaderboardListLength, leaderboard, sortRank } = props
@@ -323,6 +334,7 @@ export const LoadedRow = forwardRef((props: LoadedRowProps, ref: ForwardedRef<HT
   const address = leaderboard.id.split('-')[0]
   const trades = leaderboard.txCount
   const volumeUSDC = parseFloat(leaderboard.totalVolume).toFixed(2)
+  const volumeUno = parseFloat(`${leaderboard.totalUnoTradeVolumeUSD}`).toFixed(2)
   const theme = useTheme()
   const to = getExplorerLink(570, address, ExplorerDataType.ADDRESS)
   return (
@@ -335,6 +347,9 @@ export const LoadedRow = forwardRef((props: LoadedRowProps, ref: ForwardedRef<HT
           trades={<ClickableContent>{trades}</ClickableContent>}
           volumeUSDT={
             <ClickableContent style={{ color: `${theme.accentSuccess}` }}>{'$ ' + volumeUSDC}</ClickableContent>
+          }
+          tradeUnoVolume={
+            <ClickableContent style={{ color: `${theme.accentSuccess}` }}>{'$ ' + volumeUno}</ClickableContent>
           }
           first={leaderboardListIndex === 0}
           last={leaderboardListIndex === leaderboardListLength - 1}
@@ -350,6 +365,7 @@ export function LoadedUserRow(props: LoadedUserRowProps) {
   const to = getExplorerLink(570, address, ExplorerDataType.ADDRESS)
   const trades = leaderboard.txCount
   const volumeUSDC = parseFloat(leaderboard.totalVolume).toFixed(2)
+  const volumeUno = parseFloat(`${leaderboard.totalUnoTradeVolumeUSD}`).toFixed(2)
   const theme = useTheme()
 
   return (
@@ -361,6 +377,9 @@ export function LoadedUserRow(props: LoadedUserRowProps) {
         trades={<ClickableContent>{trades}</ClickableContent>}
         volumeUSDT={
           <ClickableContent style={{ color: `${theme.accentSuccess}` }}>{'$ ' + volumeUSDC}</ClickableContent>
+        }
+        tradeUnoVolume={
+          <ClickableContent style={{ color: `${theme.accentSuccess}` }}>{'$ ' + volumeUno}</ClickableContent>
         }
         first={leaderboardListIndex === 0}
         last={leaderboardListIndex === leaderboardListLength - 1}

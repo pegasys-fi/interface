@@ -87,10 +87,11 @@ export function LeaderboardUserTable({ address }: { address: string }) {
         id: leaderBoard.id,
         txCount: leaderBoard.txCount,
         totalVolume: leaderBoard.totalVolume,
+        totalUnoTradeVolumeUSD: leaderBoard.totalUnoTradeVolumeUSD,
         rank: Number(currentRank),
       })
     } else if (leaderBoard === null) {
-      setuser({ id: address.toLowerCase(), txCount: 0, totalVolume: '0', rank: 300 })
+      setuser({ id: address.toLowerCase(), txCount: 0, totalVolume: '0', rank: 300, totalUnoTradeVolumeUSD: 0 })
     }
   }, [address, currentRank, leaderBoard])
 
