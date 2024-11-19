@@ -8,7 +8,14 @@ import { AlertTriangle } from 'react-feather'
 import styled from 'styled-components/macro'
 
 import { HeaderRow, LoadedRow, LoadingRow } from './LeaderBoardRow'
-import { filterStringAtom, filterTimeAtom, rankAtom, sortAscendingAtom, sortMethodAtom } from './state'
+import {
+  filterDateRangeAtom,
+  filterStringAtom,
+  filterTimeAtom,
+  rankAtom,
+  sortAscendingAtom,
+  sortMethodAtom,
+} from './state'
 
 const GridContainer = styled.div`
   display: flex;
@@ -171,13 +178,14 @@ function Pagination({
 
 export default function LeaderboardTable({ address }: { address?: string }) {
   const timePeriod = useAtomValue(filterTimeAtom)
+  const dataRange = useAtomValue(filterDateRangeAtom)
   const [currentPage, setCurrentPage] = useState(1)
 
   const handlePageChange = (newPage: any) => {
     setCurrentPage(newPage)
   }
 
-  const { loading, data: leaderBoard } = useLeaderboardData(timePeriod)
+  const { loading, data: leaderBoard } = useLeaderboardData(timePeriod, dataRange)
 
   const filterString = useAtomValue(filterStringAtom)
   const sortMethod = useAtomValue(sortMethodAtom)
@@ -189,36 +197,42 @@ export default function LeaderboardTable({ address }: { address?: string }) {
     const sortMethodMapping: { [key: string]: LeaderBoardKeys } = {
       Trades: 'txCount',
       Volume: 'totalVolume',
+      ['UNO Trade Volume']: 'totalUnoTradeVolumeUSD',
     }
 
+    const sortKey = sortMethodMapping[sortMethod]
     const filtered = leaderBoard?.filter((obj: LeaderBoard | Omit<LeaderBoard, 'address' | 'date'>) => {
+      const searchTerm = filterString.toLowerCase()
+
       if ('address' in obj) {
-        const addressMatch = obj.address.toLowerCase().includes(filterString.toLowerCase())
-        return addressMatch
+        return obj.address.toLowerCase().includes(searchTerm)
       }
 
-      return obj.id.toLowerCase().includes(filterString.toLowerCase())
+      return obj.id.toLowerCase().includes(searchTerm)
     })
 
     const sorted = filtered?.sort((a, b) => {
-      const isTotalVolume = sortMethodMapping[sortMethod] === 'totalVolume'
-      const fieldA = isTotalVolume
-        ? parseFloat(a[sortMethodMapping[sortMethod]] as string)
-        : a[sortMethodMapping[sortMethod]]
-      const fieldB = isTotalVolume
-        ? parseFloat(b[sortMethodMapping[sortMethod]] as string)
-        : b[sortMethodMapping[sortMethod]]
+      const fieldA =
+        sortKey === 'totalVolume' || sortKey === 'totalUnoTradeVolumeUSD'
+          ? parseFloat((a[sortKey] as string) || '0')
+          : (a[sortKey] as number)
 
-      if (fieldA && fieldB && fieldA < fieldB) {
+      const fieldB =
+        sortKey === 'totalVolume' || sortKey === 'totalUnoTradeVolumeUSD'
+          ? parseFloat((b[sortKey] as string) || '0')
+          : (b[sortKey] as number)
+
+      if (fieldA < fieldB) {
         return sortAscending ? -1 : 1
       }
-      if (fieldA && fieldB && fieldA > fieldB) {
+      if (fieldA > fieldB) {
         return sortAscending ? 1 : -1
       }
+
       return 0
     })
 
-    return sorted
+    return sorted || []
   }, [filterString, leaderBoard, sortAscending, sortMethod])
 
   const setRankString = useSetAtom(rankAtom)

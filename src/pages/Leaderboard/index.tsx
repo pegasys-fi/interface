@@ -8,6 +8,7 @@ import { MAX_WIDTH_MEDIA_BREAKPOINT, MEDIUM_MEDIA_BREAKPOINT } from 'components/
 import { MouseoverTooltip } from 'components/Tooltip'
 import styled from 'styled-components/macro'
 import { ThemedText } from 'theme'
+import { DateTimeSelector } from '../../components/Leaderboard/DateTimeSelector'
 
 const LeaderBoardLayout = styled.div`
   width: 100%;
@@ -37,6 +38,17 @@ const FiltersContainer = styled.div`
 
   @media only screen and (max-width: ${MEDIUM_MEDIA_BREAKPOINT}) {
     order: 2;
+  }
+`
+
+const DateContainer = styled(FiltersContainer)`
+  margin-left: 8px;
+  width: 25%;
+
+  @media only screen and (max-width: ${MEDIUM_MEDIA_BREAKPOINT}) {
+    width: 40%;
+    margin: 0px;
+    order: 1;
   }
 `
 
@@ -89,6 +101,9 @@ export function LeaderBoard() {
         <FiltersContainer>
           <TimeSelector />
         </FiltersContainer>
+        <DateContainer>
+          <DateTimeSelector />
+        </DateContainer>
         <SearchContainer>
           <SearchBar />
         </SearchContainer>

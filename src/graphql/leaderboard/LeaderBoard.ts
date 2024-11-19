@@ -3,13 +3,16 @@ import dayjs from 'dayjs'
 import { apolloClient } from 'graphql/thegraph/apollo'
 import { TimePeriodLeaderboard } from 'graphql/utils/util'
 import { LeaderBoard } from 'pages/Leaderboard'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
+
+import { ILeaderBoardDateRange } from '../../components/Leaderboard/state'
 
 export type LeaderBoard = {
   address: string
   date: number
   id: string
   totalVolume: string
+  totalUnoTradeVolumeUSD: number
   txCount: number
   rank?: number
 }
@@ -36,6 +39,21 @@ const LEADERBOARD = gql`
       id
       txCount
       totalVolume
+    }
+  }
+`
+
+const TRADES_BY_USER = gql`
+  query userTrades($where: Swap_filter) {
+    swaps(first: 1000, where: $where) {
+      amountUSD
+      token0 {
+        symbol
+      }
+      token1 {
+        symbol
+      }
+      recipient
     }
   }
 `
@@ -76,7 +94,10 @@ const LEADERBOARDMONTH = gql`
 /**
  * Fetch leaderboard
  */
-export function useLeaderboardData(time: TimePeriodLeaderboard): {
+export function useLeaderboardData(
+  time: TimePeriodLeaderboard,
+  dateRange?: ILeaderBoardDateRange
+): {
   loading: boolean
   error: boolean
   data?: LeaderBoard[] | Omit<LeaderBoard, 'date' | 'address'>[]
@@ -133,8 +154,61 @@ export function useLeaderboardData(time: TimePeriodLeaderboard): {
     }
   }, [data, dataMonth, dataWeek, time])
 
-  const anyError = Boolean(error && (errorWeek || errorMonth))
-  const anyLoading = Boolean(loading && (loadingWeek || loadingMonth))
+  const recipients = leaderBoard?.map((user) => user.id) || []
+
+  const buildWhereFilter = (symbol: string, recipients: string[], startTime?: number, endTime?: number) => {
+    const where: any = {
+      token1_: { symbol },
+      recipient_in: recipients,
+    }
+
+    if (startTime) {
+      where.timestamp_gte = startTime
+    }
+
+    if (endTime) {
+      where.timestamp_lte = endTime
+    }
+
+    return where
+  }
+
+  const {
+    data: tradesData,
+    loading: isLoadingTrades,
+    error: tradeError,
+    refetch,
+  } = useQuery(TRADES_BY_USER, {
+    client: apolloClient,
+    variables: {
+      where: buildWhereFilter('UNO', recipients, dateRange?.start_date, dateRange?.end_date),
+    },
+  })
+
+  const aggregatedUnoData = tradesData?.swaps?.reduce((acc: any, swap: any) => {
+    const { recipient, amountUSD } = swap
+    if (!acc[recipient]) {
+      acc[recipient] = { recipient, totalTradeVolumeUSD: 0 }
+    }
+    acc[recipient].totalTradeVolumeUSD += parseFloat(amountUSD)
+    return acc
+  }, {})
+
+  const formattedLeaderBoard = leaderBoard?.map((user) => {
+    return {
+      ...user,
+      totalUnoTradeVolumeUSD: aggregatedUnoData?.[user.id]?.totalTradeVolumeUSD || 0,
+    }
+  })
+
+  useEffect(() => {
+    if (dateRange) {
+      refetch()
+    }
+  }, [dateRange, isLoadingTrades])
+
+  const anyError = Boolean(error && (errorWeek || errorMonth || tradeError))
+  const anyLoading = Boolean(loading || loadingWeek || loadingMonth || isLoadingTrades)
 
   // return early if not all data yet
   if (anyError || anyLoading) {
@@ -148,7 +222,7 @@ export function useLeaderboardData(time: TimePeriodLeaderboard): {
   return {
     loading: anyLoading,
     error: anyError,
-    data: leaderBoard,
+    data: formattedLeaderBoard,
   }
 }
 
@@ -180,5 +254,22 @@ export default function useLeaderboardFilteredData(address: string): {
     loading: anyLoading,
     error: anyError,
     data: data?.user,
+  }
+}
+
+// eslint-disable-next-line import/no-unused-modules
+export const useTradesByUser = (symbol: string, recipients: string[]) => {
+  const { data, loading, error } = useQuery(TRADES_BY_USER, {
+    client: apolloClient,
+    variables: {
+      symbol,
+      recipients,
+    },
+  })
+
+  return {
+    data,
+    loading,
+    error,
   }
 }

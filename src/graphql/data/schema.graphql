@@ -2,16 +2,6 @@
 directive @defer on FIELD
 
 """
-Tells the service this field/object has access authorized by an OIDC token.
-"""
-directive @aws_oidc on OBJECT | FIELD_DEFINITION
-
-"""
-Tells the service this field/object has access authorized by sigv4 signing.
-"""
-directive @aws_iam on OBJECT | FIELD_DEFINITION
-
-"""
 Tells the service this field/object has access authorized by a Lambda Authorizer.
 """
 directive @aws_lambda on OBJECT | FIELD_DEFINITION
@@ -25,6 +15,14 @@ directive @aws_publish(
   List of subscriptions which will be published to when this mutation is called.
   """
   subscriptions: [String]
+) on FIELD_DEFINITION
+
+"""Tells the service which mutation triggers this subscription."""
+directive @aws_subscribe(
+  """
+  List of mutations which will trigger this subscription when they are called.
+  """
+  mutations: [String]
 ) on FIELD_DEFINITION
 
 """
@@ -41,28 +39,31 @@ directive @aws_auth(
   cognito_groups: [String]
 ) on FIELD_DEFINITION
 
-"""Tells the service which mutation triggers this subscription."""
-directive @aws_subscribe(
-  """
-  List of mutations which will trigger this subscription when they are called.
-  """
-  mutations: [String]
-) on FIELD_DEFINITION
-
 """
 Tells the service this field/object has access authorized by an API key.
 """
 directive @aws_api_key on OBJECT | FIELD_DEFINITION
 
 """
+Tells the service this field/object has access authorized by an OIDC token.
+"""
+directive @aws_oidc on OBJECT | FIELD_DEFINITION
+
+"""
+Tells the service this field/object has access authorized by sigv4 signing.
+"""
+directive @aws_iam on OBJECT | FIELD_DEFINITION
+
+"""
   Types, unions, and inputs (alphabetized):
  These are colocated to highlight the relationship between some types and their inputs.
 """
-union ActivityDetails = TransactionDetails | SwapOrderDetails
+union ActivityDetails = TransactionDetails | SwapOrderDetails | OnRampTransactionDetails
 
 input ActivityDetailsInput {
   transactionDetails: TransactionDetailsInput
   swapOrderDetails: SwapOrderDetailsInput
+  onRampTransactionDetails: OnRampTransactionDetailsInput
 }
 
 """
@@ -91,6 +92,7 @@ enum ActivityType {
   STAKE
   UNSTAKE
   SWAP_ORDER
+  ON_RAMP
 }
 
 type Amount implements IAmount {
@@ -148,7 +150,7 @@ enum AssetActivitySwitch {
   LEGACY
 }
 
-union AssetChange = TokenTransfer | NftTransfer | TokenApproval | NftApproval | NftApproveForAll
+union AssetChange = TokenTransfer | NftTransfer | OnRampTransfer | TokenApproval | NftApproval | NftApproveForAll
 
 input AssetChangeInput {
   tokenTransfer: TokenTransferInput
@@ -156,6 +158,7 @@ input AssetChangeInput {
   nftTransfer: NftTransferInput
   nftApproval: NftApprovalInput
   nftApproveForAll: NftApproveForAllInput
+  onRampTransfer: OnRampTransferInput
 }
 
 """
@@ -182,6 +185,10 @@ enum Chain {
   BNB
   BASE
   BLAST
+  ZORA
+  ZKSYNC
+  ASTROCHAIN_SEPOLIA
+  WORLDCHAIN
   UNKNOWN_CHAIN
 }
 
@@ -206,6 +213,7 @@ enum Currency {
   IDR
   INR
   JPY
+  KRW
   MATIC
   NGN
   PKR
@@ -260,6 +268,9 @@ input DimensionsInput {
 type FeeData {
   sellFeeBps: String
   buyFeeBps: String
+  feeTakenOnTransfer: Boolean
+  externalTransferFailed: Boolean
+  sellReverted: Boolean
 }
 
 enum HighLow {
@@ -330,6 +341,13 @@ type Mutation {
   assetActivity(input: AssetActivityInput!): AssetActivity!
   heartbeat(subscriptionId: ID!, type: SubscriptionType!): Status!
   unsubscribe(subscriptionId: ID!, type: SubscriptionType!): Status!
+}
+
+type NetworkFee {
+  quantity: String
+  tokenSymbol: String
+  tokenAddress: String
+  tokenChain: String
 }
 
 type NftActivity {
@@ -432,6 +450,7 @@ type NftAsset {
   creator: NftProfile
   mediaType: MediaType
   isSpam: Boolean
+  chain: Chain
 }
 
 type NftAssetConnection {
@@ -764,6 +783,71 @@ input NftTransferInput {
   direction: TransactionDirection!
 }
 
+type OnRampServiceProvider {
+  id: ID!
+  serviceProvider: String!
+  name: String!
+  url: String!
+  logoLightUrl: String!
+  logoDarkUrl: String!
+  supportUrl: String
+}
+
+input OnRampServiceProviderInput {
+  serviceProvider: String!
+  name: String!
+  url: String!
+  logoLightUrl: String!
+  logoDarkUrl: String!
+  supportUrl: String
+}
+
+type OnRampTransactionDetails {
+  id: ID!
+  status: TransactionStatus!
+  receiverAddress: String!
+  onRampTransfer: OnRampTransfer!
+}
+
+input OnRampTransactionDetailsInput {
+  status: TransactionStatus!
+  receiverAddress: String!
+  onRampTransfer: OnRampTransferInput!
+}
+
+input OnRampTransactionsAuth {
+  queryParams: String!
+  signature: String!
+}
+
+type OnRampTransfer {
+  id: ID!
+  token: Token!
+  tokenStandard: TokenStandard!
+  amount: Float!
+  sourceCurrency: String
+  sourceAmount: Float!
+  serviceProvider: OnRampServiceProvider!
+  transactionReferenceId: String!
+  externalSessionId: String!
+  networkFee: Float
+  transactionFee: Float
+  totalFee: Float
+}
+
+input OnRampTransferInput {
+  token: TokenAssetInput!
+  tokenStandard: TokenStandard!
+  amount: Float!
+  sourceCurrency: String
+  sourceAmount: Float!
+  serviceProvider: OnRampServiceProviderInput!
+  transactionReferenceId: String!
+  networkFee: Float
+  transactionFee: Float
+  totalFee: Float
+}
+
 enum OrderStatus {
   VALID
   EXECUTED
@@ -845,7 +929,7 @@ type Portfolio {
 
   """  TODO: (michael.zhang) replace with paginated query"""
   nftBalances: [NftBalance]
-  assetActivities(page: Int, pageSize: Int, includeOffChain: Boolean, chains: [Chain!], _fs: AssetActivitySwitch): [AssetActivity]
+  assetActivities(page: Int, pageSize: Int, includeOffChain: Boolean, onRampTransactionsAuth: OnRampTransactionsAuth, onRampTransactionIDs: [String!], chains: [Chain!], includeBridging: Boolean, _fs: AssetActivitySwitch): [AssetActivity]
 }
 
 """  Specify how the portfolio value should be calculated for each `ownerAddress`.
@@ -856,16 +940,46 @@ input PortfolioValueModifier {
   tokenExcludeOverrides: [ContractInput!]
   includeSmallBalances: Boolean
   includeSpamTokens: Boolean
+  tokenBalancesLimit: Int
 }
 
 enum PriceSource {
   SUBGRAPH_V2
   SUBGRAPH_V3
+  SUBGRAPH_V4
+}
+
+enum ProtectionAttackType {
+  UNKNOWN
+  METADATA
+  INORGANIC_VOLUME
+  AIRDROP_PATTERN
+  DYNAMIC_ANALYSIS
+  STATIC_CODE_SIGNATURE
+  KNOWN_MALICIOUS
+  IMPERSONATOR
+  UNSTABLE_TOKEN_PRICE
+  RUGPULL
+  HIGH_FEES
+}
+
+type ProtectionInfo {
+  result: ProtectionResult
+  attackTypes: [ProtectionAttackType]
+}
+
+enum ProtectionResult {
+  UNKNOWN
+  MALICIOUS
+  BENIGN
+  SPAM
+  WARNING
 }
 
 enum ProtocolVersion {
   V2
   V3
+  V4
 }
 
 type PushNotification {
@@ -877,13 +991,19 @@ type PushNotification {
 }
 
 type Query {
+  isV3SubgraphStale(chain: Chain!): Boolean
   historicalProtocolVolume(chain: Chain!, version: ProtocolVersion!, duration: HistoryDuration!): [TimestampedAmount!]
   dailyProtocolTvl(chain: Chain!, version: ProtocolVersion!): [TimestampedAmount!]
 
   """  returns top v3 pools sorted by total value locked in desc order"""
   topV3Pools(chain: Chain!, first: Int!, tvlCursor: Float, tokenFilter: String): [V3Pool!]
+  topV4Pools(chain: Chain!, first: Int!, tvlCursor: Float, tokenFilter: String): [V4Pool!]
   v3Pool(chain: Chain!, address: String!): V3Pool
+  v4Pool(chain: Chain!, poolId: String!): V4Pool
+  v3PoolsForTokenPair(chain: Chain!, token0: String!, token1: String!): [V3Pool!]
+  v4PoolsForTokenPair(chain: Chain!, token0: String!, token1: String!): [V4Pool!]
   v3Transactions(chain: Chain!, first: Int!, timestampCursor: Int): [PoolTransaction!]
+  v4Transactions(chain: Chain!, first: Int!, timestampCursor: Int): [PoolTransaction!]
 
   """  returns top v2 pairs sorted by total value locked in desc order"""
   topV2Pairs(chain: Chain!, first: Int!, tvlCursor: Float, tokenFilter: String): [V2Pair!]
@@ -900,16 +1020,16 @@ type Query {
   token(chain: Chain!, address: String): Token
   tokenProjects(contracts: [ContractInput!]!): [TokenProject]
   searchTokens(searchQuery: String!, chains: [Chain!]): [Token]
-  portfolios(ownerAddresses: [String!]!, chains: [Chain!], lookupTokens: [ContractInput!], valueModifiers: [PortfolioValueModifier!]): [Portfolio]
+  portfolios(ownerAddresses: [String!]!, chains: [Chain!], lookupTokens: [ContractInput!], fungibleIds: [String!], valueModifiers: [PortfolioValueModifier!]): [Portfolio]
   topTokens(chain: Chain, page: Int, pageSize: Int, orderBy: TokenSortableField): [Token]
   topCollections(chains: [Chain!], orderBy: CollectionSortableField, duration: HistoryDuration, after: String, first: Int, cursor: String, limit: Int): NftCollectionConnection
   nftAssets(chain: Chain, address: String!, orderBy: NftAssetSortableField, asc: Boolean, filter: NftAssetsFilterInput, after: String, first: Int, before: String, last: Int): NftAssetConnection
   nftCollections(chain: Chain, filter: NftCollectionsFilterInput, after: String, first: Int): NftCollectionConnection
-  nftBalances(chain: Chain, ownerAddress: String!, filter: NftBalancesFilterInput, after: String, first: Int, before: String, last: Int): NftBalanceConnection
+  nftBalances(chain: Chain, ownerAddress: String!, filter: NftBalancesFilterInput, after: String, first: Int, before: String, last: Int, chains: [Chain!]): NftBalanceConnection
   nftRoute(chain: Chain, senderAddress: String!, nftTrades: [NftTradeInput!]!, tokenTrades: [TokenTradeInput!]): NftRouteResponse
   nftActivity(chain: Chain, filter: NftActivityFilterInput, after: String, first: Int): NftActivityConnection
   nftCollectionBalances(chain: Chain, ownerAddress: String!, after: String, first: Int, before: String, last: Int): NftCollectionBalanceConnection
-  transactionNotification(chain: Chain!, address: String!, transactionHash: String!): TransactionNotification
+  transactionNotification(chain: Chain!, address: String!, transactionHash: String!, isBridging: Boolean): TransactionNotification
 }
 
 enum SafetyLevel {
@@ -973,6 +1093,7 @@ enum SwapOrderType {
   DUTCH
   LIMIT
   DUTCH_V2
+  PRIORITY
 }
 
 type TimestampedAmount implements IAmount {
@@ -1009,6 +1130,8 @@ type Token implements IContract {
   project: TokenProject
   market(currency: Currency): TokenMarket
   feeData: FeeData
+  protectionInfo: ProtectionInfo
+  v4Transactions(first: Int!, timestampCursor: Int): [PoolTransaction]
   v3Transactions(first: Int!, timestampCursor: Int): [PoolTransaction]
   v2Transactions(first: Int!, timestampCursor: Int): [PoolTransaction]
 }
@@ -1205,6 +1328,7 @@ type TransactionDetails {
   transactionStatus: TransactionStatus!
   nonce: Int!
   application: ApplicationContract
+  networkFee: NetworkFee
 }
 
 input TransactionDetailsInput {
@@ -1240,9 +1364,11 @@ enum TransactionStatus {
 enum TransactionType {
   APPROVE
   BORROW
+  BRIDGING
   CANCEL
   CLAIM
   DEPLOYMENT
+  EXECUTE
   LEND
   MINT
   RECEIVE
@@ -1254,6 +1380,7 @@ enum TransactionType {
   UNKNOWN
   UNSTAKE
   WITHDRAW
+  ON_RAMP
 }
 
 type V2Pair implements IPool {
@@ -1293,7 +1420,7 @@ type V3Pool implements IPool {
   historicalVolume(duration: HistoryDuration!): [TimestampedAmount]
   priceHistory(duration: HistoryDuration!): [TimestampedPoolPrice]
   transactions(first: Int!, timestampCursor: Int): [PoolTransaction]
-  ticks(first: Int!, tickIdxCursor: Int): [V3PoolTick]
+  ticks(skip: Int, first: Int): [V3PoolTick]
 }
 
 type V3PoolTick {
@@ -1301,5 +1428,43 @@ type V3PoolTick {
   tickIdx: Int
   liquidityGross: String
   liquidityNet: String
+  price0: String
+  price1: String
+}
+
+type V4Pool {
+  id: ID!
+  protocolVersion: ProtocolVersion!
+  chain: Chain!
+  poolId: String!
+  createdAtTimestamp: Int
+  totalLiquidity: Amount
+  token0: Token
+  token0Supply: Float
+  token1: Token
+  token1Supply: Float
+  txCount: Int
+  feeTier: Float
+  hook: V4PoolHook
+  totalLiquidityPercentChange24h: Amount
+  cumulativeVolume(duration: HistoryDuration!): Amount
+  historicalVolume(duration: HistoryDuration!): [TimestampedAmount]
+  priceHistory(duration: HistoryDuration!): [TimestampedPoolPrice]
+  transactions(first: Int!, timestampCursor: Int): [PoolTransaction]
+  ticks(skip: Int, first: Int): [V4PoolTick]
+}
+
+type V4PoolHook {
+  id: ID!
+  address: String!
+}
+
+type V4PoolTick {
+  id: ID!
+  tickIdx: Int
+  liquidityGross: String
+  liquidityNet: String
+  price0: String
+  price1: String
 }
 
