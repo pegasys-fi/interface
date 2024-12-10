@@ -7,7 +7,6 @@ import { ChevronDown, ChevronUp } from 'react-feather'
 import styled from 'styled-components/macro'
 
 import { convertDateToTimestamp } from '../../graphql/utils/util'
-import { MouseoverTooltip } from '../Tooltip'
 import { filterDateRangeAtom } from './state'
 
 const FilterOption = styled.button<{ active: boolean }>`
@@ -169,16 +168,15 @@ export const DateTimeSelector = () => {
 
   return (
     <StyledMenu>
-      <MouseoverTooltip text="Filter for UNO Trade volume" placement="top">
-        <FilterOption onClick={() => setOpen((prev) => !prev)} active={open}>
-          <StyledMenuContent>
-            {startDate && endDate
-              ? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
-              : 'Select Date Range'}
-            <Chevron open={open}>{open ? <ChevronUp size={20} /> : <ChevronDown size={20} />}</Chevron>
-          </StyledMenuContent>
-        </FilterOption>
-      </MouseoverTooltip>
+      <FilterOption onClick={() => setOpen((prev) => !prev)} active={open}>
+        <StyledMenuContent>
+          {startDate && endDate
+            ? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
+            : 'Select Date Range'}
+          <Chevron open={open}>{open ? <ChevronUp size={20} /> : <ChevronDown size={20} />}</Chevron>
+        </StyledMenuContent>
+      </FilterOption>
+
       {open && (
         <DatePickerWrapper>
           <DatePicker

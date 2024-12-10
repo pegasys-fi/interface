@@ -34,7 +34,7 @@ function prioritizeLogoSources(uris: string[]) {
   return coingeckoUrl ? [...preferredUris, coingeckoUrl] : preferredUris
 }
 
-function getInitialUrl(address?: string | null, chainId?: number | null, isNative?: boolean) {
+export function getInitialUrl(address?: string | null, chainId?: number | null, isNative?: boolean) {
   if (chainId && isNative) return getNativeLogoURI(chainId)
 
   // const networkName = chainId ? chainIdToNetworkName(chainId) : 'ethereum'

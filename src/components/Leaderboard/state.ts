@@ -6,7 +6,6 @@ import { useCallback } from 'react'
 export enum LeaderboardSortMethod {
   TRADES = 'Trades',
   VOLUME_USDT = 'Volume',
-  VOLUME_UNO = 'UNO Trade Volume',
 }
 
 export interface ILeaderBoardDateRange {
@@ -21,6 +20,7 @@ export const filterDateRangeAtom = atom<ILeaderBoardDateRange>({
   start_date: undefined,
   end_date: undefined,
 })
+export const filterTokensAtom = atom<string[]>([])
 export const sortMethodAtom = atom<LeaderboardSortMethod>(LeaderboardSortMethod.VOLUME_USDT)
 export const sortAscendingAtom = atom<boolean>(false)
 

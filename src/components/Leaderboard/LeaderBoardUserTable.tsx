@@ -87,11 +87,19 @@ export function LeaderboardUserTable({ address }: { address: string }) {
         id: leaderBoard.id,
         txCount: leaderBoard.txCount,
         totalVolume: leaderBoard.totalVolume,
-        totalUnoTradeVolumeUSD: leaderBoard.totalUnoTradeVolumeUSD,
+        totalTokensTradeVolumeUSD: leaderBoard.totalTokensTradeVolumeUSD,
+        txTokensCount: leaderBoard.txTokensCount,
         rank: Number(currentRank),
       })
     } else if (leaderBoard === null) {
-      setuser({ id: address.toLowerCase(), txCount: 0, totalVolume: '0', rank: 300, totalUnoTradeVolumeUSD: 0 })
+      setuser({
+        id: address.toLowerCase(),
+        txCount: 0,
+        totalVolume: '0',
+        rank: 300,
+        totalTokensTradeVolumeUSD: 0,
+        txTokensCount: 0,
+      })
     }
   }, [address, currentRank, leaderBoard])
 
