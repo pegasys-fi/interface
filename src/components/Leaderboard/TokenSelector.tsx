@@ -72,7 +72,7 @@ const Chevron = styled.span<{ open: boolean }>`
 `
 
 const MenuFlyout = styled.div`
-  min-width: 240px;
+  min-width: 260px;
   max-height: 300px;
   overflow: auto;
   background-color: ${({ theme }) => theme.backgroundSurface};
