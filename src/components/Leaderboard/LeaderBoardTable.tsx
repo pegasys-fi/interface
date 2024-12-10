@@ -12,6 +12,7 @@ import {
   filterDateRangeAtom,
   filterStringAtom,
   filterTimeAtom,
+  filterTokensAtom,
   rankAtom,
   sortAscendingAtom,
   sortMethodAtom,
@@ -179,13 +180,16 @@ function Pagination({
 export default function LeaderboardTable({ address }: { address?: string }) {
   const timePeriod = useAtomValue(filterTimeAtom)
   const dataRange = useAtomValue(filterDateRangeAtom)
+  const currentFilteredTokens = useAtomValue(filterTokensAtom)
   const [currentPage, setCurrentPage] = useState(1)
 
   const handlePageChange = (newPage: any) => {
     setCurrentPage(newPage)
   }
 
-  const { loading, data: leaderBoard } = useLeaderboardData(timePeriod, dataRange)
+  const { loading, data: leaderBoard } = useLeaderboardData(timePeriod, dataRange, currentFilteredTokens)
+
+  console.log({ leaderBoard })
 
   const filterString = useAtomValue(filterStringAtom)
   const sortMethod = useAtomValue(sortMethodAtom)
@@ -195,11 +199,9 @@ export default function LeaderboardTable({ address }: { address?: string }) {
     type LeaderBoardKeys = Exclude<keyof LeaderBoard, 'address' | 'date'>
 
     const sortMethodMapping: { [key: string]: LeaderBoardKeys } = {
-      Trades: 'txCount',
-      Volume: 'totalVolume',
-      ['UNO Trade Volume']: 'totalUnoTradeVolumeUSD',
+      Trades: currentFilteredTokens.length > 0 ? 'txTokensCount' : 'txCount',
+      Volume: currentFilteredTokens.length > 0 ? 'totalTokensTradeVolumeUSD' : 'totalVolume',
     }
-
     const sortKey = sortMethodMapping[sortMethod]
     const filtered = leaderBoard?.filter((obj: LeaderBoard | Omit<LeaderBoard, 'address' | 'date'>) => {
       const searchTerm = filterString.toLowerCase()
@@ -210,17 +212,12 @@ export default function LeaderboardTable({ address }: { address?: string }) {
 
       return obj.id.toLowerCase().includes(searchTerm)
     })
+    const volumeSortKey = currentFilteredTokens.length > 0 ? 'totalTokensTradeVolumeUSD' : 'totalVolume'
 
     const sorted = filtered?.sort((a, b) => {
-      const fieldA =
-        sortKey === 'totalVolume' || sortKey === 'totalUnoTradeVolumeUSD'
-          ? parseFloat((a[sortKey] as string) || '0')
-          : (a[sortKey] as number)
+      const fieldA = sortKey === volumeSortKey ? parseFloat(`${a[sortKey]}` || '0') : (a[sortKey] as number)
 
-      const fieldB =
-        sortKey === 'totalVolume' || sortKey === 'totalUnoTradeVolumeUSD'
-          ? parseFloat((b[sortKey] as string) || '0')
-          : (b[sortKey] as number)
+      const fieldB = sortKey === volumeSortKey ? parseFloat(`${b[sortKey]}` || '0') : (b[sortKey] as number)
 
       if (fieldA < fieldB) {
         return sortAscending ? -1 : 1
@@ -278,6 +275,7 @@ export default function LeaderboardTable({ address }: { address?: string }) {
                 leaderboardListLength={paginatedData.length}
                 leaderboard={leaderboard}
                 sortRank={(currentPage - 1) * ITEMS_PER_PAGE + index + 1}
+                currentTokensFilter={currentFilteredTokens}
               />
             ) : null
           )}

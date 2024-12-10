@@ -8,7 +8,9 @@ import { MAX_WIDTH_MEDIA_BREAKPOINT, MEDIUM_MEDIA_BREAKPOINT } from 'components/
 import { MouseoverTooltip } from 'components/Tooltip'
 import styled from 'styled-components/macro'
 import { ThemedText } from 'theme'
+
 import { DateTimeSelector } from '../../components/Leaderboard/DateTimeSelector'
+import TokenSelector from '../../components/Leaderboard/TokenSelector'
 
 const LeaderBoardLayout = styled.div`
   width: 100%;
@@ -31,10 +33,11 @@ const TitleContainer = styled.div`
   display: flex;
 `
 
-const FiltersContainer = styled.div`
+const FiltersContainer = styled.div<{ $marginRight?: string }>`
   display: flex;
   gap: 8px;
   height: 40px;
+  margin-right: ${({ $marginRight }) => $marginRight || '0px'};
 
   @media only screen and (max-width: ${MEDIUM_MEDIA_BREAKPOINT}) {
     order: 2;
@@ -98,6 +101,9 @@ export function LeaderBoard() {
       </TitleContainer>
       <LeaderBoardUserWrapper>{!!account && <LeaderboardUserTable address={account} />}</LeaderBoardUserWrapper>
       <FiltersWrapper>
+        <FiltersContainer $marginRight="10px">
+          <TokenSelector />
+        </FiltersContainer>
         <FiltersContainer>
           <TimeSelector />
         </FiltersContainer>

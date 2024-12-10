@@ -12,7 +12,8 @@ export type LeaderBoard = {
   date: number
   id: string
   totalVolume: string
-  totalUnoTradeVolumeUSD: number
+  totalTokensTradeVolumeUSD: number
+  txTokensCount: number
   txCount: number
   rank?: number
 }
@@ -96,7 +97,8 @@ const LEADERBOARDMONTH = gql`
  */
 export function useLeaderboardData(
   time: TimePeriodLeaderboard,
-  dateRange?: ILeaderBoardDateRange
+  dateRange?: ILeaderBoardDateRange,
+  filterTokens?: string[]
 ): {
   loading: boolean
   error: boolean
@@ -156,18 +158,15 @@ export function useLeaderboardData(
 
   const recipients = leaderBoard?.map((user) => user.id) || []
 
-  const buildWhereFilter = (symbol: string, recipients: string[], startTime?: number, endTime?: number) => {
+  const buildWhereFilter = (symbols: string[], recipients: string[], startTime?: number, endTime?: number) => {
     const where: any = {
-      token1_: { symbol },
-      recipient_in: recipients,
-    }
-
-    if (startTime) {
-      where.timestamp_gte = startTime
-    }
-
-    if (endTime) {
-      where.timestamp_lte = endTime
+      and: [
+        {
+          or: [{ token0_: { symbol_in: symbols } }, { token1_: { symbol_in: symbols } }],
+        },
+        { recipient_in: recipients },
+        startTime && endTime ? { timestamp_gte: startTime, timestamp_lte: endTime } : {},
+      ],
     }
 
     return where
@@ -181,31 +180,33 @@ export function useLeaderboardData(
   } = useQuery(TRADES_BY_USER, {
     client: apolloClient,
     variables: {
-      where: buildWhereFilter('UNO', recipients, dateRange?.start_date, dateRange?.end_date),
+      where: buildWhereFilter(filterTokens || [], recipients, dateRange?.start_date, dateRange?.end_date),
     },
   })
 
-  const aggregatedUnoData = tradesData?.swaps?.reduce((acc: any, swap: any) => {
+  const aggregatedTokensData = tradesData?.swaps?.reduce((acc: any, swap: any, i: number, currentArray: any[]) => {
     const { recipient, amountUSD } = swap
     if (!acc[recipient]) {
-      acc[recipient] = { recipient, totalTradeVolumeUSD: 0 }
+      const swapsCounter = currentArray.filter((s) => s.recipient === recipient).length
+      acc[recipient] = { recipient, totalTokensTradeVolumeUSD: 0, txTokensCount: swapsCounter }
     }
-    acc[recipient].totalTradeVolumeUSD += parseFloat(amountUSD)
+    acc[recipient].totalTokensTradeVolumeUSD += parseFloat(amountUSD)
     return acc
   }, {})
 
   const formattedLeaderBoard = leaderBoard?.map((user) => {
     return {
       ...user,
-      totalUnoTradeVolumeUSD: aggregatedUnoData?.[user.id]?.totalTradeVolumeUSD || 0,
+      totalTokensTradeVolumeUSD: aggregatedTokensData?.[user.id]?.totalTokensTradeVolumeUSD || 0,
+      txTokensCount: aggregatedTokensData?.[user.id]?.txTokensCount || 0,
     }
   })
 
   useEffect(() => {
-    if (dateRange) {
+    if (dateRange || filterTokens) {
       refetch()
     }
-  }, [dateRange, isLoadingTrades])
+  }, [dateRange, filterTokens, isLoadingTrades])
 
   const anyError = Boolean(error && (errorWeek || errorMonth || tradeError))
   const anyLoading = Boolean(loading || loadingWeek || loadingMonth || isLoadingTrades)
