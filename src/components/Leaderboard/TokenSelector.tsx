@@ -148,7 +148,7 @@ const getTokenIcon = (token: TokenData, chainId: number) => {
 const TOKENS = [
   { symbol: 'All Tokens', name: '' },
   { symbol: 'PSYS', name: 'Pegasys' },
-  { symbol: 'WSYS', name: 'Wrapped Syscoin' },
+  { symbol: 'SYS', name: 'Syscoin' },
   { symbol: 'SUPR', name: 'SuperDapp' },
   { symbol: 'UNO', name: 'UnoRe' },
   { symbol: 'LUXY', name: 'LUXY' },
@@ -219,6 +219,8 @@ export default function TokenSelector() {
   }
 
   const TokenDisplay = ({ token }: { token: (typeof TOKENS)[0] }) => {
+    const proxyToken = { ...token, ...(token.symbol === 'WSYS' ? { symbol: 'SYS' } : {}) }
+
     const tokenData = tokens?.find((t) => t?.symbol === token?.symbol)
     return (
       <TokenInfo>
@@ -227,7 +229,7 @@ export default function TokenSelector() {
         ) : (
           <TokenIconPlaceholder />
         )}
-        <TokenSymbol>{token.symbol}</TokenSymbol>
+        <TokenSymbol>{proxyToken.symbol}</TokenSymbol>
         {token.name && <TokenName>{token.name}</TokenName>}
       </TokenInfo>
     )
@@ -250,16 +252,19 @@ export default function TokenSelector() {
 
       {isOpen && (
         <MenuFlyout>
-          {TOKENS.map((token) => (
-            <MenuItem
-              key={token.symbol}
-              onClick={() => handleTokenSelect(token.symbol)}
-              data-testid={`token-option-${token.symbol}`}
-            >
-              <TokenDisplay token={token} />
-              {selectedTokens.includes(token.symbol) && <Check color={theme.accentAction} size={16} />}
-            </MenuItem>
-          ))}
+          {TOKENS.map((token) => {
+            token = { ...token, ...(token.symbol === 'SYS' ? { symbol: 'WSYS' } : {}) }
+            return (
+              <MenuItem
+                key={token.symbol}
+                onClick={() => handleTokenSelect(token.symbol)}
+                data-testid={`token-option-${token.symbol}`}
+              >
+                <TokenDisplay token={token} />
+                {selectedTokens.includes(token.symbol) && <Check color={theme.accentAction} size={16} />}
+              </MenuItem>
+            )
+          })}
         </MenuFlyout>
       )}
     </StyledMenu>
