@@ -212,10 +212,11 @@ export default function TokenSelector() {
   }
 
   const getDisplayText = () => {
+    const formattedTokens = selectedTokens.map((token) => (token === 'WSYS' ? 'SYS' : token))
     if (selectedTokens.includes('All Tokens')) return 'All Tokens'
-    if (selectedTokens.length === 1) return selectedTokens[0]
+    if (formattedTokens.length === 1) return formattedTokens[0]
     // Join selected tokens with commas
-    return selectedTokens.join(', ')
+    return formattedTokens.join(', ')
   }
 
   const TokenDisplay = ({ token }: { token: (typeof TOKENS)[0] }) => {
