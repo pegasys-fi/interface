@@ -4,6 +4,7 @@ import { apolloClient } from 'graphql/thegraph/apollo'
 import { TimePeriodLeaderboard } from 'graphql/utils/util'
 import { LeaderBoard } from 'pages/Leaderboard'
 import { useEffect, useMemo } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 import { ILeaderBoardDateRange } from '../../components/Leaderboard/state'
 
@@ -36,7 +37,7 @@ interface LeaderBoarDataResponseUser {
 
 const LEADERBOARD = gql`
   query leaderBoardAll {
-    users(orderBy: totalVolume, first: 300, orderDirection: desc) {
+    users(orderBy: totalVolume, first: 1000, orderDirection: desc) {
       id
       txCount
       totalVolume
@@ -104,6 +105,7 @@ export function useLeaderboardData(
   error: boolean
   data?: LeaderBoard[] | Omit<LeaderBoard, 'date' | 'address'>[]
 } {
+  const [searchParams] = useSearchParams()
   const period = useMemo(() => {
     switch (time) {
       case TimePeriodLeaderboard.DAY:
@@ -155,8 +157,8 @@ export function useLeaderboardData(
         return dataMonth?.userMonthDatas
     }
   }, [data, dataMonth, dataWeek, time])
-
-  const recipients = leaderBoard?.map((user) => user.id) || []
+  const filterQueryParam = searchParams.get('filter')
+  const recipients = filterQueryParam ? [filterQueryParam] : leaderBoard?.map((user) => user.id) || []
 
   const buildWhereFilter = (symbols: string[], recipients: string[], startTime?: number, endTime?: number) => {
     const where: any = {
@@ -206,7 +208,7 @@ export function useLeaderboardData(
     if (dateRange || filterTokens) {
       refetch()
     }
-  }, [dateRange, filterTokens, isLoadingTrades])
+  }, [dateRange, filterTokens])
 
   const anyError = Boolean(error && (errorWeek || errorMonth || tradeError))
   const anyLoading = Boolean(loading || loadingWeek || loadingMonth || isLoadingTrades)
