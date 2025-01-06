@@ -5,6 +5,7 @@ import { PAGE_SIZE } from 'graphql/tokens/TokenData'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { ReactNode, useEffect, useMemo, useState } from 'react'
 import { AlertTriangle } from 'react-feather'
+import { useSearchParams } from 'react-router-dom'
 import styled from 'styled-components/macro'
 
 import { HeaderRow, LoadedRow, LoadingRow } from './LeaderBoardRow'
@@ -183,17 +184,26 @@ export default function LeaderboardTable({ address }: { address?: string }) {
   const currentFilteredTokens = useAtomValue(filterTokensAtom)
   const [currentPage, setCurrentPage] = useState(1)
 
+  const [_, setSearchParams] = useSearchParams()
+
+  const filterString = useAtomValue(filterStringAtom)
+
+  useEffect(() => {
+    if (filterString) {
+      setSearchParams({ filter: filterString })
+    } else {
+      setSearchParams({})
+    }
+  }, [filterString, setSearchParams])
+
+  const sortMethod = useAtomValue(sortMethodAtom)
+  const sortAscending = useAtomValue(sortAscendingAtom)
+
   const handlePageChange = (newPage: any) => {
     setCurrentPage(newPage)
   }
 
   const { loading, data: leaderBoard } = useLeaderboardData(timePeriod, dataRange, currentFilteredTokens)
-
-  console.log({ leaderBoard })
-
-  const filterString = useAtomValue(filterStringAtom)
-  const sortMethod = useAtomValue(sortMethodAtom)
-  const sortAscending = useAtomValue(sortAscendingAtom)
 
   const filteredAndSortedData = useMemo(() => {
     type LeaderBoardKeys = Exclude<keyof LeaderBoard, 'address' | 'date'>

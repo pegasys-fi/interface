@@ -156,6 +156,8 @@ export const DateTimeSelector = () => {
       const formattedStart = convertDateToTimestamp(start)
       const formattedEnd = convertDateToTimestamp(end)
       setDateRange({ start_date: formattedStart, end_date: formattedEnd })
+    } else {
+      setDateRange({ start_date: undefined, end_date: undefined })
     }
 
     setStartDate(start)
