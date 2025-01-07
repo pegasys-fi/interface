@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import { apolloClient } from 'graphql/thegraph/apollo'
 import { TimePeriodLeaderboard } from 'graphql/utils/util'
 import { LeaderBoard } from 'pages/Leaderboard'
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { ILeaderBoardDateRange } from '../../components/Leaderboard/state'
@@ -46,8 +46,8 @@ const LEADERBOARD = gql`
 `
 
 const TRADES_BY_USER = gql`
-  query userTrades($where: Swap_filter) {
-    swaps(first: 1000, where: $where) {
+  query userTrades($where: Swap_filter, $skip: Int!) {
+    swaps(first: 1000, skip: $skip, where: $where) {
       amountUSD
       token0 {
         symbol
@@ -105,6 +105,9 @@ export function useLeaderboardData(
   error: boolean
   data?: LeaderBoard[] | Omit<LeaderBoard, 'date' | 'address'>[]
 } {
+  const [tradesData, setTradesData] = useState<any>(null)
+  const [isLoadingTrades, setIsLoadingTrades] = useState(false)
+  const [tradeError, setTradeError] = useState(false)
   const [searchParams] = useSearchParams()
   const period = useMemo(() => {
     switch (time) {
@@ -174,17 +177,50 @@ export function useLeaderboardData(
     return where
   }
 
-  const {
-    data: tradesData,
-    loading: isLoadingTrades,
-    error: tradeError,
-    refetch,
-  } = useQuery(TRADES_BY_USER, {
-    client: apolloClient,
-    variables: {
-      where: buildWhereFilter(filterTokens || [], recipients, dateRange?.start_date, dateRange?.end_date),
-    },
-  })
+  const fetchAllTrades = async (where: any) => {
+    let hasMore = true
+    let skip = 0
+    let allSwaps: any[] = []
+
+    while (hasMore) {
+      try {
+        const result = await apolloClient.query({
+          query: TRADES_BY_USER,
+          variables: { where, skip },
+        })
+
+        if (result.data.swaps.length === 0 || skip >= 25000) {
+          hasMore = false
+        }
+
+        allSwaps = [...allSwaps, ...result.data.swaps]
+        skip += 1000
+      } catch (error) {
+        console.error('Error fetching trades:', error)
+        hasMore = false
+      }
+    }
+    return { swaps: allSwaps }
+  }
+
+  const loadTrades = useCallback(async () => {
+    try {
+      setIsLoadingTrades(true)
+      const where = buildWhereFilter(filterTokens || [], recipients, dateRange?.start_date, dateRange?.end_date)
+      const data = await fetchAllTrades(where)
+      setTradesData(data)
+    } catch (error) {
+      setTradeError(true)
+    } finally {
+      setIsLoadingTrades(false)
+    }
+  }, [recipients])
+
+  useEffect(() => {
+    if (filterTokens!.length > 0 && dateRange?.start_date && dateRange?.end_date) {
+      loadTrades()
+    }
+  }, [filterTokens, dateRange])
 
   const aggregatedTokensData = tradesData?.swaps?.reduce((acc: any, swap: any, i: number, currentArray: any[]) => {
     const { recipient, amountUSD } = swap
@@ -203,12 +239,6 @@ export function useLeaderboardData(
       txTokensCount: aggregatedTokensData?.[user.id]?.txTokensCount || 0,
     }
   })
-
-  useEffect(() => {
-    if (dateRange || filterTokens) {
-      refetch()
-    }
-  }, [dateRange, filterTokens])
 
   const anyError = Boolean(error && (errorWeek || errorMonth || tradeError))
   const anyLoading = Boolean(loading || loadingWeek || loadingMonth || isLoadingTrades)
