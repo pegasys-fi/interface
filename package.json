@@ -145,7 +145,7 @@
     "@pollum-io/pegasys-protocol": "0.0.17",
     "@pollum-io/router-sdk": "0.0.6",
     "@pollum-io/sdk-core": "^0.0.3",
-    "@pollum-io/smart-order-router": "0.0.24",
+    "@pollum-io/smart-order-router": "0.0.26",
     "@pollum-io/universal-router-sdk": "0.0.9",
     "@pollum-io/v1-sdk": "0.0.10",
     "@pollum-io/v3-core": "0.0.1",
