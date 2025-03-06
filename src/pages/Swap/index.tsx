@@ -7,7 +7,7 @@ import LoadingGifLight from 'assets/images/lightLoading.gif'
 import LoadingGif from 'assets/images/loading.gif'
 import { useToggleAccountDrawer } from 'components/AccountDrawer'
 import { sendEvent } from 'components/analytics'
-import { BannerAlert } from 'components/BannerAlert/BannerAlert'
+// import { BannerAlert } from 'components/BannerAlert/BannerAlert'
 import { LoaderGif } from 'components/Icons/LoadingSpinner'
 import { NetworkAlert } from 'components/NetworkAlert/NetworkAlert'
 import PriceImpactWarning from 'components/swap/PriceImpactWarning'
@@ -692,7 +692,7 @@ export default function Swap({ className }: { className?: string }) {
           </SwapWrapper>
         )}
         <NetworkAlert />
-        <BannerAlert />
+        {/* <BannerAlert /> */}
       </PageWrapper>
       <SwitchLocaleLink />
       {!swapIsUnsupported ? null : (

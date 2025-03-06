@@ -46,6 +46,7 @@ const DEFAULT_CHAINS = [
   // SupportedChainId.ARBITRUM_ONE,
   ChainId.ROLLUX,
   ChainId.ROLLUX_TANENBAUM,
+  ChainId.ZKSYS_TANENBAUM,
   // SupportedChainId.POLYGON,
   // SupportedChainId.CELO,
 ]

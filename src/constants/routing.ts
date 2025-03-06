@@ -2,7 +2,7 @@
 import { Currency, Token } from '@pollum-io/sdk-core'
 import { SupportedChainId } from 'constants/chains'
 
-import { nativeOnChain, USDC_ROLLUX, USDT_ROLLUX, WBTC_ROLLUX, WRAPPED_NATIVE_CURRENCY } from './tokens'
+import { nativeOnChain, USDC_ROLLUX, USDC_ZKSYS_TANENBAUM, USDT_ROLLUX, USDT_ZKSYS_TANENBAUM, WBTC_ROLLUX, WRAPPED_NATIVE_CURRENCY } from './tokens'
 
 type ChainTokenList = {
   readonly [chainId: number]: Token[]
@@ -45,6 +45,8 @@ export const COMMON_BASES: ChainCurrencyList = {
     WBTC_ROLLUX,
   ],
   [SupportedChainId.ROLLUX_TANENBAUM]: [nativeOnChain(SupportedChainId.ROLLUX_TANENBAUM)],
+  [SupportedChainId.ZKSYS_TANENBAUM]: [nativeOnChain(SupportedChainId.ZKSYS_TANENBAUM), USDC_ZKSYS_TANENBAUM,
+    USDT_ZKSYS_TANENBAUM,],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend

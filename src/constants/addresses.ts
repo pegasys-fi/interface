@@ -1,6 +1,6 @@
 import { FACTORY_ADDRESS_MAP as V2_FACTORY_ADDRESS } from '@pollum-io/v1-sdk'
 // import { FACTORY_ADDRESS as V2_FACTORY_ADDRESS } from '@pollum-io/v1-sdk'
-import { FACTORY_ADDRESS as V3_FACTORY_ADDRESS } from '@pollum-io/v3-sdk'
+import { FACTORY_ADDRESS_ZKSYS, FACTORY_ADDRESS as V3_FACTORY_ADDRESS } from '@pollum-io/v3-sdk'
 import { SupportedChainId } from 'constants/chains'
 
 import { constructSameAddressMap } from '../utils/constructSameAddressMap'
@@ -11,6 +11,8 @@ export const PSYS_ADDRESS = '0x48023b16c3e81aa7f6effbdeb35bb83f4f31a8fd'
 export const UNI_ADDRESS: AddressMap = {
   [SupportedChainId.ROLLUX_TANENBAUM]: '0x817C777DEf2Fd6ffE2492C6CD124985C78Ee9235',
   [SupportedChainId.ROLLUX]: '0x48023b16c3e81AA7F6eFFbdEB35Bb83f4f31a8fd',
+  [SupportedChainId.ZKSYS_TANENBAUM]: '0xe5faceccf0ac8c860ff09b7e627caafbf427fe20',
+
 }
 
 export const UNISWAP_NFT_AIRDROP_CLAIM_ADDRESS = '0x8B799381ac40b838BBA4131ffB26197C432AFe78'
@@ -23,24 +25,30 @@ export const UNISWAP_NFT_AIRDROP_CLAIM_ADDRESS = '0x8B799381ac40b838BBA4131ffB26
 export const V2_FACTORY_ADDRESSES: AddressMap = {
   [SupportedChainId.ROLLUX_TANENBAUM]: V2_FACTORY_ADDRESS[SupportedChainId.ROLLUX_TANENBAUM],
   [SupportedChainId.ROLLUX]: V2_FACTORY_ADDRESS[SupportedChainId.ROLLUX],
+  [SupportedChainId.ZKSYS_TANENBAUM]: V2_FACTORY_ADDRESS[SupportedChainId.ZKSYS_TANENBAUM],
+
 }
 
 export const V2_ROUTER_ADDRESS: AddressMap = {
   [SupportedChainId.ROLLUX_TANENBAUM]: '0x29f7Ad37EC018a9eA97D4b3fEebc573b5635fA84',
   [SupportedChainId.ROLLUX]: '0x71Eb84560C40094D248DD3542A479A2F0D17DB52',
+  [SupportedChainId.ZKSYS_TANENBAUM]: '0x185607836c038549e38847A6d6E65d73176dbf07',
 }
 
 /* V3 Contract Addresses */
 export const V3_CORE_FACTORY_ADDRESSES: AddressMap = {
   ...constructSameAddressMap(V3_FACTORY_ADDRESS),
+  [SupportedChainId.ZKSYS_TANENBAUM]: FACTORY_ADDRESS_ZKSYS,
 }
 
 export const V3_MIGRATOR_ADDRESSES: AddressMap = {
   ...constructSameAddressMap('0x2b75Ee991F4E5572451E186E5cd2148Ba4B286e5'),
+  [SupportedChainId.ZKSYS_TANENBAUM]: '0xd0cBC5dc1D4Fd9dBAbf79246a6fF250E85606D63',
 }
 
 export const MULTICALL_ADDRESS: AddressMap = {
   ...constructSameAddressMap('0xc9E6E07CB460F36A6D5826f70647eff7e1823899'),
+  [SupportedChainId.ZKSYS_TANENBAUM]: '0x73470551052d901925e91E64281703a119b85f52',
 }
 
 /**
@@ -64,10 +72,12 @@ export const ARGENT_WALLET_DETECTOR_ADDRESS: AddressMap = {}
 
 export const QUOTER_ADDRESSES: AddressMap = {
   ...constructSameAddressMap('0x4aa7D3a3D8025e653886EbD5f2e9416a7b4ADe22'),
+  [SupportedChainId.ZKSYS_TANENBAUM]: '0x70a2dE04bA3b025ba141570A4B0812Fe3129f6FA',
 }
 
 export const NONFUNGIBLE_POSITION_MANAGER_ADDRESSES: AddressMap = {
   ...constructSameAddressMap('0x4dB158Eec5c5d63F9A09535882b835f36d3fd012'),
+  [SupportedChainId.ZKSYS_TANENBAUM]: '0xD875Bd3b3B149c6fE07dAeFE27E5759fBf295a36',
 }
 
 export const ENS_REGISTRAR_ADDRESSES: AddressMap = {}
@@ -76,6 +86,7 @@ export const ENS_REGISTRAR_ADDRESSES: AddressMap = {}
 
 export const TICK_LENS_ADDRESSES: AddressMap = {
   ...constructSameAddressMap('0x6dfd1ea91128733Dc96479b7d1b0F4bC36C31C44'),
+  [SupportedChainId.ZKSYS_TANENBAUM]: '0xa324189a180AA8b2639A9C715A02a40Dc9258379',
 }
 
 // Farms address

@@ -2016,6 +2016,15 @@
     "@ethersproject/logger" "^5.7.0"
     bn.js "^5.2.1"
 
+"@ethersproject/bignumber@^5.8.0":
+  version "5.8.0"
+  resolved "https://registry.yarnpkg.com/@ethersproject/bignumber/-/bignumber-5.8.0.tgz#c381d178f9eeb370923d389284efa19f69efa5d7"
+  integrity sha512-ZyaT24bHaSeJon2tGPKIiHszWjD/54Sz8t57Toch475lCLljC6MgPmxk7Gtzz+ddNN5LuHea9qhAe0x3D+uYPA==
+  dependencies:
+    "@ethersproject/bytes" "^5.8.0"
+    "@ethersproject/logger" "^5.8.0"
+    bn.js "^5.2.1"
+
 "@ethersproject/bytes@5.7.0", "@ethersproject/bytes@^5.7.0":
   version "5.7.0"
   resolved "https://registry.yarnpkg.com/@ethersproject/bytes/-/bytes-5.7.0.tgz#a00f6ea8d7e7534d6d87f47188af1148d71f155d"
@@ -2023,12 +2032,26 @@
   dependencies:
     "@ethersproject/logger" "^5.7.0"
 
+"@ethersproject/bytes@^5.8.0":
+  version "5.8.0"
+  resolved "https://registry.yarnpkg.com/@ethersproject/bytes/-/bytes-5.8.0.tgz#9074820e1cac7507a34372cadeb035461463be34"
+  integrity sha512-vTkeohgJVCPVHu5c25XWaWQOZ4v+DkGoC42/TS2ond+PARCxTJvgTFUNDZovyQ/uAQ4EcpqqowKydcdmRKjg7A==
+  dependencies:
+    "@ethersproject/logger" "^5.8.0"
+
 "@ethersproject/constants@5.7.0", "@ethersproject/constants@^5.7.0":
   version "5.7.0"
   resolved "https://registry.yarnpkg.com/@ethersproject/constants/-/constants-5.7.0.tgz#df80a9705a7e08984161f09014ea012d1c75295e"
   integrity sha512-DHI+y5dBNvkpYUMiRQyxRBYBefZkJfo70VUkUAsRjcPs47muV9evftfZ0PJVCXYbAiCgght0DtcF9srFQmIgWA==
   dependencies:
     "@ethersproject/bignumber" "^5.7.0"
+
+"@ethersproject/constants@^5.8.0":
+  version "5.8.0"
+  resolved "https://registry.yarnpkg.com/@ethersproject/constants/-/constants-5.8.0.tgz#12f31c2f4317b113a4c19de94e50933648c90704"
+  integrity sha512-wigX4lrf5Vu+axVTIvNsuL6YrV4O5AXl5ubcURKMEME5TnWBouUh0CDTWxZ2GpnRn1kcCgE7l8O5+VbV9QTTcg==
+  dependencies:
+    "@ethersproject/bignumber" "^5.8.0"
 
 "@ethersproject/contracts@5.7.0":
   version "5.7.0"
@@ -2119,6 +2142,11 @@
   version "5.7.0"
   resolved "https://registry.yarnpkg.com/@ethersproject/logger/-/logger-5.7.0.tgz#6ce9ae168e74fecf287be17062b590852c311892"
   integrity sha512-0odtFdXu/XHtjQXJYA3u9G0G8btm0ND5Cu8M7i5vhEcE8/HmF4Lbdqanwyv4uQTr2tx6b7fQRmgLrsnpQlmnig==
+
+"@ethersproject/logger@^5.8.0":
+  version "5.8.0"
+  resolved "https://registry.yarnpkg.com/@ethersproject/logger/-/logger-5.8.0.tgz#f0232968a4f87d29623a0481690a2732662713d6"
+  integrity sha512-Qe6knGmY+zPPWTC+wQrpitodgBfH7XoceCGL5bJVejmH+yCS3R8jJm8iiWuvWbG76RUmyEG53oqv6GMVWqunjA==
 
 "@ethersproject/networks@5.7.1", "@ethersproject/networks@^5.7.0":
   version "5.7.1"
@@ -2225,6 +2253,15 @@
     "@ethersproject/bytes" "^5.7.0"
     "@ethersproject/constants" "^5.7.0"
     "@ethersproject/logger" "^5.7.0"
+
+"@ethersproject/strings@^5.8.0":
+  version "5.8.0"
+  resolved "https://registry.yarnpkg.com/@ethersproject/strings/-/strings-5.8.0.tgz#ad79fafbf0bd272d9765603215ac74fd7953908f"
+  integrity sha512-qWEAk0MAvl0LszjdfnZ2uC8xbR2wdv4cDabyHiBh3Cldq/T8dPH3V4BbBsAYJUeonwD+8afVXld274Ls+Y1xXg==
+  dependencies:
+    "@ethersproject/bytes" "^5.8.0"
+    "@ethersproject/constants" "^5.8.0"
+    "@ethersproject/logger" "^5.8.0"
 
 "@ethersproject/transactions@5.7.0", "@ethersproject/transactions@^5.6.2", "@ethersproject/transactions@^5.7.0":
   version "5.7.0"
@@ -3938,6 +3975,17 @@
   dependencies:
     web3 "^1.7.3"
 
+"@pollum-io/router-sdk@0.0.13":
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/@pollum-io/router-sdk/-/router-sdk-0.0.13.tgz#e510fe6dd3d6388812d83a1bacd562d73fbb3908"
+  integrity sha512-ZxTqsQc9jz4LUdasUEdSLPuFJ32hLJw2kDJpaEwyI+W9XFAk5gwyGoFUgn0PM64kIQxFDfK4VAtT03evhf/RbQ==
+  dependencies:
+    "@ethersproject/abi" "^5.5.0"
+    "@pollum-io/sdk-core" "0.0.5"
+    "@pollum-io/swap-router-contracts" "0.0.5"
+    "@pollum-io/v1-sdk" "0.0.15"
+    "@pollum-io/v3-sdk" "0.0.8"
+
 "@pollum-io/router-sdk@0.0.3":
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/@pollum-io/router-sdk/-/router-sdk-0.0.3.tgz#64115c781d01f1b8740c90d733f5665f21bfcb6e"
@@ -3949,23 +3997,25 @@
     "@pollum-io/v1-sdk" "0.0.2"
     "@pollum-io/v3-sdk" "0.0.1"
 
-"@pollum-io/router-sdk@0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@pollum-io/router-sdk/-/router-sdk-0.0.6.tgz#a9f9b5d0a2e8bf2b389e24aec4e73c91bc66bf97"
-  integrity sha512-GCLSiQO130ll0ZVv+4lRW5Ncgujc5+fKy+vajm3QXRLtQuftMUGhjrDM67bKHluJmSpd3C3IwdhSQFnYnTs7aA==
-  dependencies:
-    "@ethersproject/abi" "^5.5.0"
-    "@pollum-io/sdk-core" "0.0.3"
-    "@pollum-io/swap-router-contracts" "0.0.5"
-    "@pollum-io/v1-sdk" "0.0.10"
-    "@pollum-io/v3-sdk" "0.0.2"
-
-"@pollum-io/sdk-core@0.0.3", "@pollum-io/sdk-core@^0.0.3":
+"@pollum-io/sdk-core@0.0.3":
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/@pollum-io/sdk-core/-/sdk-core-0.0.3.tgz#407e2b958ad56da3244c6022552025e37ae3f631"
   integrity sha512-kL6eIpvcMyR2eRXliAYoKE9f1u5vfU+IwQeESaMcKdRB5KKZ8J+hmC7BSEsU/wvcMKHJ5AQSBWAElvzy2J/8Ig==
   dependencies:
     "@ethersproject/address" "^5.0.2"
+    big.js "^5.2.2"
+    decimal.js-light "^2.5.0"
+    jsbi "^3.1.4"
+    tiny-invariant "^1.1.0"
+    toformat "^2.0.0"
+
+"@pollum-io/sdk-core@0.0.5", "@pollum-io/sdk-core@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@pollum-io/sdk-core/-/sdk-core-0.0.5.tgz#3e399b8fa94a842d0dbc108e8d3ca2830d8f9c13"
+  integrity sha512-z5bnTM3YrtE3C93tg+CkfNEMfu/GSjn+L9vamGnm2I9K2ceZSKfzn5I+wX1KhkNDHa6Tvy5XVrNn/UON1NoYsQ==
+  dependencies:
+    "@ethersproject/address" "^5.0.2"
+    "@ethersproject/strings" "^5.8.0"
     big.js "^5.2.2"
     decimal.js-light "^2.5.0"
     jsbi "^3.1.4"
@@ -3999,18 +4049,18 @@
     node-cache "^5.1.2"
     stats-lite "^2.2.0"
 
-"@pollum-io/smart-order-router@0.0.24":
-  version "0.0.24"
-  resolved "https://registry.yarnpkg.com/@pollum-io/smart-order-router/-/smart-order-router-0.0.24.tgz#e4dcb41fb69c41f2dbf02924b5566a9ffdbe8e5d"
-  integrity sha512-vzm6ICDwYfPr8oQcYb5gx68yhOYVYJEY+dvS+ViAtLfdmDObqbCevd3gZneJNqRMMgkWMQmQvUnCi3JTN+VG7g==
+"@pollum-io/smart-order-router@0.0.34":
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/@pollum-io/smart-order-router/-/smart-order-router-0.0.34.tgz#df84a40c63c8e1484ed70951ad2b0a7b554424f4"
+  integrity sha512-5fEQW8GOtT0cNcb3M2HX/G+KzjLFigQjZGhKG5/4HTFQAm2K43Y1q6QK+Gl0od14NmLdDQkwlJVd6YjbxzeFQg==
   dependencies:
     "@pollum-io/default-token-list" latest
-    "@pollum-io/router-sdk" "0.0.6"
+    "@pollum-io/router-sdk" "0.0.13"
     "@pollum-io/swap-router-contracts" "0.0.5"
     "@pollum-io/universal-router" "0.0.6"
-    "@pollum-io/universal-router-sdk" "0.0.9"
-    "@pollum-io/v1-sdk" "0.0.10"
-    "@pollum-io/v3-sdk" "0.0.2"
+    "@pollum-io/universal-router-sdk" "0.0.16"
+    "@pollum-io/v1-sdk" "0.0.15"
+    "@pollum-io/v3-sdk" "0.0.8"
     "@uniswap/permit2-sdk" "^1.2.0"
     "@uniswap/token-lists" "^1.0.0-beta.25"
     async-retry "^1.3.1"
@@ -4050,6 +4100,20 @@
     dotenv "^14.2.0"
     hardhat-watcher "^2.1.1"
 
+"@pollum-io/universal-router-sdk@0.0.16":
+  version "0.0.16"
+  resolved "https://registry.yarnpkg.com/@pollum-io/universal-router-sdk/-/universal-router-sdk-0.0.16.tgz#6fa7ce8c7333d6f2fcdfeb43a977411c18850edb"
+  integrity sha512-NOcvXhc4nXYRjZeDITwZ6Rqfb7ef596F7/f+lvQB2XivsCA6V3RSYlJXvnPC8lH2PE6Pvm3Bb7/IJ/JfdypFaQ==
+  dependencies:
+    "@pollum-io/router-sdk" "0.0.13"
+    "@pollum-io/sdk-core" "0.0.5"
+    "@pollum-io/universal-router" "0.0.8"
+    "@pollum-io/v1-sdk" "0.0.15"
+    "@pollum-io/v3-sdk" "0.0.8"
+    "@uniswap/permit2-sdk" "^1.2.0"
+    bignumber.js "^9.0.2"
+    ethers "^5.3.1"
+
 "@pollum-io/universal-router-sdk@0.0.3":
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/@pollum-io/universal-router-sdk/-/universal-router-sdk-0.0.3.tgz#1f4436cfb16c06393a5043b774f496971805aa28"
@@ -4060,20 +4124,6 @@
     "@pollum-io/universal-router" "0.0.4"
     "@pollum-io/v1-sdk" "0.0.2"
     "@pollum-io/v3-sdk" "0.0.1"
-    "@uniswap/permit2-sdk" "^1.2.0"
-    bignumber.js "^9.0.2"
-    ethers "^5.3.1"
-
-"@pollum-io/universal-router-sdk@0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@pollum-io/universal-router-sdk/-/universal-router-sdk-0.0.9.tgz#951e1209cb95ac48daeeba054a332dbc081abcc8"
-  integrity sha512-PRTKktnLJQ7R3reDQfc1YcgttU/WemZXliGdCi6fwhKmmRHA1chzZO43CdADuGl8OPjZ1YAn2yOHPkBSJAgxHQ==
-  dependencies:
-    "@pollum-io/router-sdk" "0.0.6"
-    "@pollum-io/sdk-core" "0.0.3"
-    "@pollum-io/universal-router" "0.0.6"
-    "@pollum-io/v1-sdk" "0.0.10"
-    "@pollum-io/v3-sdk" "0.0.2"
     "@uniswap/permit2-sdk" "^1.2.0"
     bignumber.js "^9.0.2"
     ethers "^5.3.1"
@@ -4096,14 +4146,24 @@
     "@pollum-io/pegasys-protocol" "0.0.17"
     "@pollum-io/v3-core" "0.0.1"
 
-"@pollum-io/v1-sdk@0.0.10":
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/@pollum-io/v1-sdk/-/v1-sdk-0.0.10.tgz#5cf9f9fcf318f9b749204634456471af14149215"
-  integrity sha512-yQ0aa9vkL7cM7+yjGHCsKYdIbK/wqLVz50tSXA7wUsrPuxgW0ITyS81AcBiVwSh7v/0eG4ksEzsF5e+UorYpZw==
+"@pollum-io/universal-router@0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@pollum-io/universal-router/-/universal-router-0.0.8.tgz#3af869c5f2081f73b4f770a095b2d85326744334"
+  integrity sha512-c4GD0hQHEkFNRdwsOjDciI+Sq11pYbyDL+SyDadDC14iXugXutUIQxSdGC0pVbz8IrQaU1oqtQf1QUKaWnwg8g==
+  dependencies:
+    "@openzeppelin/contracts" "4.7.0"
+    "@pollum-io/pegasys-protocol" "0.0.17"
+    "@pollum-io/v3-core" "0.0.1"
+    solmate "^6.8.0"
+
+"@pollum-io/v1-sdk@0.0.15":
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/@pollum-io/v1-sdk/-/v1-sdk-0.0.15.tgz#9678df782f1c292109cc7b55c18c06c71f3d0216"
+  integrity sha512-sCw4CMqms7UBs30IkpCwAW/rl5H9DOAYeNJa3xnPiBDhQYJX8hud/DycOLwlVGC0LGv9dKFAjMrGH9k+uVtFKw==
   dependencies:
     "@ethersproject/address" "^5.0.0"
     "@ethersproject/solidity" "^5.0.0"
-    "@pollum-io/sdk-core" "0.0.3"
+    "@pollum-io/sdk-core" "0.0.5"
     tiny-invariant "^1.1.0"
     tiny-warning "^1.0.3"
 
@@ -4168,14 +4228,14 @@
     tiny-invariant "^1.1.0"
     tiny-warning "^1.0.3"
 
-"@pollum-io/v3-sdk@0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@pollum-io/v3-sdk/-/v3-sdk-0.0.2.tgz#1c2acded9de3471561fd4a6ff0e644198871cf68"
-  integrity sha512-4Skgxd8aJKaUAnk9jo1leiARkOMGQu1PvpyJBhC6tCM52zT9t7/wO+6tlxv4zLHmvXAi0qeraGjJ85WMJC+HuA==
+"@pollum-io/v3-sdk@0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@pollum-io/v3-sdk/-/v3-sdk-0.0.8.tgz#540f7050c5dad9f2d4dfd78abe67020a6fc672e6"
+  integrity sha512-2/XnuC1vOy/UY88VvrpI/Z/G09Q9flQz2+mX+3ojb04gVV601mS6TJkbjbRMCpzMImOrkOTZKHqIqbI67Qn6aQ==
   dependencies:
     "@ethersproject/abi" "^5.0.12"
     "@ethersproject/solidity" "^5.0.9"
-    "@pollum-io/sdk-core" "0.0.3"
+    "@pollum-io/sdk-core" "0.0.5"
     "@pollum-io/swap-router-contracts" "0.0.5"
     "@pollum-io/v3-periphery" "0.0.1"
     "@pollum-io/v3-staker" "0.0.1"
@@ -19385,6 +19445,11 @@ sockjs@^0.3.24:
     uuid "^8.3.2"
     websocket-driver "^0.7.4"
 
+solmate@^6.8.0:
+  version "6.8.0"
+  resolved "https://registry.yarnpkg.com/solmate/-/solmate-6.8.0.tgz#acb665d88783745899e2f6345e3ac66d5b7df2ab"
+  integrity sha512-/oI8kgEvSxGG1mrFv3FmCEZd0F8Z9VzRmoYMIhzmmzt6mjtPwfdCm3oh8yOL7bMHJBSfXJuMpnMPrM0uyaKsKg==
+
 sonic-boom@^2.2.1:
   version "2.8.0"
   resolved "https://registry.yarnpkg.com/sonic-boom/-/sonic-boom-2.8.0.tgz#c1def62a77425090e6ad7516aad8eb402e047611"
@@ -19647,7 +19712,7 @@ string-natural-compare@^3.0.1:
   resolved "https://registry.yarnpkg.com/string-natural-compare/-/string-natural-compare-3.0.1.tgz#7a42d58474454963759e8e8b7ae63d71c1e7fdf4"
   integrity sha512-n3sPwynL1nwKi3WJ6AIsClwBMa0zTi54fn2oLU6ndfTSIO05xaznjSf15PcBZU6FNWbmN5Q6cxT4V5hGvB4taw==
 
-"string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
+"string-width-cjs@npm:string-width@^4.2.0":
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -19672,6 +19737,15 @@ string-width@^3.0.0, string-width@^3.1.0:
     emoji-regex "^7.0.1"
     is-fullwidth-code-point "^2.0.0"
     strip-ansi "^5.1.0"
+
+string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
+  integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
+  dependencies:
+    emoji-regex "^8.0.0"
+    is-fullwidth-code-point "^3.0.0"
+    strip-ansi "^6.0.1"
 
 string-width@^5.0.1, string-width@^5.1.2:
   version "5.1.2"
@@ -19768,7 +19842,7 @@ stringify-object@^3.3.0:
     is-obj "^1.0.1"
     is-regexp "^1.0.0"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
@@ -19788,6 +19862,13 @@ strip-ansi@^5.0.0, strip-ansi@^5.1.0, strip-ansi@^5.2.0:
   integrity sha512-DuRs1gKbBqsMKIZlrffwlug8MHkcnpjs5VPmL1PAh+mA30U0DTotfDZ0d2UUsXpPmPmMMJ6W773MaA3J+lbiWA==
   dependencies:
     ansi-regex "^4.1.0"
+
+strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
+  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
+  dependencies:
+    ansi-regex "^5.0.1"
 
 strip-ansi@^7.0.1:
   version "7.1.0"
@@ -21949,7 +22030,7 @@ workbox-window@6.6.1:
     "@types/trusted-types" "^2.0.2"
     workbox-core "6.6.1"
 
-"wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
+"wrap-ansi-cjs@npm:wrap-ansi@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
@@ -21971,6 +22052,15 @@ wrap-ansi@^6.0.1, wrap-ansi@^6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-6.2.0.tgz#e9393ba07102e6c91a3b221478f0257cd2856e53"
   integrity sha512-r6lPcBGxZXlIcymEu7InxDMhdW0KDxpLgoFLcguasxCaJ/SOIZwINatK9KY/tf+ZrlywOKU0UDj3ATXUBfxJXA==
+  dependencies:
+    ansi-styles "^4.0.0"
+    string-width "^4.1.0"
+    strip-ansi "^6.0.0"
+
+wrap-ansi@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
+  integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
   dependencies:
     ansi-styles "^4.0.0"
     string-width "^4.1.0"

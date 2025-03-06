@@ -46,6 +46,21 @@ export const WBTC_ROLLUX = new Token(
   'Wrapped BTC'
 ) // TODO: add WBTC to rollux
 
+export const USDC_ZKSYS_TANENBAUM = new Token(
+  SupportedChainId.ZKSYS_TANENBAUM,
+  '0xdf2d98dccf84180ceb337475fcadd0003ea14e2e',
+  6,
+  'USDC',
+  'USD//C'
+);
+export const USDT_ZKSYS_TANENBAUM = new Token(
+  SupportedChainId.ZKSYS_TANENBAUM,
+  '0xfc25fa595ef72210d429b3f5913834df40c98cc5',
+  6,
+  'USDT',
+  'Tether USD'
+);
+
 export const UNI: { [chainId: number]: Token } = {
   [SupportedChainId.ROLLUX]: new Token(
     SupportedChainId.ROLLUX,
@@ -57,6 +72,13 @@ export const UNI: { [chainId: number]: Token } = {
   [SupportedChainId.ROLLUX_TANENBAUM]: new Token(
     SupportedChainId.ROLLUX_TANENBAUM,
     UNI_ADDRESS[SupportedChainId.ROLLUX_TANENBAUM],
+    18,
+    'PSYS',
+    'Pegasys'
+  ),
+  [SupportedChainId.ZKSYS_TANENBAUM]: new Token(
+    SupportedChainId.ZKSYS_TANENBAUM,
+    UNI_ADDRESS[SupportedChainId.ZKSYS_TANENBAUM],
     18,
     'PSYS',
     'Pegasys'
@@ -107,5 +129,6 @@ export const TOKEN_SHORTHANDS: { [shorthand: string]: { [chainId in SupportedCha
   USDC: {
     [SupportedChainId.ROLLUX]: USDC_ROLLUX.address,
     [SupportedChainId.ROLLUX_TANENBAUM]: USDC_ROLLUX_TANENBAUM.address,
+    [SupportedChainId.ZKSYS_TANENBAUM]: USDC_ZKSYS_TANENBAUM.address
   },
 }

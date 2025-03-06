@@ -19,6 +19,10 @@ export const FALLBACK_URLS = {
     // "Safe" URLs
     'https://rpc-tanenbaum.rollux.com/',
   ],
+  [SupportedChainId.ZKSYS_TANENBAUM]: [
+    // "Safe" URLs
+    'https://rpc-test-zk.syscoin.org/',
+  ],
 }
 
 /**
@@ -30,5 +34,9 @@ export const RPC_URLS = {
   [SupportedChainId.ROLLUX_TANENBAUM]: [
     `https://rpc-tanenbaum.rollux.com/`,
     ...FALLBACK_URLS[SupportedChainId.ROLLUX_TANENBAUM],
+  ],
+  [SupportedChainId.ZKSYS_TANENBAUM]: [
+    `https://rpc-test-zk.syscoin.org/`,
+    ...FALLBACK_URLS[SupportedChainId.ZKSYS_TANENBAUM],
   ],
 }

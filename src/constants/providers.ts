@@ -60,4 +60,5 @@ class AppJsonRpcProvider extends StaticJsonRpcProvider {
 export const RPC_PROVIDERS: { [key in SupportedChainId]: StaticJsonRpcProvider } = {
   [SupportedChainId.ROLLUX]: new AppJsonRpcProvider(SupportedChainId.ROLLUX),
   [SupportedChainId.ROLLUX_TANENBAUM]: new AppJsonRpcProvider(SupportedChainId.ROLLUX_TANENBAUM),
+  [SupportedChainId.ZKSYS_TANENBAUM]: new AppJsonRpcProvider(SupportedChainId.ZKSYS_TANENBAUM),
 }

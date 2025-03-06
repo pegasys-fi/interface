@@ -30,6 +30,7 @@ const RootWrapper = styled.div`
 const SHOULD_SHOW_ALERT = {
   [SupportedChainId.ROLLUX]: true,
   [SupportedChainId.ROLLUX_TANENBAUM]: true,
+  [SupportedChainId.ZKSYS_TANENBAUM]: true,
   // [SupportedChainId.ARBITRUM_ONE]: true,
   // [SupportedChainId.ARBITRUM_GOERLI]: true,
   // [SupportedChainId.POLYGON]: true,
@@ -63,6 +64,8 @@ const BG_COLORS_BY_DARK_MODE_AND_CHAIN_ID: {
     //   'radial-gradient(285% 8200% at 30% 50%, rgba(40, 160, 240, 0.01) 0%, rgba(219, 255, 0, 0) 100%),radial-gradient(75% 75% at 0% 0%, rgba(150, 190, 220, 0.05) 0%, rgba(33, 114, 229, 0.05) 100%), hsla(0, 0%, 100%, 0.05)',
     [SupportedChainId.ROLLUX_TANENBAUM]:
       'radial-gradient(285% 8200% at 30% 50%, rgba(219, 239, 136, 0.05) 0%, rgba(219, 255, 0, 0) 100%),radial-gradient(75% 75% at 0% 0%, rgba(202, 224, 118, 0.05) 0%, hsla(72, 65%, 73%, 0.12) 100%), hsla(0, 0%, 100%, 0.05)',
+      [SupportedChainId.ZKSYS_TANENBAUM]:
+      'radial-gradient(285% 8200% at 30% 50%, rgba(219, 239, 136, 0.05) 0%, rgba(219, 255, 0, 0) 100%),radial-gradient(75% 75% at 0% 0%, rgba(202, 224, 118, 0.05) 0%, hsla(72, 65%, 73%, 0.12) 100%), hsla(0, 0%, 100%, 0.05)',
   },
   light: {
     // [SupportedChainId.POLYGON]:
@@ -82,6 +85,8 @@ const BG_COLORS_BY_DARK_MODE_AND_CHAIN_ID: {
     // [SupportedChainId.ARBITRUM_ONE]:
     //   'radial-gradient(285% 8200% at 30% 50%, rgba(40, 160, 240, 0.1) 0%, rgba(219, 255, 0, 0) 100%),radial-gradient(circle at top left, hsla(206, 50%, 75%, 0.01), hsla(215, 79%, 51%, 0.12)), hsla(0, 0%, 100%, 0.1)',
     [SupportedChainId.ROLLUX_TANENBAUM]:
+      'radial-gradient(285% 8200% at 30% 50%, rgba(219, 239, 136, 0.1) 0%, rgba(219, 239, 136, 0) 100%), radial-gradient(circle at top left, hsla(206, 50%, 75%, 0.01), hsla(72, 65%, 73%, 0.12), hsla(0, 0%, 100%, 0.1)',
+      [SupportedChainId.ZKSYS_TANENBAUM]:
       'radial-gradient(285% 8200% at 30% 50%, rgba(219, 239, 136, 0.1) 0%, rgba(219, 239, 136, 0) 100%), radial-gradient(circle at top left, hsla(206, 50%, 75%, 0.01), hsla(72, 65%, 73%, 0.12), hsla(0, 0%, 100%, 0.1)',
   },
 }
@@ -139,6 +144,7 @@ const TEXT_COLORS: { [chainId in NetworkAlertChains]: string } = {
   // [SupportedChainId.CELO_ALFAJORES]: 'rgba(53, 178, 97)',
   [SupportedChainId.ROLLUX]: 'rgb(219, 239, 136)',
   [SupportedChainId.ROLLUX_TANENBAUM]: 'rgb(219, 239, 136)',
+  [SupportedChainId.ZKSYS_TANENBAUM]: 'rgb(214, 125, 0)',
   // [SupportedChainId.ARBITRUM_ONE]: '#0490ed',
   // [SupportedChainId.BNB]: colors.gold400,
   // [SupportedChainId.ARBITRUM_GOERLI]: '#0490ed',

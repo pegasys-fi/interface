@@ -6,7 +6,7 @@ import { isAddress } from 'utils'
 import sysLogo from '../../assets/images/syslogo.png'
 import { NATIVE_CHAIN_ID } from '../../constants/tokens'
 
-type Network = 'rollux' | 'rollux_tanenbaum'
+type Network = 'rollux' | 'rollux_tanenbaum' | 'zksys_tanenbaum'
 // eslint-disable-next-line import/no-unused-modules
 export function chainIdToNetworkName(networkId: SupportedChainId): Network {
   switch (networkId) {
@@ -18,6 +18,8 @@ export function chainIdToNetworkName(networkId: SupportedChainId): Network {
       return 'rollux'
     case SupportedChainId.ROLLUX_TANENBAUM:
       return 'rollux_tanenbaum'
+    case SupportedChainId.ZKSYS_TANENBAUM:
+      return 'zksys_tanenbaum'
     // case SupportedChainId.POLYGON:
     // return 'polygon'
     // case SupportedChainId.BNB:
@@ -29,8 +31,6 @@ export function chainIdToNetworkName(networkId: SupportedChainId): Network {
 
 export function getNativeLogoURI(chainId: SupportedChainId = SupportedChainId.ROLLUX): string {
   switch (chainId) {
-    case SupportedChainId.ROLLUX:
-      return sysLogo
     default:
       return sysLogo
   }

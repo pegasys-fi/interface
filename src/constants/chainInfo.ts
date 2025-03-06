@@ -1,4 +1,5 @@
 import rolluxTennenbalLogoUrl from 'assets/svg/rollux_inverted_logo.svg'
+import zksysLogoUrl from 'assets/images/zksys.svg'
 import rolluxLogoUrl from 'assets/svg/Rollux-1.svg'
 import { SupportedChainId } from 'constants/chains'
 import ms from 'ms.macro'
@@ -83,6 +84,23 @@ const CHAIN_INFO: ChainInfoMap = {
     helpCenterUrl: 'https://pegasys.fi/',
     nativeCurrency: { name: 'Syscoin', symbol: 'SYS', decimals: 18 },
     color: darkTheme.chain_57000_background,
+    backgroundColor: darkTheme.chain_570_background,
+  },
+  [SupportedChainId.ZKSYS_TANENBAUM]: {
+    networkType: NetworkType.L2,
+    blockWaitMsBeforeWarning: ms`25m`,
+    bridge: 'https://bridge-test-zk.syscoin.org/bridge',
+    defaultListUrl: ROLLUX_LIST,
+    docs: 'https://syscoin.org/',
+    explorer: 'https://explorer-test-zk.syscoin.org/',
+    infoLink: 'https://info.pegasys.fi/#/',
+    label: 'ZkSYS Tanenbaum',
+    logoUrl: zksysLogoUrl,
+    statusPage: 'https://syscoin.org/',
+    helpCenterUrl: 'https://pegasys.fi/',
+    nativeCurrency: { name: 'Syscoin', symbol: 'SYS', decimals: 18 },
+    color: darkTheme.chain_570_background,
+    backgroundColor: darkTheme.chain_570_background,
   },
 }
 

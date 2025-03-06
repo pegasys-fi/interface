@@ -6,18 +6,20 @@
 
 import { ChainId } from '@pollum-io/smart-order-router'
 
-const SUPPORTED_CHAINS = [ChainId.ROLLUX, ChainId.ROLLUX_TANENBAUM] as const
+const SUPPORTED_CHAINS = [ChainId.ROLLUX, ChainId.ROLLUX_TANENBAUM, ChainId.ZKSYS_TANENBAUM] as const
 type SupportedChainsType = (typeof SUPPORTED_CHAINS)[number]
 
 // Because this is not explicitly derived from @pollum-io/sdk-core, there is a unit test to enforce conformance.
 export enum SupportedChainId {
   ROLLUX = 570,
   ROLLUX_TANENBAUM = 57000,
+  ZKSYS_TANENBAUM = 5701
 }
 
 export const CHAIN_IDS_TO_NAMES = {
   [SupportedChainId.ROLLUX]: 'rollux',
   [SupportedChainId.ROLLUX_TANENBAUM]: 'rollux_tanenbaum',
+  [SupportedChainId.ZKSYS_TANENBAUM]: 'zksys_tanenbaum',
 }
 
 export type SupportedInterfaceChain = Exclude<SupportedChainsType, ChainId.ROLLUX_TANENBAUM>
@@ -38,7 +40,7 @@ export const SUPPORTED_GAS_ESTIMATE_CHAIN_IDS = [SupportedChainId.ROLLUX] as con
 /**
  * Unsupported networks for V2 pool behavior.
  */
-export const UNSUPPORTED_V2POOL_CHAIN_IDS = [SupportedChainId] as const
+export const UNSUPPORTED_V2POOL_CHAIN_IDS = [] as const
 
 /**
  * All the chain IDs that are running the Ethereum protocol.
@@ -51,7 +53,7 @@ export type SupportedL1ChainId = (typeof L1_CHAIN_IDS)[number]
  * Controls some L2 specific behavior, e.g. slippage tolerance, special UI behavior.
  * The expectation is that all of these networks have immediate transaction confirmation.
  */
-export const L2_CHAIN_IDS = [ChainId.ROLLUX, ChainId.ROLLUX_TANENBAUM] as const
+export const L2_CHAIN_IDS = [ChainId.ROLLUX, ChainId.ROLLUX_TANENBAUM, ChainId.ZKSYS_TANENBAUM] as const
 
 export type SupportedL2ChainId = (typeof L2_CHAIN_IDS)[number]
 
@@ -64,6 +66,7 @@ export function getChainPriority(chainId: ChainId): number {
   switch (chainId) {
     case ChainId.ROLLUX:
     case ChainId.ROLLUX_TANENBAUM:
+    case ChainId.ZKSYS_TANENBAUM:
     default:
       return 2
   }

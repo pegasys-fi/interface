@@ -69,6 +69,7 @@ export type PricePoint = { timestamp: number; value: number }
 export const CHAIN_ID_TO_BACKEND_NAME: { [key: number]: Chain } = {
   [SupportedChainId.ROLLUX]: 'ROLLUX' as Chain,
   [SupportedChainId.ROLLUX_TANENBAUM]: 'ROLLUX' as Chain,
+  [SupportedChainId.ZKSYS_TANENBAUM]: 'ZKSYS' as Chain,
 }
 
 export function chainIdToBackendName(chainId: number | undefined) {

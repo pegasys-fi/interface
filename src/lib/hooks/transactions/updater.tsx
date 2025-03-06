@@ -35,6 +35,7 @@ const RETRY_OPTIONS_BY_CHAIN_ID: { [chainId: number]: RetryOptions } = {
   // [SupportedChainId.ARBITRUM_GOERLI]: { n: 10, minWait: 250, maxWait: 1000 },
   [SupportedChainId.ROLLUX]: { n: 10, minWait: 250, maxWait: 1000 },
   [SupportedChainId.ROLLUX_TANENBAUM]: { n: 10, minWait: 250, maxWait: 1000 },
+  [SupportedChainId.ZKSYS_TANENBAUM]: { n: 10, minWait: 250, maxWait: 1000 }
 }
 const DEFAULT_RETRY_OPTIONS: RetryOptions = { n: 1, minWait: 0, maxWait: 0 }
 
