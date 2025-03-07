@@ -56,7 +56,7 @@ export function useUniversalRouterSwapCallback(
           if (!chainId) throw new Error('missing chainId')
           if (!provider) throw new Error('missing provider')
           if (!trade) throw new Error('missing trade')
-
+            console.log(trade)
           setTraceData('slippageTolerance', options.slippageTolerance.toFixed(2))
           const { calldata: data, value } = SwapRouter.swapERC20CallParameters(trade, {
             slippageTolerance: options.slippageTolerance,
@@ -81,7 +81,7 @@ export function useUniversalRouterSwapCallback(
             console.warn(gasError)
             throw new GasEstimationError()
           }
-          const gasLimit = calculateGasMargin(gasEstimate)
+          const gasLimit =calculateGasMargin(gasEstimate)
           setTraceData('gasLimit', gasLimit.toNumber())
           const response = await provider
             .getSigner()

@@ -4049,16 +4049,16 @@
     node-cache "^5.1.2"
     stats-lite "^2.2.0"
 
-"@pollum-io/smart-order-router@0.0.34":
-  version "0.0.34"
-  resolved "https://registry.yarnpkg.com/@pollum-io/smart-order-router/-/smart-order-router-0.0.34.tgz#df84a40c63c8e1484ed70951ad2b0a7b554424f4"
-  integrity sha512-5fEQW8GOtT0cNcb3M2HX/G+KzjLFigQjZGhKG5/4HTFQAm2K43Y1q6QK+Gl0od14NmLdDQkwlJVd6YjbxzeFQg==
+"@pollum-io/smart-order-router@0.0.37":
+  version "0.0.37"
+  resolved "https://registry.yarnpkg.com/@pollum-io/smart-order-router/-/smart-order-router-0.0.37.tgz#02f9d3fbdbb00f502c3fb56031ed3e6bad62bb68"
+  integrity sha512-IPSig/9ml3eyi8a41MKomSgWSgb2ut6iMIWWXM54tT2lollyKWMckR2ivKujCSseGqaf8p04txkD31Ub5sS78g==
   dependencies:
     "@pollum-io/default-token-list" latest
     "@pollum-io/router-sdk" "0.0.13"
     "@pollum-io/swap-router-contracts" "0.0.5"
     "@pollum-io/universal-router" "0.0.6"
-    "@pollum-io/universal-router-sdk" "0.0.16"
+    "@pollum-io/universal-router-sdk" "0.0.20"
     "@pollum-io/v1-sdk" "0.0.15"
     "@pollum-io/v3-sdk" "0.0.8"
     "@uniswap/permit2-sdk" "^1.2.0"
@@ -4100,10 +4100,10 @@
     dotenv "^14.2.0"
     hardhat-watcher "^2.1.1"
 
-"@pollum-io/universal-router-sdk@0.0.16":
-  version "0.0.16"
-  resolved "https://registry.yarnpkg.com/@pollum-io/universal-router-sdk/-/universal-router-sdk-0.0.16.tgz#6fa7ce8c7333d6f2fcdfeb43a977411c18850edb"
-  integrity sha512-NOcvXhc4nXYRjZeDITwZ6Rqfb7ef596F7/f+lvQB2XivsCA6V3RSYlJXvnPC8lH2PE6Pvm3Bb7/IJ/JfdypFaQ==
+"@pollum-io/universal-router-sdk@0.0.20":
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/@pollum-io/universal-router-sdk/-/universal-router-sdk-0.0.20.tgz#fc3bb5267e2d76e709e77f950f6bb7054d971808"
+  integrity sha512-ydsPch8aF13w7Ajvg7xgGaFg3U4dVvnDbCWcSWuB16B4x+nz+whAulg5cI2ryeJGA+PaRWrCIwAx0vnKQXvpxw==
   dependencies:
     "@pollum-io/router-sdk" "0.0.13"
     "@pollum-io/sdk-core" "0.0.5"
